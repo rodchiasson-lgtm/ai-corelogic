@@ -12,20 +12,20 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email Us",
-    value: "hello@ai-corelogic.com",
+    value: "rodchiasson@ai-corelogic.com",
     sub: "We respond within 24 hours",
   },
   {
     icon: Phone,
     label: "Call Us",
-    value: "+1 (888) 247-2673",
+    value: "+1 (727) 318-9265",
     sub: "Mon–Fri, 9am–6pm EST",
   },
   {
     icon: MapPin,
-    label: "Headquarters",
-    value: "Austin, TX",
-    sub: "Serving clients globally",
+    label: "Global Offices",
+    value: "London, UK & New York, USA",
+    sub: "Serving clients worldwide",
   },
 ];
 

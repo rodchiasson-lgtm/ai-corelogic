@@ -56,6 +56,11 @@ export default function Footer() {
             <p className="text-slate-500 text-sm leading-relaxed mb-6 max-w-xs" style={{ fontFamily: "var(--font-body)" }}>
               Precision-driven AI consulting for small to mid-sized businesses. From discovery to deployment — we make AI work for you.
             </p>
+            <div className="text-slate-600 text-xs space-y-1 mb-6">
+              <p><strong>Contact:</strong> rodchiasson@ai-corelogic.com</p>
+              <p><strong>Phone:</strong> +1 (727) 318-9265</p>
+              <p><strong>Offices:</strong> London, UK & New York, USA</p>
+            </div>
             {/* Social links */}
             <div className="flex gap-3">
               {[
