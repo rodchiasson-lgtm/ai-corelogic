@@ -1,3 +1,11 @@
+/*
+ * AI-CoreLogic Design System
+ * Theme: "Deep Intelligence" — Aerospace HMI meets Premium Dark SaaS
+ * Color: Deep navy-black bg, cyan-teal accents, electric blue CTAs
+ * Typography: Syne (display) + DM Sans (body) + JetBrains Mono (accents)
+ * Layout: Diagonal clip-path sections, asymmetric, frosted glass cards
+ */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -40,77 +48,55 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom brand tokens */
+  --color-cyan-brand: #00D4C8;
+  --color-cyan-glow: rgba(0, 212, 200, 0.15);
+  --color-blue-brand: #2563EB;
+  --color-navy-deep: #050B18;
+  --color-navy-surface: #0D1B2E;
+  --color-navy-card: #0F2035;
+  --color-navy-border: rgba(0, 212, 200, 0.15);
+
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
+  --radius: 0.5rem;
+  --background: oklch(0.07 0.02 240);
+  --foreground: oklch(0.97 0.005 220);
+  --card: oklch(0.1 0.025 235);
+  --card-foreground: oklch(0.97 0.005 220);
+  --popover: oklch(0.1 0.025 235);
+  --popover-foreground: oklch(0.97 0.005 220);
+  --primary: oklch(0.78 0.15 185);
+  --primary-foreground: oklch(0.07 0.02 240);
+  --secondary: oklch(0.13 0.03 235);
+  --secondary-foreground: oklch(0.85 0.01 220);
+  --muted: oklch(0.15 0.02 235);
+  --muted-foreground: oklch(0.6 0.02 220);
+  --accent: oklch(0.78 0.15 185);
+  --accent-foreground: oklch(0.07 0.02 240);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
-}
-
-.dark {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-500);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.85 0.005 65);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.85 0.005 65);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.85 0.005 65);
-  --secondary: oklch(0.24 0.006 286.033);
-  --secondary-foreground: oklch(0.7 0.005 65);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.85 0.005 65);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground:  oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
+  --border: oklch(0.78 0.15 185 / 0.15);
+  --input: oklch(0.78 0.15 185 / 0.2);
+  --ring: oklch(0.78 0.15 185 / 0.5);
+  --chart-1: oklch(0.78 0.15 185);
+  --chart-2: oklch(0.6 0.18 240);
+  --chart-3: oklch(0.5 0.2 260);
+  --chart-4: oklch(0.7 0.12 200);
+  --chart-5: oklch(0.85 0.1 175);
+  --sidebar: oklch(0.09 0.025 235);
+  --sidebar-foreground: oklch(0.97 0.005 220);
+  --sidebar-primary: oklch(0.78 0.15 185);
+  --sidebar-primary-foreground: oklch(0.07 0.02 240);
+  --sidebar-accent: oklch(0.13 0.03 235);
+  --sidebar-accent-foreground: oklch(0.97 0.005 220);
+  --sidebar-border: oklch(0.78 0.15 185 / 0.15);
+  --sidebar-ring: oklch(0.78 0.15 185 / 0.5);
 }
 
 @layer base {
@@ -119,6 +105,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    background-color: #050B18;
+    color: #F8FAFC;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -134,24 +126,11 @@
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 
@@ -162,16 +141,212 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
+  }
+
+  /* Brand gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #00D4C8 0%, #2563EB 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glowing cyan border card */
+  .glow-card {
+    background: rgba(13, 27, 46, 0.8);
+    border: 1px solid rgba(0, 212, 200, 0.15);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+  }
+
+  .glow-card:hover {
+    border-color: rgba(0, 212, 200, 0.4);
+    box-shadow: 0 0 30px rgba(0, 212, 200, 0.1), 0 8px 32px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Cyan glow button */
+  .btn-primary {
+    background: linear-gradient(135deg, #00D4C8 0%, #2563EB 100%);
+    color: #050B18;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(0, 212, 200, 0.4);
+    transform: translateY(-1px);
+  }
+
+  /* Outline glow button */
+  .btn-outline-glow {
+    background: transparent;
+    border: 1px solid rgba(0, 212, 200, 0.5);
+    color: #00D4C8;
+    font-family: var(--font-display);
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-glow:hover {
+    background: rgba(0, 212, 200, 0.1);
+    border-color: #00D4C8;
+    box-shadow: 0 0 20px rgba(0, 212, 200, 0.2);
+  }
+
+  /* Section diagonal clip */
+  .clip-diagonal-top {
+    clip-path: polygon(0 5%, 100% 0, 100% 100%, 0 100%);
+    margin-top: -3rem;
+    padding-top: 5rem;
+  }
+
+  .clip-diagonal-bottom {
+    clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+    padding-bottom: 5rem;
+    margin-bottom: -2rem;
+  }
+
+  /* Mono label */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #00D4C8;
+  }
+
+  /* Circuit line decoration */
+  .circuit-line {
+    position: relative;
+  }
+
+  .circuit-line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00D4C8);
+  }
+
+  /* Animated pulse dot */
+  @keyframes pulse-cyan {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 200, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(0, 212, 200, 0); }
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #00D4C8;
+    border-radius: 50%;
+    animation: pulse-cyan 2s infinite;
+  }
+
+  /* Scroll fade-up animation */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  /* Number counter animation */
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  /* Glow pulse */
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  .animate-glow {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  /* Nav blur background */
+  .nav-blur {
+    background: rgba(5, 11, 24, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 212, 200, 0.1);
+  }
+
+  /* Stats band */
+  .stats-band {
+    background: linear-gradient(135deg, #0D1B2E 0%, #0F2035 50%, #0D1B2E 100%);
+    border-top: 1px solid rgba(0, 212, 200, 0.15);
+    border-bottom: 1px solid rgba(0, 212, 200, 0.15);
+  }
+
+  /* Service card icon glow */
+  .icon-glow {
+    filter: drop-shadow(0 0 8px rgba(0, 212, 200, 0.6));
+  }
+
+  /* Testimonial card */
+  .testimonial-card {
+    background: linear-gradient(135deg, rgba(13, 27, 46, 0.9) 0%, rgba(15, 32, 53, 0.9) 100%);
+    border: 1px solid rgba(0, 212, 200, 0.12);
+    backdrop-filter: blur(12px);
+  }
+
+  /* Process step connector */
+  .step-connector {
+    position: relative;
+  }
+
+  .step-connector::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: calc(100% + 8px);
+    width: calc(100% - 16px);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0, 212, 200, 0.5), rgba(37, 99, 235, 0.3));
+  }
+
+  /* Input focus glow */
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: rgba(0, 212, 200, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(0, 212, 200, 0.1);
   }
 }
