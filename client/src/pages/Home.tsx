@@ -13,6 +13,7 @@ import AboutSection from "@/components/AboutSection";
 import IndustriesSection from "@/components/IndustriesSection";
 import ResearchSection from "@/components/ResearchSection";
 import ResourcesSection from "@/components/ResourcesSection";
+import LinkedInFeedSection from "@/components/LinkedInFeedSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTABanner from "@/components/CTABanner";
 import ContactSection from "@/components/ContactSection";
@@ -30,6 +31,7 @@ export default function Home() {
       <IndustriesSection />
       <ResearchSection />
       <ResourcesSection />
+      <LinkedInFeedSection />
       <TestimonialsSection />
       <CTABanner />
       <ContactSection />
