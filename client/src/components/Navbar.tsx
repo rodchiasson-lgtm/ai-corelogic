@@ -13,7 +13,7 @@ const navLinks = [
   { label: "About", href: "#about" },
   { label: "Research", href: "#research" },
   { label: "Resources", href: "#resources" },
-  { label: "LinkedIn", href: "#linkedin-feed" },
+  { label: "Newsletter", href: "#newsletter" },
   { label: "Contact", href: "#contact" },
 ];
 

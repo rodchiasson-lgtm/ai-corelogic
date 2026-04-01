@@ -14,6 +14,7 @@ import IndustriesSection from "@/components/IndustriesSection";
 import ResearchSection from "@/components/ResearchSection";
 import ResourcesSection from "@/components/ResourcesSection";
 import LinkedInFeedSection from "@/components/LinkedInFeedSection";
+import NewsletterSection from "@/components/NewsletterSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTABanner from "@/components/CTABanner";
 import ContactSection from "@/components/ContactSection";
@@ -32,6 +33,7 @@ export default function Home() {
       <ResearchSection />
       <ResourcesSection />
       <LinkedInFeedSection />
+      <NewsletterSection />
       <TestimonialsSection />
       <CTABanner />
       <ContactSection />
