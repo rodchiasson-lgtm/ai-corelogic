@@ -16,6 +16,7 @@ import ResourcesSection from "@/components/ResourcesSection";
 import LinkedInFeedSection from "@/components/LinkedInFeedSection";
 import NewsletterSection from "@/components/NewsletterSection";
 import BlogSection from "@/components/BlogSection";
+import CategoryGrid from "@/components/CategoryGrid";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTABanner from "@/components/CTABanner";
 import ContactSection from "@/components/ContactSection";
@@ -36,6 +37,7 @@ export default function Home() {
       <LinkedInFeedSection />
       <NewsletterSection />
       <BlogSection />
+      <CategoryGrid />
       <TestimonialsSection />
       <CTABanner />
       <ContactSection />
