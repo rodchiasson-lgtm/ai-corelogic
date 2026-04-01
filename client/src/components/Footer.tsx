@@ -64,13 +64,15 @@ export default function Footer() {
             {/* Social links */}
             <div className="flex gap-3">
               {[
-                { icon: Linkedin, href: "#", label: "LinkedIn" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/rodneychiasson", label: "LinkedIn" },
                 { icon: Twitter, href: "#", label: "Twitter" },
                 { icon: Github, href: "#", label: "GitHub" },
               ].map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
+                  target={href !== "#" ? "_blank" : undefined}
+                  rel={href !== "#" ? "noopener noreferrer" : undefined}
                   aria-label={label}
                   className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:text-cyan-400 transition-all duration-200 hover:border-cyan-400/40"
                   style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
