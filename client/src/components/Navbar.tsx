@@ -13,6 +13,7 @@ const navLinks = [
   { label: "About", href: "#about" },
   { label: "Research", href: "#research" },
   { label: "Resources", href: "#resources" },
+  { label: "Blog", href: "/blog" },
   { label: "Newsletter", href: "#newsletter" },
   { label: "Contact", href: "#contact" },
 ];
@@ -29,9 +30,15 @@ export default function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    if (href.startsWith("/")) {
+      // External route
+      window.location.href = href;
+    } else {
+      // Anchor link
+      const el = document.querySelector(href);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
