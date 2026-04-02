@@ -30,7 +30,7 @@ const contactInfo = [
   {
     icon: MessageCircle,
     label: "Chat on Telegram",
-    value: "@AI_CoreLogic_Bot",
+    value: "@Aicorelogic_bot",
     sub: "Instant responses 24/7",
   },
 ];
@@ -151,7 +151,7 @@ export default function ContactSection() {
               const Icon = info.icon;
               const isTelegram = info.label === "Chat on Telegram";
               const handleTelegramClick = () => {
-                window.open("https://t.me/AI_CoreLogic_Bot", "_blank");
+                window.open("https://t.me/Aicorelogic_bot", "_blank");
               };
               return (
                 <div

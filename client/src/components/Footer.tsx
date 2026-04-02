@@ -65,7 +65,7 @@ export default function Footer() {
             <div className="flex gap-3">
               {[
                 { icon: Linkedin, href: "https://www.linkedin.com/in/rodneychiasson", label: "LinkedIn" },
-                { icon: MessageCircle, href: "https://t.me/AI_CoreLogic_Bot", label: "Telegram" },
+                { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot", label: "Telegram" },
                 { icon: Twitter, href: "#", label: "Twitter" },
                 { icon: Github, href: "#", label: "GitHub" },
               ].map(({ icon: Icon, href, label }) => (

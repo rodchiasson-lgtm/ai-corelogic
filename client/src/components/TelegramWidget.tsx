@@ -6,7 +6,7 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 
-const TELEGRAM_BOT_USERNAME = "AI_CoreLogic_Bot"; // Replace with your actual bot username
+const TELEGRAM_BOT_USERNAME = "Aicorelogic_bot"; // Official bot username
 
 export default function TelegramWidget() {
   const [isVisible, setIsVisible] = useState(false);

@@ -3,7 +3,7 @@
  * Handles bot responses and lead capture
  */
 
-const BOT_TOKEN = "123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ";
+const BOT_TOKEN = "8142972713:AAGhqPeK_uHnx80DgJAWa7xAd4I2pHLAwgE";
 const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
 // FAQ responses
