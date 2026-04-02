@@ -254,9 +254,8 @@ export default function BlogArticle() {
                   <div className="space-y-3">
                     {relatedArticles.map((related) => (
                       <Link key={related.id} href={`/blog/${related.slug}`}>
-                        <a
-                          className="block p-3 rounded-lg hover:bg-slate-800 transition-colors group"
-                          style={{ textDecoration: "none" }}
+                        <div
+                          className="block p-3 rounded-lg hover:bg-slate-800 transition-colors group cursor-pointer"
                         >
                           <p
                             className="text-white text-sm font-semibold group-hover:text-cyan-400 transition-colors"
@@ -267,7 +266,7 @@ export default function BlogArticle() {
                           <p className="text-slate-500 text-xs mt-1" style={{ fontFamily: "var(--font-body)" }}>
                             {related.readTime} min read
                           </p>
-                        </a>
+                        </div>
                       </Link>
                     ))}
                   </div>

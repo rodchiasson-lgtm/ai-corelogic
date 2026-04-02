@@ -13,7 +13,7 @@ import AboutSection from "@/components/AboutSection";
 import IndustriesSection from "@/components/IndustriesSection";
 import ResearchSection from "@/components/ResearchSection";
 import ResourcesSection from "@/components/ResourcesSection";
-import LinkedInFeedSection from "@/components/LinkedInFeedSection";
+
 import NewsletterSection from "@/components/NewsletterSection";
 import BlogSection from "@/components/BlogSection";
 import CategoryGrid from "@/components/CategoryGrid";
@@ -35,7 +35,7 @@ export default function Home() {
       <IndustriesSection />
       <ResearchSection />
       <ResourcesSection />
-      <LinkedInFeedSection />
+
       <NewsletterSection />
       <BlogSection />
       <CategoryGrid />

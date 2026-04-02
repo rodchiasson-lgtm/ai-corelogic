@@ -191,7 +191,7 @@ export default function ResourcesSection() {
                 Our team offers tailored Celonis workshops and implementation support. These guides are starting points — we customize training based on your specific use cases and team composition.
               </p>
               <a
-                href="mailto:contact@ai-corelogic.com"
+                href="mailto:admin@core-logic.com"
                 className="text-sm font-semibold"
                 style={{ color: "#00D4C8", textDecoration: "none" }}
               >

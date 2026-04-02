@@ -12,7 +12,7 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email Us",
-    value: "rodchiasson@ai-corelogic.com",
+    value: "admin@core-logic.com",
     sub: "We respond within 24 hours",
   },
   {
@@ -88,7 +88,7 @@ export default function ContactSection() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-                to: "contact@ai-corelogic.com",
+                to: "admin@core-logic.com",
           name: form.name,
           email: form.email,
           company: form.company,

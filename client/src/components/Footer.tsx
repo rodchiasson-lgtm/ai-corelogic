@@ -57,7 +57,7 @@ export default function Footer() {
               Precision-driven AI consulting for small to mid-sized businesses. From discovery to deployment — we make AI work for you.
             </p>
             <div className="text-slate-600 text-xs space-y-1 mb-6">
-              <p><strong>Contact:</strong> contact@ai-corelogic.com</p>
+              <p><strong>Contact:</strong> admin@core-logic.com</p>
               <p><strong>Phone:</strong> +1 (727) 318-9265</p>
               <p><strong>Offices:</strong> London, UK & New York, USA</p>
             </div>
