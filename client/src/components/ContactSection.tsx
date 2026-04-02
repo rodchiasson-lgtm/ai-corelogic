@@ -88,7 +88,7 @@ export default function ContactSection() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          to: "rodchiasson@ai-corelogic.com",
+                to: "contact@ai-corelogic.com",
           name: form.name,
           email: form.email,
           company: form.company,

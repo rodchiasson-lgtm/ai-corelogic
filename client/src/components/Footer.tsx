@@ -57,14 +57,14 @@ export default function Footer() {
               Precision-driven AI consulting for small to mid-sized businesses. From discovery to deployment — we make AI work for you.
             </p>
             <div className="text-slate-600 text-xs space-y-1 mb-6">
-              <p><strong>Contact:</strong> rodchiasson@ai-corelogic.com</p>
+              <p><strong>Contact:</strong> contact@ai-corelogic.com</p>
               <p><strong>Phone:</strong> +1 (727) 318-9265</p>
               <p><strong>Offices:</strong> London, UK & New York, USA</p>
             </div>
             {/* Social links */}
             <div className="flex gap-3">
               {[
-                { icon: Linkedin, href: "https://www.linkedin.com/in/rodneychiasson", label: "LinkedIn" },
+
                 { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot", label: "Telegram" },
                 { icon: MessageCircle, href: "https://wa.me/17273189265", label: "WhatsApp" },
                 { icon: Twitter, href: "#", label: "Twitter" },

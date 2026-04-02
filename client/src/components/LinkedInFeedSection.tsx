@@ -112,9 +112,7 @@ export default function LinkedInFeedSection() {
                     Want to see more? Visit the full LinkedIn profile for all posts, articles, and updates.
                   </p>
                   <a
-                    href="https://www.linkedin.com/in/rodneychiasson"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#"
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200"
                     style={{
                       background: "#2563EB",
@@ -194,9 +192,7 @@ export default function LinkedInFeedSection() {
                 Join thousands of professionals following AI-CoreLogic for insights and industry updates.
               </p>
               <a
-                href="https://www.linkedin.com/in/rodneychiasson"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
                 className="text-sm font-semibold"
                 style={{ color: "#2563EB", textDecoration: "none" }}
               >

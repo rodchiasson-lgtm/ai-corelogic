@@ -72,7 +72,7 @@ export default function TeamSection() {
                     className="text-2xl font-bold text-white mb-1"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
-                    Rodney Chiasson
+                    Our Founder
                   </h3>
                   <p
                     className="text-cyan-400 font-semibold mb-6"
@@ -151,19 +151,7 @@ export default function TeamSection() {
 
                 {/* Contact Links */}
                 <div className="flex flex-wrap gap-4 pt-6 border-t border-slate-700">
-                  <a
-                    href="mailto:rodchiasson@ai-corelogic.com"
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 hover:bg-opacity-100"
-                    style={{
-                      background: "rgba(0,212,200,0.1)",
-                      color: "#00D4C8",
-                      border: "1px solid rgba(0,212,200,0.2)",
-                      fontFamily: "var(--font-body)",
-                    }}
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span className="text-sm font-medium">Email</span>
-                  </a>
+
                   <a
                     href="tel:+1-727-318-9265"
                     className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 hover:bg-opacity-100"

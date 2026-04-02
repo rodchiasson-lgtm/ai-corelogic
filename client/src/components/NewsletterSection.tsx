@@ -305,9 +305,7 @@ export default function NewsletterSection() {
                 Every week: AI market trends • Implementation case studies • Process mining insights • Industry analysis • Exclusive webinar invitations • Early access to new research
               </p>
               <a
-                href="https://www.linkedin.com/in/rodneychiasson"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
                 className="text-sm font-semibold"
                 style={{ color: "#2563EB", textDecoration: "none" }}
               >

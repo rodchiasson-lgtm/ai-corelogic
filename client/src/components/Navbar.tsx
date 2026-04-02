@@ -88,13 +88,7 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <a
-              href="mailto:rodchiasson@ai-corelogic.com"
-              className="text-slate-300 hover:text-cyan-400 transition-colors text-sm font-medium"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              Contact
-            </a>
+
             <button
               onClick={() => handleNavClick("#contact")}
               className="btn-primary px-5 py-2.5 rounded-lg text-sm font-semibold"
