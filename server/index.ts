@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import { handleTelegramMessage, handleTelegramCallback } from "../shared/telegram-bot.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,6 +11,10 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
+  // Middleware
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
   // Serve static files from dist/public in production
   const staticPath =
     process.env.NODE_ENV === "production"
@@ -17,6 +22,29 @@ async function startServer() {
       : path.resolve(__dirname, "..", "dist", "public");
 
   app.use(express.static(staticPath));
+
+  // Telegram webhook endpoint
+  app.post("/api/telegram/webhook", async (req, res) => {
+    try {
+      const { message, callback_query } = req.body;
+
+      if (message) {
+        await handleTelegramMessage(message);
+      } else if (callback_query) {
+        await handleTelegramCallback(callback_query);
+      }
+
+      res.json({ ok: true });
+    } catch (error) {
+      console.error("Telegram webhook error:", error);
+      res.status(500).json({ ok: false, error: "Internal server error" });
+    }
+  });
+
+  // Health check endpoint
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
 
   // Handle client-side routing - serve index.html for all routes
   app.get("*", (_req, res) => {
@@ -27,6 +55,7 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    console.log(`Telegram webhook available at /api/telegram/webhook`);
   });
 }
 

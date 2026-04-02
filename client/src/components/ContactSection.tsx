@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle, Loader } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle, Loader, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const contactInfo = [
@@ -26,6 +26,12 @@ const contactInfo = [
     label: "Global Offices",
     value: "London, UK & New York, USA",
     sub: "Serving clients worldwide",
+  },
+  {
+    icon: MessageCircle,
+    label: "Chat on Telegram",
+    value: "@AI_CoreLogic_Bot",
+    sub: "Instant responses 24/7",
   },
 ];
 
@@ -143,8 +149,18 @@ export default function ContactSection() {
           >
             {contactInfo.map((info) => {
               const Icon = info.icon;
+              const isTelegram = info.label === "Chat on Telegram";
+              const handleTelegramClick = () => {
+                window.open("https://t.me/AI_CoreLogic_Bot", "_blank");
+              };
               return (
-                <div key={info.label} className="glow-card p-5 rounded-xl flex items-start gap-4">
+                <div
+                  key={info.label}
+                  className={`glow-card p-5 rounded-xl flex items-start gap-4 ${
+                    isTelegram ? "cursor-pointer hover:border-cyan-400 transition-all" : ""
+                  }`}
+                  onClick={isTelegram ? handleTelegramClick : undefined}
+                >
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ background: "rgba(0,212,200,0.1)", border: "1px solid rgba(0,212,200,0.2)" }}
@@ -153,7 +169,13 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <div className="mono-label text-xs mb-0.5">{info.label}</div>
-                    <div className="text-white font-semibold text-sm" style={{ fontFamily: "var(--font-display)" }}>
+                    <div
+                      className="text-white font-semibold text-sm"
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        color: isTelegram ? "#00D4C8" : "white",
+                      }}
+                    >
                       {info.value}
                     </div>
                     <div className="text-slate-500 text-xs mt-0.5" style={{ fontFamily: "var(--font-body)" }}>

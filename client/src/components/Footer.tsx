@@ -3,7 +3,7 @@
  * Theme: Deep Intelligence — dark footer with brand links and legal
  */
 
-import { Cpu, Linkedin, Twitter, Github } from "lucide-react";
+import { Cpu, Linkedin, Twitter, Github, MessageCircle } from "lucide-react";
 
 const footerLinks = {
   Services: [
@@ -65,6 +65,7 @@ export default function Footer() {
             <div className="flex gap-3">
               {[
                 { icon: Linkedin, href: "https://www.linkedin.com/in/rodneychiasson", label: "LinkedIn" },
+                { icon: MessageCircle, href: "https://t.me/AI_CoreLogic_Bot", label: "Telegram" },
                 { icon: Twitter, href: "#", label: "Twitter" },
                 { icon: Github, href: "#", label: "GitHub" },
               ].map(({ icon: Icon, href, label }) => (
