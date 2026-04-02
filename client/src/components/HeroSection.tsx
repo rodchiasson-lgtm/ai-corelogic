@@ -177,7 +177,7 @@ export default function HeroSection() {
             className={`mt-12 flex flex-wrap items-center gap-4 transition-all duration-700 delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           >
             {[
-              { value: "150+", label: "SMBs Transformed" },
+              { value: "50+", label: "SMBs Transformed" },
               { value: "98%", label: "Client Satisfaction" },
               { value: "12+", label: "Years of Expertise" },
             ].map((stat, i) => (
