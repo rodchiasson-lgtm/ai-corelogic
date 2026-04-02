@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle, Loader } from "lucide-react";
 import { toast } from "sonner";
 
 const contactInfo = [
@@ -42,6 +42,7 @@ export default function ContactSection() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -59,14 +60,44 @@ export default function ContactSection() {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
       toast.error("Please fill in all required fields.");
       return;
     }
-    setSubmitted(true);
-    toast.success("Message sent! We'll be in touch within 24 hours.");
+
+    setLoading(true);
+    try {
+      // Send email via API
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: "rodchiasson@ai-corelogic.com",
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          service: form.service,
+          message: form.message,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setForm({ name: "", email: "", company: "", service: "", message: "" });
+        toast.success("Message sent! We'll be in touch within 24 hours.");
+      } else {
+        toast.error("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Error sending message. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass = `w-full px-4 py-3 rounded-lg text-white text-sm placeholder-slate-500 transition-all duration-200 focus:outline-none`;
@@ -246,10 +277,21 @@ export default function ContactSection() {
 
                 <button
                   type="submit"
-                  className="btn-primary w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-base font-semibold"
+                  disabled={loading}
+                  className="btn-primary w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-base font-semibold transition-opacity"
+                  style={{ opacity: loading ? 0.7 : 1, cursor: loading ? "not-allowed" : "pointer" }}
                 >
-                  <Send className="w-4 h-4" />
-                  Send Message
+                  {loading ? (
+                    <>
+                      <Loader className="w-4 h-4 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Send Message
+                    </>
+                  )}
                 </button>
 
                 <p className="text-slate-600 text-xs text-center" style={{ fontFamily: "var(--font-body)" }}>

@@ -75,6 +75,7 @@ const services = [
     ],
     image: MATURITY_IMG,
     color: "#2563EB",
+    link: "https://gamma.app/generations/rO0twuAOr7KjWARyzcQaV",
   },
 ];
 
@@ -155,13 +156,25 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
           ))}
         </ul>
 
-        <button
-          onClick={() => { const el = document.querySelector("#contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-          className="flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 hover:gap-3"
-          style={{ color: service.color, fontFamily: "var(--font-display)" }}
-        >
-          Learn More <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        {service.link ? (
+          <a
+            href={service.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 hover:gap-3"
+            style={{ color: service.color, fontFamily: "var(--font-display)", textDecoration: "none" }}
+          >
+            View Assessment <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        ) : (
+          <button
+            onClick={() => { const el = document.querySelector("#contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
+            className="flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 hover:gap-3"
+            style={{ color: service.color, fontFamily: "var(--font-display)" }}
+          >
+            Learn More <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
     </div>
   );
