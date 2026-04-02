@@ -162,7 +162,7 @@ export default function ContactSection() {
                   window.open("https://t.me/Aicorelogic_bot", "_blank");
                 } else if (isWhatsApp) {
                   const message = encodeURIComponent("Hi! I'm interested in learning more about AI-CoreLogic's consulting services.");
-                  window.open(`https://wa.me/447700123456?text=${message}`, "_blank");
+                  window.open(`https://wa.me/17273189265?text=${message}`, "_blank");
                 }
               };
               return (

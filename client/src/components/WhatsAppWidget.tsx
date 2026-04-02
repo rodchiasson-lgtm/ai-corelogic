@@ -6,7 +6,7 @@
 import { useState, useEffect } from "react";
 import { MessageCircle } from "lucide-react";
 
-const WHATSAPP_NUMBER = "447700123456"; // UK number format: +44 7700 123456 (replace with your actual number)
+const WHATSAPP_NUMBER = "17273189265"; // US number format: +1 727-318-9265
 const WHATSAPP_MESSAGE = "Hi! I'm interested in learning more about AI-CoreLogic's consulting services.";
 
 export default function WhatsAppWidget() {
