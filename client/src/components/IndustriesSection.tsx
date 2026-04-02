@@ -4,17 +4,49 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { ShoppingBag, HeartPulse, Truck, DollarSign, Building2, Factory, Utensils, GraduationCap } from "lucide-react";
+import { ShoppingBag, HeartPulse, Truck, DollarSign, Building2, Factory, Utensils, GraduationCap, Beaker } from "lucide-react";
 
 const industries = [
-  { icon: ShoppingBag, name: "Retail & E-Commerce", desc: "Personalization, demand forecasting, inventory optimization" },
-  { icon: HeartPulse, name: "Healthcare", desc: "Patient analytics, clinical workflow automation, diagnostics support" },
-  { icon: Truck, name: "Logistics & Supply Chain", desc: "Route optimization, predictive maintenance, demand planning" },
-  { icon: DollarSign, name: "Financial Services", desc: "Fraud detection, credit scoring, automated reporting" },
-  { icon: Building2, name: "Real Estate", desc: "Property valuation, market analysis, lead qualification" },
-  { icon: Factory, name: "Manufacturing", desc: "Quality control, predictive maintenance, process optimization" },
-  { icon: Utensils, name: "Food & Hospitality", desc: "Demand forecasting, menu optimization, customer insights" },
-  { icon: GraduationCap, name: "Education & Training", desc: "Personalized learning, content generation, student analytics" },
+  {
+    icon: DollarSign,
+    name: "Financial Services",
+    desc: "AI enables fraud detection, credit scoring, and automated reporting. Benefits: Reduced fraud losses by 40-60%, faster loan approvals, and improved risk management through real-time pattern analysis.",
+  },
+  {
+    icon: HeartPulse,
+    name: "Healthcare",
+    desc: "AI powers patient analytics, clinical workflow automation, and diagnostics support. Benefits: Improved diagnostic accuracy, reduced patient wait times, and better treatment outcomes through predictive analytics.",
+  },
+  {
+    icon: Factory,
+    name: "Manufacturing",
+    desc: "AI optimizes quality control, predictive maintenance, and process efficiency. Benefits: 20-30% reduction in downtime, improved product quality, and 15-25% increase in production efficiency.",
+  },
+  {
+    icon: ShoppingBag,
+    name: "Retail & E-Commerce",
+    desc: "AI drives personalization, demand forecasting, and inventory optimization. Benefits: 10-15% increase in conversion rates, 25-35% reduction in excess inventory, and enhanced customer experience.",
+  },
+  {
+    icon: Truck,
+    name: "Logistics & Supply Chain",
+    desc: "AI optimizes routes, enables predictive maintenance, and improves demand planning. Benefits: 15-20% fuel cost savings, reduced delivery times, and 30% improvement in supply chain visibility.",
+  },
+  {
+    icon: Building2,
+    name: "Real Estate",
+    desc: "AI automates property valuation, market analysis, and lead qualification. Benefits: Faster property assessments, improved pricing accuracy, and 40% faster lead conversion.",
+  },
+  {
+    icon: Beaker,
+    name: "Life Sciences",
+    desc: "AI accelerates drug discovery, clinical trial optimization, and research data analysis. Benefits: 30-50% reduction in R&D time, improved trial recruitment, and faster time-to-market for new therapies.",
+  },
+  {
+    icon: Factory,
+    name: "Food & Hospitality",
+    desc: "AI optimizes demand forecasting, menu engineering, and customer insights. Benefits: 20% reduction in food waste, improved customer satisfaction, and 10-15% revenue increase through personalization.",
+  },
 ];
 
 export default function IndustriesSection() {
@@ -55,7 +87,7 @@ export default function IndustriesSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {industries.map((industry, i) => {
             const Icon = industry.icon;
             return (
