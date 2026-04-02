@@ -11,41 +11,49 @@ const industries = [
     icon: DollarSign,
     name: "Financial Services",
     desc: "AI enables fraud detection, credit scoring, and automated reporting. Benefits: Reduced fraud losses by 40-60%, faster loan approvals, and improved risk management through real-time pattern analysis.",
+    articleSlug: "ai-financial-services-differentiation",
   },
   {
     icon: HeartPulse,
     name: "Healthcare",
     desc: "AI powers patient analytics, clinical workflow automation, and diagnostics support. Benefits: Improved diagnostic accuracy, reduced patient wait times, and better treatment outcomes through predictive analytics.",
+    articleSlug: "ai-healthcare-clinical-transformation",
   },
   {
     icon: Factory,
     name: "Manufacturing",
     desc: "AI optimizes quality control, predictive maintenance, and process efficiency. Benefits: 20-30% reduction in downtime, improved product quality, and 15-25% increase in production efficiency.",
+    articleSlug: "ai-manufacturing-quality-efficiency",
   },
   {
     icon: ShoppingBag,
     name: "Retail & E-Commerce",
     desc: "AI drives personalization, demand forecasting, and inventory optimization. Benefits: 10-15% increase in conversion rates, 25-35% reduction in excess inventory, and enhanced customer experience.",
+    articleSlug: "ai-retail-personalization-conversion",
   },
   {
     icon: Truck,
     name: "Logistics & Supply Chain",
     desc: "AI optimizes routes, enables predictive maintenance, and improves demand planning. Benefits: 15-20% fuel cost savings, reduced delivery times, and 30% improvement in supply chain visibility.",
+    articleSlug: "ai-logistics-optimization-efficiency",
   },
   {
     icon: Building2,
     name: "Real Estate",
     desc: "AI automates property valuation, market analysis, and lead qualification. Benefits: Faster property assessments, improved pricing accuracy, and 40% faster lead conversion.",
+    articleSlug: "ai-real-estate-valuation-insights",
   },
   {
     icon: Beaker,
     name: "Life Sciences",
     desc: "AI accelerates drug discovery, clinical trial optimization, and research data analysis. Benefits: 30-50% reduction in R&D time, improved trial recruitment, and faster time-to-market for new therapies.",
+    articleSlug: "ai-life-sciences-drug-discovery",
   },
   {
     icon: Factory,
     name: "Food & Hospitality",
     desc: "AI optimizes demand forecasting, menu engineering, and customer insights. Benefits: 20% reduction in food waste, improved customer satisfaction, and 10-15% revenue increase through personalization.",
+    articleSlug: "ai-food-hospitality-optimization",
   },
 ];
 
@@ -123,9 +131,16 @@ export default function IndustriesSection() {
                 >
                   {industry.name}
                 </h4>
-                <p className="text-slate-500 text-xs leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-slate-500 text-xs leading-relaxed mb-3" style={{ fontFamily: "var(--font-body)" }}>
                   {industry.desc}
                 </p>
+                <a
+                  href={`/blog/${industry.articleSlug}`}
+                  className="text-cyan-400 hover:text-cyan-300 text-xs font-semibold transition-colors inline-flex items-center gap-1"
+                  style={{ textDecoration: "none", fontFamily: "var(--font-body)" }}
+                >
+                  Read Article →
+                </a>
               </div>
             );
           })}
