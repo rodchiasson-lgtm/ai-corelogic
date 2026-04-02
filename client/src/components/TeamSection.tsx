@@ -64,31 +64,9 @@ export default function TeamSection() {
               backdropFilter: "blur(10px)",
             }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-              {/* Photo Section */}
-              <div className="md:col-span-1 relative overflow-hidden">
-                <img
-                  src="https://d2xsxph8kpxj0f.cloudfront.net/310519663498118390/juLcehvUK8ZLccnz5JYQE8/81_1bdc8163.jpg"
-                  alt="Rodney Chiasson"
-                  className="w-full h-full object-cover"
-                />
-                <div
-                  className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6"
-                  style={{
-                    background: "linear-gradient(to top, rgba(5,11,24,0.95), transparent)",
-                  }}
-                >
-                  <div className="text-white text-sm space-y-2">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" style={{ color: "#00D4C8" }} />
-                      <span>London, UK & New York, USA</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+            <div className="grid grid-cols-1 gap-0">
               {/* Content Section */}
-              <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-between">
+              <div className="p-8 md:p-10 flex flex-col justify-between">
                 <div>
                   <h3
                     className="text-2xl font-bold text-white mb-1"
