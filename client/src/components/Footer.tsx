@@ -66,6 +66,7 @@ export default function Footer() {
               {[
                 { icon: Linkedin, href: "https://www.linkedin.com/in/rodneychiasson", label: "LinkedIn" },
                 { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot", label: "Telegram" },
+                { icon: MessageCircle, href: "https://wa.me/447700123456", label: "WhatsApp" },
                 { icon: Twitter, href: "#", label: "Twitter" },
                 { icon: Github, href: "#", label: "GitHub" },
               ].map(({ icon: Icon, href, label }) => (

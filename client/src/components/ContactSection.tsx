@@ -33,6 +33,12 @@ const contactInfo = [
     value: "@Aicorelogic_bot",
     sub: "Instant responses 24/7",
   },
+  {
+    icon: MessageCircle,
+    label: "Chat on WhatsApp",
+    value: "+1 (727) 318-9265",
+    sub: "Quick replies 24/7",
+  },
 ];
 
 const services = [
@@ -150,16 +156,22 @@ export default function ContactSection() {
             {contactInfo.map((info) => {
               const Icon = info.icon;
               const isTelegram = info.label === "Chat on Telegram";
-              const handleTelegramClick = () => {
-                window.open("https://t.me/Aicorelogic_bot", "_blank");
+              const isWhatsApp = info.label === "Chat on WhatsApp";
+              const handleMessengerClick = () => {
+                if (isTelegram) {
+                  window.open("https://t.me/Aicorelogic_bot", "_blank");
+                } else if (isWhatsApp) {
+                  const message = encodeURIComponent("Hi! I'm interested in learning more about AI-CoreLogic's consulting services.");
+                  window.open(`https://wa.me/447700123456?text=${message}`, "_blank");
+                }
               };
               return (
                 <div
                   key={info.label}
                   className={`glow-card p-5 rounded-xl flex items-start gap-4 ${
-                    isTelegram ? "cursor-pointer hover:border-cyan-400 transition-all" : ""
+                    isTelegram || isWhatsApp ? "cursor-pointer hover:border-cyan-400 transition-all" : ""
                   }`}
-                  onClick={isTelegram ? handleTelegramClick : undefined}
+                  onClick={isTelegram || isWhatsApp ? handleMessengerClick : undefined}
                 >
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -173,7 +185,7 @@ export default function ContactSection() {
                       className="text-white font-semibold text-sm"
                       style={{
                         fontFamily: "var(--font-display)",
-                        color: isTelegram ? "#00D4C8" : "white",
+                        color: isTelegram ? "#00D4C8" : isWhatsApp ? "#25D366" : "white",
                       }}
                     >
                       {info.value}
