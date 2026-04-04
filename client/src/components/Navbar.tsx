@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { Menu, X, Cpu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Services", href: "#services" },
@@ -54,22 +54,14 @@ export default function Navbar() {
           {/* Logo */}
           <a
             href="#"
-            className="flex items-center gap-2.5 group"
+            className="flex items-center group"
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
           >
-            <div className="relative w-9 h-9 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 opacity-20 group-hover:opacity-40 transition-opacity" />
-              <div className="absolute inset-0 rounded-lg border border-cyan-400/30 group-hover:border-cyan-400/60 transition-colors" />
-              <Cpu className="w-5 h-5 text-cyan-400 relative z-10" strokeWidth={1.5} />
-            </div>
-            <div>
-              <span
-                style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.1rem", letterSpacing: "-0.01em" }}
-                className="text-white"
-              >
-                AI-<span className="gradient-text">CoreLogic</span>
-              </span>
-            </div>
+            <img
+              src="/logo.png"
+              alt="AI-CoreLogic"
+              className="h-12 lg:h-14 w-auto object-contain transition-opacity duration-200 group-hover:opacity-90"
+            />
           </a>
 
           {/* Desktop Nav */}
