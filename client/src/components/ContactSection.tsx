@@ -8,36 +8,43 @@ import { useEffect, useRef, useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCircle, Loader, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
+const WHATSAPP_MESSAGE = encodeURIComponent("Hi! I'm interested in learning more about AI-CoreLogic's consulting services.");
+
 const contactInfo = [
   {
     icon: Mail,
     label: "Email Us",
     value: "admin@core-logic.com",
     sub: "We respond within 24 hours",
+    href: "mailto:admin@core-logic.com",
   },
   {
     icon: Phone,
     label: "Call Us",
     value: "+1 (727) 318-9265",
     sub: "Mon–Fri, 9am–6pm EST",
+    href: "tel:+17273189265",
   },
   {
     icon: MapPin,
     label: "Global Offices",
     value: "London, UK & New York, USA",
     sub: "Serving clients worldwide",
+    href: undefined,
   },
   {
     icon: MessageCircle,
     label: "Chat on Telegram",
     value: "@Aicorelogic_bot",
     sub: "Instant responses 24/7",
+    href: "https://t.me/Aicorelogic_bot",
   },
   {
     icon: MessageCircle,
     label: "Chat on WhatsApp",
     value: "+1 (727) 318-9265",
     sub: "Quick replies 24/7",
+    href: `https://wa.me/17273189265?text=${WHATSAPP_MESSAGE}`,
   },
 ];
 
@@ -157,22 +164,9 @@ export default function ContactSection() {
               const Icon = info.icon;
               const isTelegram = info.label === "Chat on Telegram";
               const isWhatsApp = info.label === "Chat on WhatsApp";
-              const handleMessengerClick = () => {
-                if (isTelegram) {
-                  window.open("https://t.me/Aicorelogic_bot", "_blank");
-                } else if (isWhatsApp) {
-                  const message = encodeURIComponent("Hi! I'm interested in learning more about AI-CoreLogic's consulting services.");
-                  window.open(`https://wa.me/17273189265?text=${message}`, "_blank");
-                }
-              };
-              return (
-                <div
-                  key={info.label}
-                  className={`glow-card p-5 rounded-xl flex items-start gap-4 ${
-                    isTelegram || isWhatsApp ? "cursor-pointer hover:border-cyan-400 transition-all" : ""
-                  }`}
-                  onClick={isTelegram || isWhatsApp ? handleMessengerClick : undefined}
-                >
+              const isClickable = !!info.href;
+              const cardContent = (
+                <>
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ background: "rgba(0,212,200,0.1)", border: "1px solid rgba(0,212,200,0.2)" }}
@@ -194,6 +188,25 @@ export default function ContactSection() {
                       {info.sub}
                     </div>
                   </div>
+                </>
+              );
+              return isClickable ? (
+                <a
+                  key={info.label}
+                  href={info.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glow-card p-5 rounded-xl flex items-start gap-4 cursor-pointer hover:border-cyan-400 transition-all no-underline"
+                  style={{ textDecoration: "none" }}
+                >
+                  {cardContent}
+                </a>
+              ) : (
+                <div
+                  key={info.label}
+                  className="glow-card p-5 rounded-xl flex items-start gap-4"
+                >
+                  {cardContent}
                 </div>
               );
             })}
