@@ -21,9 +21,9 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email Us",
-    value: "admin@core-logic.com",
+    value: "admin@ai-corelogic.com",
     sub: "We respond within 24 hours",
-    href: "mailto:admin@core-logic.com",
+    href: "mailto:admin@ai-corelogic.com",
     isWhatsApp: false,
     isTelegram: false,
   },
@@ -112,7 +112,7 @@ export default function ContactSection() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-                to: "admin@core-logic.com",
+                to: "admin@ai-corelogic.com",
           name: form.name,
           email: form.email,
           company: form.company,
