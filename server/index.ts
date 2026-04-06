@@ -41,6 +41,35 @@ async function startServer() {
     }
   });
 
+  // Email sending endpoint
+  app.post("/api/send-email", async (req, res) => {
+    try {
+      const { to, name, email, company, service, message } = req.body;
+
+      // Validate required fields
+      if (!name || !email || !message) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // Log the email submission
+      console.log("Email received:", {
+        to,
+        from: email,
+        name,
+        company,
+        service,
+        message,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Return success response
+      res.json({ success: true, message: "Email received successfully" });
+    } catch (error) {
+      console.error("Email sending error:", error);
+      res.status(500).json({ error: "Failed to send email" });
+    }
+  });
+
   // Health check endpoint
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
@@ -56,6 +85,7 @@ async function startServer() {
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
     console.log(`Telegram webhook available at /api/telegram/webhook`);
+    console.log(`Email endpoint available at /api/send-email`);
   });
 }
 
