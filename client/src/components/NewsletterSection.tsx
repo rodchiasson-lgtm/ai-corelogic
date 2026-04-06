@@ -299,18 +299,43 @@ export default function NewsletterSection() {
                 className="text-white font-bold text-lg mb-2"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                What You'll Get
+                Stay Ahead with Our AI Insights
               </h4>
               <p className="text-slate-400 text-sm mb-4" style={{ fontFamily: "var(--font-body)" }}>
                 Every week: AI market trends • Implementation case studies • Process mining insights • Industry analysis • Exclusive webinar invitations • Early access to new research
               </p>
-              <a
-                href="#"
-                className="text-sm font-semibold"
-                style={{ color: "#2563EB", textDecoration: "none" }}
-              >
-                Or follow on LinkedIn →
-              </a>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a
+                  href="https://rodchiasson-velon.wordpress.com/?_gl=1*h1mdp6*_gcl_au*MTY0MTU5ODI5NS4xNzc1NDkyMzM1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200"
+                  style={{
+                    color: "white",
+                    background: "rgba(0,212,200,0.15)",
+                    border: "1px solid rgba(0,212,200,0.3)",
+                    textDecoration: "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(0,212,200,0.25)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,212,200,0.6)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(0,212,200,0.15)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,212,200,0.3)";
+                  }}
+                >
+                  Read Our Blog →
+                </a>
+                <span className="text-slate-500">or</span>
+                <a
+                  href="#"
+                  className="text-sm font-semibold"
+                  style={{ color: "#2563EB", textDecoration: "none" }}
+                >
+                  Follow on LinkedIn →
+                </a>
+              </div>
             </div>
           </div>
         )}
