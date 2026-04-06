@@ -329,7 +329,9 @@ export default function NewsletterSection() {
                 </a>
                 <span className="text-slate-500">or</span>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/rodneychiasson"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm font-semibold"
                   style={{ color: "#2563EB", textDecoration: "none" }}
                 >

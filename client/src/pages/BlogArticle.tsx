@@ -202,7 +202,9 @@ export default function BlogArticle() {
                   {article.author} is an AI consulting expert with 12+ years of experience helping mid-sized organizations transform through AI and process mining.
                 </p>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/rodneychiasson"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm font-semibold"
                   style={{ color: "#2563EB", textDecoration: "none" }}
                 >
