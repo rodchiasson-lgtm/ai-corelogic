@@ -52,8 +52,8 @@ export default function BlogSection() {
               <span className="gradient-text">Blog</span>
             </h2>
             <Link href="/blog">
-              <a
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 w-fit"
+              <div
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 w-fit cursor-pointer"
                 style={{
                   background: "rgba(37,99,235,0.1)",
                   border: "1px solid rgba(37,99,235,0.3)",
@@ -64,7 +64,7 @@ export default function BlogSection() {
               >
                 View All Articles
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </div>
             </Link>
           </div>
         </div>
@@ -73,8 +73,8 @@ export default function BlogSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article, i) => (
             <Link key={article.id} href={`/blog/${article.slug}`}>
-              <a
-                className={`group glow-card rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-700 hover:translate-y-[-4px] ${
+              <div
+                className={`group glow-card rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-700 hover:translate-y-[-4px] cursor-pointer ${
                   visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
                 style={{ transitionDelay: `${i * 100}ms`, textDecoration: "none" }}
@@ -121,7 +121,7 @@ export default function BlogSection() {
                     <ArrowRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
-              </a>
+              </div>
             </Link>
           ))}
         </div>

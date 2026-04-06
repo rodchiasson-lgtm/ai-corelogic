@@ -195,7 +195,7 @@ export default function ContactSection() {
                     }}
                   >
                     {info.isWhatsApp ? (
-                      <WhatsAppIcon className="w-4 h-4" style={{ color: "#25D366" } as React.CSSProperties} />
+                      <WhatsAppIcon className="w-4 h-4" />
                     ) : Icon ? (
                       <Icon className="w-4 h-4" style={{ color: "#00D4C8" }} strokeWidth={1.5} />
                     ) : null}

@@ -93,8 +93,8 @@ export default function CategoryGrid() {
 
               return (
                 <Link key={category} href={`/category/${slug}`}>
-                  <a
-                    className={`group glow-card p-6 rounded-2xl flex flex-col h-full transition-all duration-700 hover:translate-y-[-4px] ${
+                  <div
+                    className={`group glow-card p-6 rounded-2xl flex flex-col h-full transition-all duration-700 hover:translate-y-[-4px] cursor-pointer ${
                       visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     }`}
                     style={{
@@ -127,7 +127,7 @@ export default function CategoryGrid() {
                       </span>
                       <ArrowRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
                     </div>
-                  </a>
+                  </div>
                 </Link>
               );
             })}
@@ -148,8 +148,8 @@ export default function CategoryGrid() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link href="/blog">
-              <a
-                className="px-6 py-3 rounded-lg font-semibold transition-all duration-200"
+              <div
+                className="px-6 py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer"
                 style={{
                   background: "rgba(37,99,235,0.1)",
                   border: "1px solid rgba(37,99,235,0.3)",
@@ -159,7 +159,7 @@ export default function CategoryGrid() {
                 }}
               >
                 View All Articles
-              </a>
+              </div>
             </Link>
             <a
               href="#newsletter"

@@ -58,7 +58,7 @@ export default function Navbar() {
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
           >
             <img
-              src="/logo.png"
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663498118390/juLcehvUK8ZLccnz5JYQE8/logo_8ad417ef.png"
               alt="AI-CoreLogic"
               className="h-12 lg:h-14 w-auto object-contain transition-opacity duration-200 group-hover:opacity-90"
             />
