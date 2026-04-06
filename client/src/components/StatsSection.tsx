@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const stats = [
-  { value: 150, suffix: "+", label: "SMBs Transformed", description: "Businesses successfully guided through AI adoption" },
+  { value: 50, suffix: "+", label: "SMBs Transformed", description: "Businesses successfully guided through AI adoption" },
   { value: 98, suffix: "%", label: "Client Satisfaction", description: "Measured across all project engagements" },
   { value: 12, suffix: "+", label: "Years of Expertise", description: "Deep AI consulting and implementation experience" },
   { value: 40, suffix: "%", label: "Avg. Efficiency Gain", description: "Operational improvement post-implementation" },
