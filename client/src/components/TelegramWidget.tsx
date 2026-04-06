@@ -25,7 +25,7 @@ export default function TelegramWidget() {
     <>
       {/* Floating Telegram Button */}
       <div
-        className="fixed bottom-24 right-6 z-40 animate-fade-in"
+        className="fixed bottom-32 right-6 z-40 animate-fade-in"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
