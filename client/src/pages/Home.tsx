@@ -20,6 +20,7 @@ import CategoryGrid from "@/components/CategoryGrid";
 import TeamSection from "@/components/TeamSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTABanner from "@/components/CTABanner";
+import MapSection from "@/components/MapSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
@@ -42,6 +43,7 @@ export default function Home() {
       <TeamSection />
       <TestimonialsSection />
       <CTABanner />
+      <MapSection />
       <ContactSection />
       <Footer />
     </div>
