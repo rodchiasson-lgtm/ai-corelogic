@@ -46,6 +46,15 @@ const contactInfo = [
     isTelegram: false,
   },
   {
+    icon: MessageCircle,
+    label: "Chat on Telegram",
+    value: "@Aicorelogic_bot",
+    sub: "Instant responses 24/7",
+    href: "https://t.me/Aicorelogic_bot",
+    isWhatsApp: false,
+    isTelegram: true,
+  },
+  {
     icon: null,
     label: "Chat on WhatsApp",
     value: "+1 (727) 318-9265",
@@ -179,16 +188,20 @@ export default function ContactSection() {
                     style={{
                       background: info.isWhatsApp
                         ? "rgba(37,211,102,0.15)"
+                        : info.isTelegram
+                        ? "rgba(0,136,204,0.15)"
                         : "rgba(0,212,200,0.1)",
                       border: info.isWhatsApp
                         ? "1px solid rgba(37,211,102,0.35)"
+                        : info.isTelegram
+                        ? "1px solid rgba(0,136,204,0.35)"
                         : "1px solid rgba(0,212,200,0.2)",
                     }}
                   >
                     {info.isWhatsApp ? (
                       <WhatsAppIcon className="w-4 h-4" />
                     ) : Icon ? (
-                      <Icon className="w-4 h-4" style={{ color: "#00D4C8" }} strokeWidth={1.5} />
+                      <Icon className="w-4 h-4" style={{ color: info.isTelegram ? "#0088CC" : "#00D4C8" }} strokeWidth={1.5} />
                     ) : null}
                   </div>
                   <div>

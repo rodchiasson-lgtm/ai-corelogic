@@ -73,6 +73,7 @@ export default function Footer() {
             {/* Social links */}
             <div className="flex gap-3">
               {[
+                { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot", label: "Telegram", color: "#0088CC" },
                 { icon: null, href: `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`, label: "WhatsApp", color: "#25D366" },
                 { icon: Twitter, href: "#", label: "Twitter", color: undefined },
                 { icon: Github, href: "#", label: "GitHub", color: undefined },
@@ -85,8 +86,8 @@ export default function Footer() {
                   aria-label={label}
                   className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:border-cyan-400/40"
                   style={{
-                    background: label === "WhatsApp" ? "rgba(37,211,102,0.12)" : "rgba(255,255,255,0.04)",
-                    border: label === "WhatsApp" ? "1px solid rgba(37,211,102,0.3)" : "1px solid rgba(255,255,255,0.08)",
+                    background: label === "Telegram" ? "rgba(0,136,204,0.12)" : label === "WhatsApp" ? "rgba(37,211,102,0.12)" : "rgba(255,255,255,0.04)",
+                    border: label === "Telegram" ? "1px solid rgba(0,136,204,0.3)" : label === "WhatsApp" ? "1px solid rgba(37,211,102,0.3)" : "1px solid rgba(255,255,255,0.08)",
                     color: color || undefined,
                   }}
                 >

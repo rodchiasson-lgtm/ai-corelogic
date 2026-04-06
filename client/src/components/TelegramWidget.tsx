@@ -6,7 +6,8 @@
 import { useState, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 
-const TELEGRAM_BOT_USERNAME = "Aicorelogic_bot"; // Official bot username
+const TELEGRAM_BOT_USERNAME = "Aicorelogic_bot";
+const TELEGRAM_URL = `https://t.me/${TELEGRAM_BOT_USERNAME}`;
 
 export default function TelegramWidget() {
   const [isVisible, setIsVisible] = useState(false);
@@ -18,15 +19,13 @@ export default function TelegramWidget() {
     return () => clearTimeout(timer);
   }, []);
 
-  const TELEGRAM_URL = `https://t.me/${TELEGRAM_BOT_USERNAME}?start=website`;
-
   if (!isVisible) return null;
 
   return (
     <>
       {/* Floating Telegram Button */}
       <div
-        className="fixed bottom-6 right-6 z-40 animate-fade-in"
+        className="fixed bottom-24 right-6 z-40 animate-fade-in"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
@@ -35,7 +34,7 @@ export default function TelegramWidget() {
           <div
             className="absolute bottom-16 right-0 px-4 py-2 rounded-lg text-sm font-medium text-white whitespace-nowrap mb-2 animate-fade-in"
             style={{
-              background: "rgba(0,212,200,0.95)",
+              background: "rgba(0,136,204,0.95)",
               backdropFilter: "blur(10px)",
               fontFamily: "var(--font-body)",
             }}
@@ -43,7 +42,7 @@ export default function TelegramWidget() {
             Chat with us on Telegram
             <div
               className="absolute -bottom-1 right-4 w-2 h-2 transform rotate-45"
-              style={{ background: "rgba(0,212,200,0.95)" }}
+              style={{ background: "rgba(0,136,204,0.95)" }}
             />
           </div>
         )}
@@ -55,8 +54,8 @@ export default function TelegramWidget() {
           rel="noopener noreferrer"
           className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg no-underline"
           style={{
-            background: "linear-gradient(135deg, #00D4C8 0%, #0099CC 100%)",
-            boxShadow: "0 8px 24px rgba(0,212,200,0.3)",
+            background: "linear-gradient(135deg, #0088CC 0%, #0055AA 100%)",
+            boxShadow: "0 8px 24px rgba(0,136,204,0.3)",
             textDecoration: "none",
           }}
           aria-label="Open Telegram Chat"
@@ -68,7 +67,7 @@ export default function TelegramWidget() {
         <div
           className="absolute inset-0 rounded-full animate-pulse"
           style={{
-            background: "rgba(0,212,200,0.2)",
+            background: "rgba(0,136,204,0.2)",
             animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
           }}
         />
