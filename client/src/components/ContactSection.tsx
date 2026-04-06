@@ -46,15 +46,6 @@ const contactInfo = [
     isTelegram: false,
   },
   {
-    icon: MessageCircle,
-    label: "Chat on Telegram",
-    value: "@Aicorelogic_bot",
-    sub: "Instant responses 24/7",
-    href: "https://t.me/Aicorelogic_bot?start=website",
-    isWhatsApp: false,
-    isTelegram: true,
-  },
-  {
     icon: null,
     label: "Chat on WhatsApp",
     value: "+1 (727) 318-9265",
