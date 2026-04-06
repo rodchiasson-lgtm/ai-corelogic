@@ -73,7 +73,7 @@ export default function Footer() {
             {/* Social links */}
             <div className="flex gap-3">
               {[
-                { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot", label: "Telegram", color: undefined },
+                { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot?start=website", label: "Telegram", color: undefined },
                 { icon: null, href: `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`, label: "WhatsApp", color: "#25D366" },
                 { icon: Twitter, href: "#", label: "Twitter", color: undefined },
                 { icon: Github, href: "#", label: "GitHub", color: undefined },

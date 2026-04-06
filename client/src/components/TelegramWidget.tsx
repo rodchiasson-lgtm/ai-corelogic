@@ -18,10 +18,7 @@ export default function TelegramWidget() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleTelegramClick = () => {
-    // Open Telegram bot in new window
-    window.open(`https://t.me/${TELEGRAM_BOT_USERNAME}`, "_blank");
-  };
+  const TELEGRAM_URL = `https://t.me/${TELEGRAM_BOT_USERNAME}?start=website`;
 
   if (!isVisible) return null;
 
@@ -52,17 +49,20 @@ export default function TelegramWidget() {
         )}
 
         {/* Button */}
-        <button
-          onClick={handleTelegramClick}
-          className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
+        <a
+          href={TELEGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg no-underline"
           style={{
             background: "linear-gradient(135deg, #00D4C8 0%, #0099CC 100%)",
             boxShadow: "0 8px 24px rgba(0,212,200,0.3)",
+            textDecoration: "none",
           }}
           aria-label="Open Telegram Chat"
         >
           <MessageCircle className="w-6 h-6 text-white" strokeWidth={1.5} />
-        </button>
+        </a>
 
         {/* Pulse animation */}
         <div

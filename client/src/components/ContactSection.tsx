@@ -50,7 +50,7 @@ const contactInfo = [
     label: "Chat on Telegram",
     value: "@Aicorelogic_bot",
     sub: "Instant responses 24/7",
-    href: "https://t.me/Aicorelogic_bot",
+    href: "https://t.me/Aicorelogic_bot?start=website",
     isWhatsApp: false,
     isTelegram: true,
   },
