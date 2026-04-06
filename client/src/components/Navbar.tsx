@@ -1,4 +1,4 @@
-/*
+/**
  * AI-CoreLogic Navbar
  * Theme: Deep Intelligence — dark aerospace, cyan accents
  * Behavior: Transparent on top, blurred on scroll
@@ -80,7 +80,33 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-3">
-
+            <a
+              href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-300 hover:text-cyan-400 transition-colors duration-200 text-sm font-medium"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              Schedule a Call
+            </a>
+            <a
+              href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-300 hover:text-cyan-400 transition-colors duration-200 text-sm font-medium"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              Book a Meeting
+            </a>
+            <a
+              href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-300 hover:text-cyan-400 transition-colors duration-200 text-sm font-medium"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              Book a Demo
+            </a>
             <button
               onClick={() => handleNavClick("#contact")}
               className="btn-primary px-5 py-2.5 rounded-lg text-sm font-semibold"
@@ -114,7 +140,34 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
-            <div className="mt-2 pt-2 border-t border-cyan-400/10">
+            <div className="mt-2 pt-2 border-t border-cyan-400/10 flex flex-col gap-2">
+              <a
+                href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-left px-4 py-3 text-slate-300 hover:text-cyan-400 hover:bg-cyan-400/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                Schedule a Call
+              </a>
+              <a
+                href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-left px-4 py-3 text-slate-300 hover:text-cyan-400 hover:bg-cyan-400/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                Book a Meeting
+              </a>
+              <a
+                href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-left px-4 py-3 text-slate-300 hover:text-cyan-400 hover:bg-cyan-400/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                Book a Demo
+              </a>
               <button
                 onClick={() => handleNavClick("#contact")}
                 className="btn-primary w-full px-5 py-3 rounded-lg text-sm font-semibold"
