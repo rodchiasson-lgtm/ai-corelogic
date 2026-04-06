@@ -6,6 +6,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Mail, Phone, MapPin, MessageCircle } from "lucide-react";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const WHATSAPP_NUMBER = "17273189265";
 const WHATSAPP_MESSAGE = encodeURIComponent("Hi! I'm interested in learning more about AI-CoreLogic's consulting services.");
@@ -67,6 +68,7 @@ const contactInfo = [
 export default function ContactSection() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const { trackCommunicationClick } = useAnalytics();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -161,6 +163,12 @@ export default function ContactSection() {
                 href={info.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  if (info.isTelegram) trackCommunicationClick('telegram');
+                  else if (info.isWhatsApp) trackCommunicationClick('whatsapp');
+                  else if (info.label === 'Email Us') trackCommunicationClick('email');
+                  else if (info.label === 'Call Us') trackCommunicationClick('phone');
+                }}
                 className="glow-card p-5 rounded-xl flex items-start gap-4 cursor-pointer transition-all no-underline"
                 style={{
                   textDecoration: "none",

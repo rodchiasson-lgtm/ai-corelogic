@@ -6,6 +6,7 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const navLinks = [
   { label: "Services", href: "#services" },
@@ -22,6 +23,7 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { trackSchedulingClick } = useAnalytics();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -84,6 +86,7 @@ export default function Navbar() {
               href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackSchedulingClick('call')}
               className="text-slate-300 hover:text-cyan-400 transition-colors duration-200 text-sm font-medium"
               style={{ fontFamily: "var(--font-body)" }}
             >
@@ -93,6 +96,7 @@ export default function Navbar() {
               href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackSchedulingClick('meeting')}
               className="text-slate-300 hover:text-cyan-400 transition-colors duration-200 text-sm font-medium"
               style={{ fontFamily: "var(--font-body)" }}
             >
@@ -102,6 +106,7 @@ export default function Navbar() {
               href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackSchedulingClick('demo')}
               className="text-slate-300 hover:text-cyan-400 transition-colors duration-200 text-sm font-medium"
               style={{ fontFamily: "var(--font-body)" }}
             >

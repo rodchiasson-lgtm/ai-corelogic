@@ -7,24 +7,29 @@ import { useRoute, Link } from "wouter";
 import { getArticleBySlug, blogArticles } from "@/lib/blogData";
 import { Calendar, Clock, ArrowLeft, ArrowRight, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export default function BlogArticle() {
   const [route, params] = useRoute("/blog/:slug");
   const [article, setArticle] = useState(getArticleBySlug(params?.slug || ""));
   const [relatedArticles, setRelatedArticles] = useState<typeof blogArticles>([]);
+  const { trackBlogRead } = useAnalytics();
 
   useEffect(() => {
     const foundArticle = getArticleBySlug(params?.slug || "");
     setArticle(foundArticle);
 
     if (foundArticle) {
+      // Track blog read event
+      trackBlogRead(foundArticle.slug, foundArticle.title);
+
       // Get related articles from same category
       const related = blogArticles
         .filter((a) => a.category === foundArticle.category && a.id !== foundArticle.id)
         .slice(0, 3);
       setRelatedArticles(related);
     }
-  }, [params?.slug]);
+  }, [params?.slug, trackBlogRead]);
 
   if (!article) {
     return (
