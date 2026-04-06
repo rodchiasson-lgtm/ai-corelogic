@@ -23,7 +23,7 @@ const contactInfo = [
     label: "Email Us",
     value: "admin@ai-corelogic.com",
     sub: "We respond within 24 hours",
-    href: "mailto:admin@ai-corelogic.com",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=admin@ai-corelogic.com&su=AI%20Consulting%20Inquiry",
     isWhatsApp: false,
     isTelegram: false,
   },
