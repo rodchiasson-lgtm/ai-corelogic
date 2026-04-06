@@ -1,7 +1,7 @@
 /**
  * AI-CoreLogic Map Section
  * Theme: Deep Intelligence — Google Map integration
- * Features: Embedded Google Map showing London office
+ * Features: Embedded Google Map showing London and NYC offices
  */
 
 import { useEffect, useRef } from "react";
@@ -14,10 +14,10 @@ export default function MapSection() {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Initialize map
+    // Initialize map (centered between London and NYC)
     const map = new google.maps.Map(mapRef.current, {
-      zoom: 15,
-      center: { lat: 51.5524, lng: -0.1932 }, // 21 Hampstead Gardens, London
+      zoom: 4,
+      center: { lat: 40.7128, lng: -74.0060 }, // NYC center
       styles: [
         {
           elementType: "geometry",
@@ -86,8 +86,8 @@ export default function MapSection() {
 
     mapInstanceRef.current = map;
 
-    // Add marker
-    const marker = new google.maps.Marker({
+    // London Marker
+    const londonMarker = new google.maps.Marker({
       position: { lat: 51.5524, lng: -0.1932 },
       map: map,
       title: "AI-CoreLogic London Office",
@@ -101,8 +101,8 @@ export default function MapSection() {
       },
     });
 
-    // Add info window
-    const infoWindow = new google.maps.InfoWindow({
+    // London Info Window
+    const londonInfoWindow = new google.maps.InfoWindow({
       content: `
         <div style="color: #fff; font-family: var(--font-body); padding: 10px;">
           <div style="font-weight: bold; margin-bottom: 5px; color: #00D4C8;">AI-CoreLogic London</div>
@@ -113,12 +113,45 @@ export default function MapSection() {
       `,
     });
 
-    marker.addListener("click", () => {
-      infoWindow.open(map, marker);
+    londonMarker.addListener("click", () => {
+      londonInfoWindow.open(map, londonMarker);
+      nycInfoWindow.close();
     });
 
-    // Open info window by default
-    infoWindow.open(map, marker);
+    // NYC Marker
+    const nycMarker = new google.maps.Marker({
+      position: { lat: 40.7127, lng: -74.0134 }, // 1 World Trade Center
+      map: map,
+      title: "AI-CoreLogic New York Office",
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 12,
+        fillColor: "#2563EB",
+        fillOpacity: 1,
+        strokeColor: "#ffffff",
+        strokeWeight: 2,
+      },
+    });
+
+    // NYC Info Window
+    const nycInfoWindow = new google.maps.InfoWindow({
+      content: `
+        <div style="color: #fff; font-family: var(--font-body); padding: 10px;">
+          <div style="font-weight: bold; margin-bottom: 5px; color: #2563EB;">AI-CoreLogic New York</div>
+          <div>1 World Trade Center</div>
+          <div>New York, NY 10007, USA</div>
+          <div style="margin-top: 8px; font-size: 12px; color: #9CA3AF;">+1 (727) 318-9265</div>
+        </div>
+      `,
+    });
+
+    nycMarker.addListener("click", () => {
+      nycInfoWindow.open(map, nycMarker);
+      londonInfoWindow.close();
+    });
+
+    // Open NYC info window by default
+    nycInfoWindow.open(map, nycMarker);
 
     return () => {
       // Cleanup if needed
@@ -188,8 +221,8 @@ export default function MapSection() {
                       New York, USA
                     </h3>
                     <p className="text-slate-400 text-sm mb-2" style={{ fontFamily: "var(--font-body)" }}>
-                      Available for consultations<br />
-                      EST timezone support
+                      1 World Trade Center<br />
+                      New York, NY 10007, USA
                     </p>
                     <p className="text-blue-400 text-sm font-medium">+1 (727) 318-9265</p>
                   </div>
