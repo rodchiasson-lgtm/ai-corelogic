@@ -52,11 +52,14 @@ export default function TelegramWidget() {
           href={TELEGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg no-underline"
+          className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
           style={{
             background: "linear-gradient(135deg, #0088CC 0%, #0055AA 100%)",
             boxShadow: "0 8px 24px rgba(0,136,204,0.3)",
             textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           aria-label="Open Telegram Chat"
         >
