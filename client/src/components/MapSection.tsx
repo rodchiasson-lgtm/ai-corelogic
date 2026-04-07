@@ -1,18 +1,20 @@
 /**
  * AI-CoreLogic Map Section
  * Theme: Deep Intelligence — Google Map integration
- * Features: Embedded Google Map showing London and NYC offices
+ * Features: Embedded Google Map showing London and NYC offices (hidden by default, shown on click)
  */
 
-import { useEffect, useRef } from "react";
-import { MapPin } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { MapPin, Map as MapIcon } from "lucide-react";
 
 export default function MapSection() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const [mapVisible, setMapVisible] = useState(false);
+  const [mapInitialized, setMapInitialized] = useState(false);
 
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !mapVisible || mapInitialized) return;
 
     // Initialize map (centered between London and NYC)
     const map = new google.maps.Map(mapRef.current, {
@@ -153,10 +155,12 @@ export default function MapSection() {
     // Open NYC info window by default
     nycInfoWindow.open(map, nycMarker);
 
+    setMapInitialized(true);
+
     return () => {
       // Cleanup if needed
     };
-  }, []);
+  }, [mapVisible, mapInitialized]);
 
   return (
     <section className="py-20 relative" style={{ background: "#0D1B2E" }}>
@@ -185,15 +189,16 @@ export default function MapSection() {
             <div className="space-y-4">
               {/* London */}
               <div
-                className="p-6 rounded-xl"
+                className="p-6 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg"
                 style={{
                   background: "rgba(0,212,200,0.05)",
                   border: "1px solid rgba(0,212,200,0.2)",
                 }}
+                onClick={() => setMapVisible(true)}
               >
                 <div className="flex items-start gap-4">
                   <MapPin className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-1" />
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-bold text-white mb-1" style={{ fontFamily: "var(--font-display)" }}>
                       London, UK
                     </h3>
@@ -203,20 +208,22 @@ export default function MapSection() {
                     </p>
                     <p className="text-cyan-400 text-sm font-medium">+1 (727) 318-9265</p>
                   </div>
+                  <MapIcon className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-1" />
                 </div>
               </div>
 
               {/* New York */}
               <div
-                className="p-6 rounded-xl"
+                className="p-6 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg"
                 style={{
                   background: "rgba(37,99,235,0.05)",
                   border: "1px solid rgba(37,99,235,0.2)",
                 }}
+                onClick={() => setMapVisible(true)}
               >
                 <div className="flex items-start gap-4">
                   <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-bold text-white mb-1" style={{ fontFamily: "var(--font-display)" }}>
                       New York, USA
                     </h3>
@@ -226,6 +233,7 @@ export default function MapSection() {
                     </p>
                     <p className="text-blue-400 text-sm font-medium">+1 (727) 318-9265</p>
                   </div>
+                  <MapIcon className="w-4 h-4 text-blue-400 flex-shrink-0 mt-1" />
                 </div>
               </div>
             </div>
@@ -233,14 +241,41 @@ export default function MapSection() {
 
           {/* Right: Map */}
           <div
-            ref={mapRef}
-            className="rounded-xl overflow-hidden"
+            className="rounded-xl overflow-hidden transition-all duration-500"
             style={{
               height: "500px",
               border: "1px solid rgba(0,212,200,0.2)",
               boxShadow: "0 0 40px rgba(0,212,200,0.1)",
+              opacity: mapVisible ? 1 : 0.5,
+              pointerEvents: mapVisible ? "auto" : "none",
             }}
-          />
+          >
+            {!mapVisible && (
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center rounded-xl cursor-pointer z-10 transition-all duration-300 hover:bg-opacity-80"
+                style={{
+                  background: "rgba(13, 27, 46, 0.8)",
+                  backdropFilter: "blur(4px)",
+                }}
+                onClick={() => setMapVisible(true)}
+              >
+                <MapIcon className="w-12 h-12 text-cyan-400 mb-3" />
+                <p className="text-white font-semibold mb-1" style={{ fontFamily: "var(--font-display)" }}>
+                  Click to View Map
+                </p>
+                <p className="text-slate-400 text-sm" style={{ fontFamily: "var(--font-body)" }}>
+                  Explore our office locations
+                </p>
+              </div>
+            )}
+            <div
+              ref={mapRef}
+              className="w-full h-full"
+              style={{
+                display: mapVisible ? "block" : "none",
+              }}
+            />
+          </div>
         </div>
       </div>
     </section>
