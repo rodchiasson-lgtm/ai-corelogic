@@ -7,11 +7,22 @@
 import { useEffect, useRef, useState } from "react";
 import { MapPin, Map as MapIcon } from "lucide-react";
 
+type LocationType = "london" | "nyc" | null;
+
 export default function MapSection() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const markersRef = useRef<{
+    london?: google.maps.Marker;
+    nyc?: google.maps.Marker;
+  }>({});
+  const infoWindowsRef = useRef<{
+    london?: google.maps.InfoWindow;
+    nyc?: google.maps.InfoWindow;
+  }>({});
   const [mapVisible, setMapVisible] = useState(false);
   const [mapInitialized, setMapInitialized] = useState(false);
+  const [activeLocation, setActiveLocation] = useState<LocationType>(null);
 
   useEffect(() => {
     if (!mapRef.current || !mapVisible || mapInitialized) return;
@@ -19,7 +30,7 @@ export default function MapSection() {
     // Initialize map (centered between London and NYC)
     const map = new google.maps.Map(mapRef.current, {
       zoom: 4,
-      center: { lat: 40.7128, lng: -74.0060 }, // NYC center
+      center: { lat: 54.5973, lng: -3.4360 }, // Center between London and NYC
       styles: [
         {
           elementType: "geometry",
@@ -117,7 +128,7 @@ export default function MapSection() {
 
     londonMarker.addListener("click", () => {
       londonInfoWindow.open(map, londonMarker);
-      nycInfoWindow.close();
+      infoWindowsRef.current.nyc?.close();
     });
 
     // NYC Marker
@@ -149,11 +160,12 @@ export default function MapSection() {
 
     nycMarker.addListener("click", () => {
       nycInfoWindow.open(map, nycMarker);
-      londonInfoWindow.close();
+      infoWindowsRef.current.london?.close();
     });
 
-    // Open NYC info window by default
-    nycInfoWindow.open(map, nycMarker);
+    // Store markers and info windows
+    markersRef.current = { london: londonMarker, nyc: nycMarker };
+    infoWindowsRef.current = { london: londonInfoWindow, nyc: nycInfoWindow };
 
     setMapInitialized(true);
 
@@ -161,6 +173,28 @@ export default function MapSection() {
       // Cleanup if needed
     };
   }, [mapVisible, mapInitialized]);
+
+  // Handle location-specific centering
+  useEffect(() => {
+    if (!mapInstanceRef.current || !activeLocation) return;
+
+    if (activeLocation === "london") {
+      mapInstanceRef.current.setCenter({ lat: 51.5524, lng: -0.1932 });
+      mapInstanceRef.current.setZoom(15);
+      infoWindowsRef.current.london?.open(mapInstanceRef.current, markersRef.current.london);
+      infoWindowsRef.current.nyc?.close();
+    } else if (activeLocation === "nyc") {
+      mapInstanceRef.current.setCenter({ lat: 40.7127, lng: -74.0134 });
+      mapInstanceRef.current.setZoom(15);
+      infoWindowsRef.current.nyc?.open(mapInstanceRef.current, markersRef.current.nyc);
+      infoWindowsRef.current.london?.close();
+    }
+  }, [activeLocation]);
+
+  const handleLocationClick = (location: LocationType) => {
+    setMapVisible(true);
+    setActiveLocation(location);
+  };
 
   return (
     <section className="py-20 relative" style={{ background: "#0D1B2E" }}>
@@ -191,10 +225,10 @@ export default function MapSection() {
               <div
                 className="p-6 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg"
                 style={{
-                  background: "rgba(0,212,200,0.05)",
-                  border: "1px solid rgba(0,212,200,0.2)",
+                  background: activeLocation === "london" ? "rgba(0,212,200,0.15)" : "rgba(0,212,200,0.05)",
+                  border: activeLocation === "london" ? "1px solid rgba(0,212,200,0.4)" : "1px solid rgba(0,212,200,0.2)",
                 }}
-                onClick={() => setMapVisible(true)}
+                onClick={() => handleLocationClick("london")}
               >
                 <div className="flex items-start gap-4">
                   <MapPin className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-1" />
@@ -216,10 +250,10 @@ export default function MapSection() {
               <div
                 className="p-6 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg"
                 style={{
-                  background: "rgba(37,99,235,0.05)",
-                  border: "1px solid rgba(37,99,235,0.2)",
+                  background: activeLocation === "nyc" ? "rgba(37,99,235,0.15)" : "rgba(37,99,235,0.05)",
+                  border: activeLocation === "nyc" ? "1px solid rgba(37,99,235,0.4)" : "1px solid rgba(37,99,235,0.2)",
                 }}
-                onClick={() => setMapVisible(true)}
+                onClick={() => handleLocationClick("nyc")}
               >
                 <div className="flex items-start gap-4">
                   <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
@@ -241,13 +275,12 @@ export default function MapSection() {
 
           {/* Right: Map */}
           <div
-            className="rounded-xl overflow-hidden transition-all duration-500"
+            className="rounded-xl overflow-hidden transition-all duration-500 relative"
             style={{
               height: "500px",
               border: "1px solid rgba(0,212,200,0.2)",
               boxShadow: "0 0 40px rgba(0,212,200,0.1)",
               opacity: mapVisible ? 1 : 0.5,
-              pointerEvents: mapVisible ? "auto" : "none",
             }}
           >
             {!mapVisible && (
@@ -257,7 +290,7 @@ export default function MapSection() {
                   background: "rgba(13, 27, 46, 0.8)",
                   backdropFilter: "blur(4px)",
                 }}
-                onClick={() => setMapVisible(true)}
+                onClick={() => handleLocationClick("nyc")}
               >
                 <MapIcon className="w-12 h-12 text-cyan-400 mb-3" />
                 <p className="text-white font-semibold mb-1" style={{ fontFamily: "var(--font-display)" }}>
