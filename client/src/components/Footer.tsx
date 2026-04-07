@@ -73,7 +73,7 @@ export default function Footer() {
             {/* Social links */}
             <div className="flex gap-3">
               {[
-                { icon: Linkedin, href: "https://www.linkedin.com/in/rodneychiasson", label: "LinkedIn", color: "#0A66C2" },
+                { icon: Linkedin, href: "https://www.linkedin.com/company/109932965/", label: "LinkedIn", color: "#0A66C2" },
                 { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot", label: "Telegram", color: "#0088CC" },
                 { icon: null, href: `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`, label: "WhatsApp", color: "#25D366" },
                 { icon: Twitter, href: "#", label: "Twitter", color: undefined },

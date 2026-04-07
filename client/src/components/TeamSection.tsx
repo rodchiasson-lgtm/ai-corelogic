@@ -166,7 +166,7 @@ export default function TeamSection() {
                     <span className="text-sm font-medium">Call</span>
                   </a>
                   <a
-                    href="https://www.linkedin.com/in/rodneychiasson"
+                    href="https://www.linkedin.com/company/109932965/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 hover:bg-opacity-100"

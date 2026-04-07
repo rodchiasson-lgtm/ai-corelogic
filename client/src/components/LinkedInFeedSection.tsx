@@ -192,7 +192,7 @@ export default function LinkedInFeedSection() {
                 Join thousands of professionals following AI-CoreLogic for insights and industry updates.
               </p>
               <a
-                href="https://www.linkedin.com/in/rodneychiasson"
+                href="https://www.linkedin.com/company/109932965/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-semibold"

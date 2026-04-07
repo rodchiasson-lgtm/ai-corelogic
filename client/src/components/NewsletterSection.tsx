@@ -329,7 +329,7 @@ export default function NewsletterSection() {
                 </a>
                 <span className="text-slate-500">or</span>
                 <a
-                  href="https://www.linkedin.com/in/rodneychiasson"
+                  href="https://www.linkedin.com/company/109932965/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-semibold"
