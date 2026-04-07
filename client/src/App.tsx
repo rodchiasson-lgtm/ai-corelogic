@@ -10,7 +10,6 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import WhatsAppWidget from "./components/WhatsAppWidget";
-import TelegramWidget from "./components/TelegramWidget";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Blog from "./pages/Blog";
@@ -46,7 +45,6 @@ function App() {
             }}
           />
           <Router />
-      <TelegramWidget />
       <WhatsAppWidget />
         </TooltipProvider>
       </ThemeProvider>
