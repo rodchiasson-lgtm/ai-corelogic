@@ -121,7 +121,7 @@ export default function MapSection() {
           <div style="font-weight: bold; margin-bottom: 5px; color: #00D4C8;">AI-CoreLogic London</div>
           <div>21 Hampstead Gardens</div>
           <div>London, NW11 7EU, UK</div>
-          <div style="margin-top: 8px; font-size: 12px; color: #9CA3AF;">+1 (727) 318-9265</div>
+          <div style="margin-top: 8px; font-size: 12px; color: #9CA3AF;">+44 (0) 7305270251</div>
         </div>
       `,
     });
@@ -240,7 +240,7 @@ export default function MapSection() {
                       21 Hampstead Gardens<br />
                       London, NW11 7EU, UK
                     </p>
-                    <p className="text-cyan-400 text-sm font-medium">+1 (727) 318-9265</p>
+                    <p className="text-cyan-400 text-sm font-medium">+44 (0) 7305270251</p>
                   </div>
                   <MapIcon className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-1" />
                 </div>
