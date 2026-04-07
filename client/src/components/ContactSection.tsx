@@ -172,17 +172,23 @@ export default function ContactSection() {
                 className="glow-card p-5 rounded-xl flex items-start gap-4 cursor-pointer transition-all no-underline"
                 style={{
                   textDecoration: "none",
-                  border: info.isWhatsApp ? "1px solid rgba(37,211,102,0.25)" : undefined,
+                  border: info.isWhatsApp ? "1px solid rgba(37,211,102,0.25)" : info.isTelegram ? "1px solid rgba(0,136,204,0.25)" : undefined,
                 }}
                 onMouseEnter={(e) => {
                   if (info.isWhatsApp) {
                     (e.currentTarget as HTMLElement).style.borderColor = "rgba(37,211,102,0.6)";
                     (e.currentTarget as HTMLElement).style.background = "rgba(37,211,102,0.05)";
+                  } else if (info.isTelegram) {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,136,204,0.6)";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(0,136,204,0.05)";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (info.isWhatsApp) {
                     (e.currentTarget as HTMLElement).style.borderColor = "rgba(37,211,102,0.25)";
+                    (e.currentTarget as HTMLElement).style.background = "";
+                  } else if (info.isTelegram) {
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,136,204,0.25)";
                     (e.currentTarget as HTMLElement).style.background = "";
                   }
                 }}
