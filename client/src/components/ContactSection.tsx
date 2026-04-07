@@ -50,7 +50,7 @@ const contactInfo = [
     label: "Chat on Telegram",
     value: "@Aicorelogic_bot",
     sub: "Instant responses 24/7",
-    href: "https://t.me/Aicorelogic_bot",
+    href: "https://t.me/Aicorelogic_bot?start=hello",
     isWhatsApp: false,
     isTelegram: true,
   },
@@ -163,11 +163,16 @@ export default function ContactSection() {
                 href={info.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => {
-                  if (info.isTelegram) trackCommunicationClick('telegram');
-                  else if (info.isWhatsApp) trackCommunicationClick('whatsapp');
-                  else if (info.label === 'Email Us') trackCommunicationClick('email');
-                  else if (info.label === 'Call Us') trackCommunicationClick('phone');
+                onClick={(e) => {
+                  if (info.isTelegram) {
+                    trackCommunicationClick('telegram');
+                  } else if (info.isWhatsApp) {
+                    trackCommunicationClick('whatsapp');
+                  } else if (info.label === 'Email Us') {
+                    trackCommunicationClick('email');
+                  } else if (info.label === 'Call Us') {
+                    trackCommunicationClick('phone');
+                  }
                 }}
                 className="glow-card p-5 rounded-xl flex items-start gap-4 cursor-pointer transition-all no-underline"
                 style={{
