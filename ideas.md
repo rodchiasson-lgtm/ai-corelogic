@@ -166,3 +166,10 @@ AI consulting company for small to mid-sized businesses. Services: AI implementa
 ## Selected Design: Option B — "Deep Intelligence"
 
 Rationale: The aerospace dark mode aesthetic perfectly aligns with AI-CoreLogic's brand positioning as a cutting-edge, precision-focused AI consultancy. The deep navy palette with cyan accents communicates technological sophistication while remaining trustworthy. The diagonal section breaks and asymmetric layout avoid the "generic AI startup" look. Syne + DM Sans typography is distinctive without being illegible.
+
+## Style Decisions
+
+- **Composition rule:** Every major section uses an asymmetric aerospace-HMI structure through offset module labels, directional routing lines, telemetry bands, or diagonal transitions rather than relying on a centered heading and uniform card grid as the primary composition.
+- **Signature motif rule:** AI-CoreLogic uses thin cyan circuit/HUD linework, coordinate labels, node paths, mono telemetry details, and restrained status indicators as a recurring brand device.
+- **Copy voice rule:** Language should sound like a precise AI implementation advisor—diagnostic, operational, and evidence-led—avoiding generic AI hype unless it is grounded in a concrete business outcome.
+- **Accent discipline:** Bright cyan and electric blue are reserved for primary actions, active system states, and decision-critical information; supporting surfaces remain darker and quieter.

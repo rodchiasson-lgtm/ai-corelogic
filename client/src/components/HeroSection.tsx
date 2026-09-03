@@ -93,7 +93,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden" style={{ background: "#050B18", minHeight: "100vh" }}>
+    <section className="hero-command relative overflow-hidden" style={{ background: "#050B18", minHeight: "100vh" }}>
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-20"
@@ -116,15 +116,27 @@ export default function HeroSection() {
       <div className="absolute bottom-1/3 right-1/3 w-64 h-64 rounded-full opacity-5 animate-glow"
         style={{ background: "radial-gradient(circle, #2563EB 0%, transparent 70%)", animationDelay: "1.5s" }} />
 
+      <div className="hero-coordinates" aria-hidden="true">
+        <span>ACL / MISSION-READY</span>
+        <span>46.8139° N / 71.2080° W</span>
+      </div>
+
+      <div className="hero-orbit-panel" aria-hidden="true">
+        <span className="hero-orbit-panel__label">OPERATING MODEL</span>
+        <span><i /> DIAGNOSE</span>
+        <span><i /> ARCHITECT</span>
+        <span><i /> OPERATIONALIZE</span>
+      </div>
+
       {/* Content */}
       <div className="container relative z-10 flex items-center" style={{ minHeight: "100vh", paddingTop: "6rem", paddingBottom: "10rem" }}>
-        <div className="max-w-3xl">
+        <div className="hero-copy-panel max-w-3xl">
           {/* Mono label */}
           <div
             className={`mono-label flex items-center gap-3 mb-6 transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
             <span className="pulse-dot inline-block" />
-            AI Consulting for SMBs — Precision-Driven Transformation
+            AI Operating Architecture / SMB Transformation
           </div>
 
           {/* Main headline */}
@@ -139,10 +151,10 @@ export default function HeroSection() {
               color: "#F8FAFC",
             }}
           >
-            Unlock the Power of{" "}
-            <span className="gradient-text">AI Intelligence</span>
+            Turn AI ambition into{" "}
+            <span className="gradient-text">operating advantage.</span>
             <br />
-            for Your Business
+            Built for the real business.
           </h1>
 
           {/* Subheadline */}
@@ -150,7 +162,7 @@ export default function HeroSection() {
             className={`mt-6 text-lg text-slate-300 max-w-xl leading-relaxed transition-all duration-700 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
             style={{ fontFamily: "var(--font-body)" }}
           >
-            AI-CoreLogic delivers end-to-end AI consulting — from discovery and strategic research to full implementation and maturity assessment — tailored for small to mid-sized companies ready to compete at scale.
+            We diagnose where AI can produce measurable value, design the operating architecture, and lead implementation through adoption, governance, and maturity.
           </p>
 
           {/* CTA Buttons */}
@@ -161,14 +173,14 @@ export default function HeroSection() {
               onClick={() => { const el = document.querySelector("#contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
               className="btn-primary flex items-center gap-2 px-7 py-3.5 rounded-lg text-base font-semibold"
             >
-              Start Your AI Journey
+              Request an AI Readiness Briefing
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => { const el = document.querySelector("#services"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
               className="btn-outline-glow flex items-center gap-2 px-7 py-3.5 rounded-lg text-base"
             >
-              Explore Services
+              Review Capabilities
             </button>
           </div>
 
@@ -176,10 +188,10 @@ export default function HeroSection() {
           <div
             className={`mt-12 flex flex-wrap items-center gap-4 transition-all duration-700 delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           >
-            {[
-              { value: "50+", label: "SMBs Transformed" },
-              { value: "98%", label: "Client Satisfaction" },
-              { value: "12+", label: "Years of Expertise" },
+              {[
+              { value: "01", label: "Diagnose" },
+              { value: "02", label: "Architect" },
+              { value: "03", label: "Operationalize" },
             ].map((stat, i) => (
               <div key={stat.label} className="flex items-center gap-4">
                 <div>
@@ -206,9 +218,9 @@ export default function HeroSection() {
           <div
             className={`transition-all duration-700 delay-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
-            <p className="mono-label text-xs mb-4 opacity-50">Trusted by businesses across industries</p>
+            <p className="mono-label text-xs mb-4 opacity-50">Deployment sequence / End-to-end execution</p>
             <div className="flex flex-wrap gap-6 items-center">
-              {["Meridian Logistics", "Vertex Healthcare", "Bloom Retail", "Pinnacle Finance", "Apex Manufacturing"].map((name) => (
+              {["Discovery", "Use-Case Architecture", "Implementation", "Governance", "Maturity"].map((name) => (
                 <span
                   key={name}
                   className="text-slate-600 text-sm font-medium"
