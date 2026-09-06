@@ -7,6 +7,7 @@ import {
   ArrowRight,
   BarChart3,
   BookOpenCheck,
+  BrainCircuit,
   Check,
   ChevronDown,
   Clipboard,
@@ -52,6 +53,7 @@ import {
   type LiveStockResult,
 } from "@/lib/marketData";
 import { popularStocks } from "@/lib/stockDirectory";
+import { authorizeStockSummaryAI, generateStockSummary, type StockSummaryResult } from "@/lib/stockSummary";
 
 const navigation = [
   { label: "Briefing", href: "#briefing", index: "01" },
@@ -407,10 +409,22 @@ export default function IntelligenceDesk() {
   const [comparisonStocks, setComparisonStocks] = useState<LiveStockResult[]>(loadSavedComparison);
   const [editingSlot, setEditingSlot] = useState<number | null>(null);
   const [comparisonRefreshing, setComparisonRefreshing] = useState(false);
+  const [stockSummary, setStockSummary] = useState<StockSummaryResult | null>(null);
+  const [summaryLoading, setSummaryLoading] = useState(false);
+  const [summaryCopied, setSummaryCopied] = useState(false);
+
+  const comparisonSignature = comparisonStocks
+    .map((stock) => `${stock.symbolKey}:${stock.price ?? "na"}:${stock.changePercent ?? "na"}`)
+    .join("|");
 
   useEffect(() => {
     window.localStorage.setItem(comparisonStorageKey, JSON.stringify(comparisonStocks));
   }, [comparisonStocks]);
+
+  useEffect(() => {
+    setStockSummary(null);
+    setSummaryCopied(false);
+  }, [comparisonSignature]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -489,6 +503,48 @@ export default function IntelligenceDesk() {
     setComparisonStocks(refreshed);
     setComparisonRefreshing(false);
     toast.success("Live comparison refreshed");
+  };
+
+  const generateComparisonBrief = async () => {
+    setSummaryLoading(true);
+    setStockSummary(null);
+    setSummaryCopied(false);
+    try {
+      const aiAuthorized = await authorizeStockSummaryAI();
+      const refreshed = await Promise.all(
+        comparisonStocks.map(async (stock) => {
+          try {
+            return (await fetchLiveStockQuote(stock.ticker, stock.exchange)) ?? stock;
+          } catch {
+            return stock;
+          }
+        })
+      );
+      setComparisonStocks(refreshed);
+      const result = await generateStockSummary(refreshed, aiAuthorized);
+      setStockSummary(result);
+      if (result.mode === "ai") {
+        toast.success("AI comparison generated");
+      } else {
+        toast.info("AI provider unavailable — metrics brief generated instead");
+      }
+    } catch {
+      toast.error("The comparison brief could not be generated. Please try again.");
+    } finally {
+      setSummaryLoading(false);
+    }
+  };
+
+  const copyStockSummary = async () => {
+    if (!stockSummary) return;
+    try {
+      await navigator.clipboard.writeText(stockSummary.text);
+      setSummaryCopied(true);
+      toast.success("Comparison brief copied");
+      window.setTimeout(() => setSummaryCopied(false), 1800);
+    } catch {
+      toast.error("Clipboard access was unavailable.");
+    }
   };
 
   const resetComparisonStocks = () => {
@@ -910,10 +966,20 @@ export default function IntelligenceDesk() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 print:hidden">
-                <button type="button" onClick={() => void refreshComparisonStocks()} disabled={comparisonRefreshing} className="intelligence-action">
+                <button
+                  type="button"
+                  onClick={() => void generateComparisonBrief()}
+                  disabled={summaryLoading}
+                  className="btn-primary inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs disabled:cursor-wait disabled:opacity-70"
+                  aria-describedby="ai-summary-disclosure"
+                >
+                  {summaryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <BrainCircuit className="h-4 w-4" />}
+                  {summaryLoading ? "Analyzing basket…" : "Generate AI brief"}
+                </button>
+                <button type="button" onClick={() => void refreshComparisonStocks()} disabled={comparisonRefreshing || summaryLoading} className="intelligence-action">
                   <RefreshCw className={`h-4 w-4 ${comparisonRefreshing ? "animate-spin" : ""}`} /> Refresh prices
                 </button>
-                <button type="button" onClick={resetComparisonStocks} className="intelligence-action">Restore defaults</button>
+                <button type="button" onClick={resetComparisonStocks} disabled={summaryLoading} className="intelligence-action">Restore defaults</button>
               </div>
             </div>
 
@@ -956,8 +1022,52 @@ export default function IntelligenceDesk() {
                 </article>
               ))}
             </div>
+
+            {(summaryLoading || stockSummary) && (
+              <div className="relative mt-6 overflow-hidden rounded-xl border border-cyan-400/20 bg-[#050d18] p-5 sm:p-7" aria-live="polite" aria-busy={summaryLoading}>
+                <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-cyan-400 via-blue-500 to-violet-500" />
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.15em] text-cyan-400">
+                      {summaryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                      Comparative intelligence
+                    </div>
+                    <h3 className="mt-3 text-2xl font-bold tracking-[-0.04em] text-white">
+                      {summaryLoading ? "Reading the live basket…" : "AI-Corelogic market brief"}
+                    </h3>
+                  </div>
+                  {stockSummary && (
+                    <div className="flex items-center gap-2">
+                      <span className={`rounded border px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.11em] ${stockSummary.mode === "ai" ? "border-cyan-400/20 bg-cyan-400/[0.06] text-cyan-400" : "border-amber-300/20 bg-amber-300/[0.06] text-amber-200"}`}>
+                        {stockSummary.mode === "ai" ? "AI generated" : "Metrics fallback"}
+                      </span>
+                      <button type="button" onClick={() => void copyStockSummary()} className="intelligence-action" aria-label="Copy comparative brief">
+                        {summaryCopied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
+                        {summaryCopied ? "Copied" : "Copy"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {summaryLoading ? (
+                  <div className="mt-6 space-y-3" aria-label="Generating comparative analysis">
+                    <div className="h-3 w-full animate-pulse rounded bg-cyan-400/10" />
+                    <div className="h-3 w-[92%] animate-pulse rounded bg-cyan-400/10" />
+                    <div className="h-3 w-[78%] animate-pulse rounded bg-cyan-400/10" />
+                  </div>
+                ) : stockSummary ? (
+                  <div className="mt-6 max-w-4xl space-y-4 text-sm leading-7 text-slate-300">
+                    {stockSummary.text.split(/\n\s*\n/).map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                    <p className="border-t border-cyan-400/10 pt-4 font-mono text-[8px] uppercase tracking-[0.1em] text-slate-600">
+                      Generated {new Date(stockSummary.generatedAt).toLocaleString()} · Current price and 1D change only
+                    </p>
+                  </div>
+                ) : null}
+              </div>
+            )}
+
             <div className="mt-4 flex flex-col gap-2 text-xs leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-              <span>Live market snapshots may be delayed by the relevant exchange.</span>
+              <span id="ai-summary-disclosure">Live market snapshots may be delayed. AI generation may request provider authorization and uses only the four displayed metrics.</span>
               <span className="font-mono text-[8px] uppercase tracking-[0.11em] text-cyan-400">Four slots · Global listings · Browser saved</span>
             </div>
           </div>
