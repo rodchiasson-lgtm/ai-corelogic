@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Clipboard,
   ExternalLink,
+  FileDown,
   FileCheck2,
   Loader2,
   Menu,
@@ -67,6 +68,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { downloadStockBriefPdf } from "@/lib/stockBriefPdf";
 
 const navigation = [
   { label: "Briefing", href: "#briefing", index: "01" },
@@ -445,6 +447,7 @@ export default function IntelligenceDesk() {
   const [summaryLoading, setSummaryLoading] = useState(false);
   const [summaryCopied, setSummaryCopied] = useState(false);
   const [summaryStyle, setSummaryStyle] = useState<StockSummaryStyle>(loadSummaryStyle);
+  const [pdfExporting, setPdfExporting] = useState(false);
 
   const comparisonSignature = comparisonStocks
     .map((stock) => `${stock.symbolKey}:${stock.price ?? "na"}:${stock.changePercent ?? "na"}`)
@@ -583,6 +586,19 @@ export default function IntelligenceDesk() {
       window.setTimeout(() => setSummaryCopied(false), 1800);
     } catch {
       toast.error("Clipboard access was unavailable.");
+    }
+  };
+
+  const exportStockSummary = async () => {
+    if (!stockSummary) return;
+    setPdfExporting(true);
+    try {
+      await downloadStockBriefPdf(comparisonStocks, stockSummary);
+      toast.success("Comparison brief downloaded as PDF");
+    } catch {
+      toast.error("The PDF could not be generated. Please try again.");
+    } finally {
+      setPdfExporting(false);
     }
   };
 
@@ -1110,13 +1126,23 @@ export default function IntelligenceDesk() {
                     </h3>
                   </div>
                   {stockSummary && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className={`rounded border px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.11em] ${stockSummary.mode === "ai" ? "border-cyan-400/20 bg-cyan-400/[0.06] text-cyan-400" : "border-amber-300/20 bg-amber-300/[0.06] text-amber-200"}`}>
                         {stockSummary.mode === "ai" ? "AI generated" : "Metrics fallback"}
                       </span>
                       <span className="rounded border border-white/10 bg-white/[0.025] px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.11em] text-slate-400">
                         {stockSummaryStyles[stockSummary.style].shortLabel}
                       </span>
+                      <button
+                        type="button"
+                        onClick={() => void exportStockSummary()}
+                        disabled={pdfExporting}
+                        className="intelligence-action disabled:cursor-wait disabled:opacity-60"
+                        aria-label="Download comparative brief as PDF"
+                      >
+                        {pdfExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}
+                        {pdfExporting ? "Preparing…" : "Export PDF"}
+                      </button>
                       <button type="button" onClick={() => void copyStockSummary()} className="intelligence-action" aria-label="Copy comparative brief">
                         {summaryCopied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
                         {summaryCopied ? "Copied" : "Copy"}
