@@ -5,8 +5,9 @@
  */
 
 import { useState, useEffect } from "react";
-import { Activity, BarChart3, BookOpenCheck, ChevronDown, FileSearch, Menu, X } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, ChevronDown, FileSearch, Menu, Search, X } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { researchCompanies, type ResearchCompany } from "@/lib/intelligenceData";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,10 +32,88 @@ const financialAnalysisLinks = [
   { label: "Evidence Sources", description: "Primary releases and market data", href: "/intelligence#sources", icon: BookOpenCheck },
 ];
 
+function TickerSearch({
+  query,
+  onQueryChange,
+  onSelect,
+}: {
+  query: string;
+  onQueryChange: (value: string) => void;
+  onSelect: (ticker: ResearchCompany["ticker"]) => void;
+}) {
+  const normalizedQuery = query.trim().toLowerCase();
+  const matches = normalizedQuery
+    ? researchCompanies.filter(
+        (company) =>
+          company.ticker.toLowerCase().includes(normalizedQuery) ||
+          company.name.toLowerCase().includes(normalizedQuery)
+      )
+    : [];
+
+  return (
+    <div
+      className="px-2 pb-2"
+      onKeyDown={(event) => {
+        event.stopPropagation();
+        if (event.key === "Enter" && matches[0]) {
+          event.preventDefault();
+          onSelect(matches[0].ticker);
+        }
+      }}
+    >
+      <label className="relative block">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => onQueryChange(event.target.value)}
+          onClick={(event) => event.stopPropagation()}
+          placeholder="Search ticker or company..."
+          aria-label="Search stock ticker or company"
+          autoComplete="off"
+          className="h-10 w-full rounded-lg border border-cyan-400/15 bg-[#030810]/70 pl-10 pr-3 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/45 focus:outline-none"
+        />
+      </label>
+
+      {normalizedQuery ? (
+        <div className="mt-2 space-y-1" role="listbox" aria-label="Matching stocks">
+          {matches.length > 0 ? (
+            matches.map((company) => (
+              <button
+                type="button"
+                key={company.ticker}
+                onClick={() => onSelect(company.ticker)}
+                className="flex w-full items-center justify-between rounded-lg border border-transparent px-3 py-2.5 text-left transition-colors hover:border-cyan-400/15 hover:bg-cyan-400/[0.06] focus-visible:border-cyan-400/30 focus-visible:outline-none"
+                role="option"
+              >
+                <span className="flex items-center gap-3">
+                  <i className="h-2 w-2 rounded-full" style={{ background: company.accent, boxShadow: `0 0 8px ${company.accent}80` }} />
+                  <span>
+                    <span className="block font-mono text-[10px] tracking-[0.12em] text-white">{company.ticker}</span>
+                    <span className="mt-0.5 block text-[11px] text-slate-500">{company.name}</span>
+                  </span>
+                </span>
+                <span className="font-mono text-[9px] text-cyan-400">VIEW</span>
+              </button>
+            ))
+          ) : (
+            <p className="px-3 py-3 text-xs text-slate-500">No covered ticker found.</p>
+          )}
+        </div>
+      ) : (
+        <p className="px-1 pt-2 font-mono text-[8px] uppercase tracking-[0.11em] text-slate-600">
+          Try SNDK, AMZN, NVDA or MU
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [financialOpen, setFinancialOpen] = useState(false);
+  const [tickerQuery, setTickerQuery] = useState("");
   const { trackSchedulingClick } = useAnalytics();
 
   useEffect(() => {
@@ -46,6 +125,7 @@ export default function Navbar() {
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
     setFinancialOpen(false);
+    setTickerQuery("");
     if (href.startsWith("/")) {
       // Internal routed experience
       window.location.href = href;
@@ -56,6 +136,10 @@ export default function Navbar() {
         el.scrollIntoView({ behavior: "smooth" });
       }
     }
+  };
+
+  const handleTickerSelect = (ticker: ResearchCompany["ticker"]) => {
+    handleNavClick(`/intelligence?ticker=${encodeURIComponent(ticker)}#evidence`);
   };
 
   return (
@@ -96,7 +180,7 @@ export default function Navbar() {
               </button>
             ))}
 
-            <DropdownMenu>
+            <DropdownMenu onOpenChange={(open) => { if (!open) setTickerQuery(""); }}>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
@@ -116,6 +200,8 @@ export default function Navbar() {
                   <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-cyan-400">Financial Stock Analysis</span>
                   <span className="mt-1 block text-xs font-normal leading-5 text-slate-500">Source-forward company research and comparative market signals.</span>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-cyan-400/10" />
+                <TickerSearch query={tickerQuery} onQueryChange={setTickerQuery} onSelect={handleTickerSelect} />
                 <DropdownMenuSeparator className="bg-cyan-400/10" />
                 {financialAnalysisLinks.map((item) => {
                   const Icon = item.icon;
@@ -209,6 +295,8 @@ export default function Navbar() {
               </button>
               {financialOpen && (
                 <div className="border-t border-cyan-400/10 p-2">
+                  <TickerSearch query={tickerQuery} onQueryChange={setTickerQuery} onSelect={handleTickerSelect} />
+                  <div className="my-2 h-px bg-cyan-400/10" />
                   {financialAnalysisLinks.map((item) => {
                     const Icon = item.icon;
                     return (

@@ -222,7 +222,11 @@ function ResearchHeader() {
 }
 
 export default function IntelligenceDesk() {
-  const [activeTicker, setActiveTicker] = useState<"all" | ResearchCompany["ticker"]>("all");
+  const [activeTicker, setActiveTicker] = useState<"all" | ResearchCompany["ticker"]>(() => {
+    const requestedTicker = new URLSearchParams(window.location.search).get("ticker")?.toUpperCase();
+    const company = researchCompanies.find((item) => item.ticker === requestedTicker);
+    return company?.ticker ?? "all";
+  });
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
