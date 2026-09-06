@@ -18,6 +18,7 @@ import BlogArticle from "./pages/BlogArticle";
 import CategoryLanding from "./pages/CategoryLanding";
 
 const IntelligenceDesk = lazy(() => import("./pages/IntelligenceDesk"));
+const StockLookup = lazy(() => import("./pages/StockLookup"));
 
 function IntelligenceDeskRoute() {
   return (
@@ -33,11 +34,26 @@ function IntelligenceDeskRoute() {
   );
 }
 
+function StockLookupRoute() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#050B18] flex items-center justify-center text-cyan-400 font-mono text-xs tracking-[0.18em]">
+          RESOLVING MARKET TICKER
+        </div>
+      }
+    >
+      <StockLookup />
+    </Suspense>
+  );
+}
+
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/intelligence" component={IntelligenceDeskRoute} />
+      <Route path="/stocks/:ticker" component={StockLookupRoute} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/category/:slug" component={CategoryLanding} />

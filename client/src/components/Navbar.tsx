@@ -7,7 +7,8 @@
 import { useState, useEffect } from "react";
 import { Activity, BarChart3, BookOpenCheck, ChevronDown, FileSearch, Menu, Search, X } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
-import { researchCompanies, type ResearchCompany } from "@/lib/intelligenceData";
+import { researchCompanies } from "@/lib/intelligenceData";
+import { popularStocks, type StockDirectoryEntry } from "@/lib/stockDirectory";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +33,23 @@ const financialAnalysisLinks = [
   { label: "Evidence Sources", description: "Primary releases and market data", href: "/intelligence#sources", icon: BookOpenCheck },
 ];
 
+type StockSearchResult = StockDirectoryEntry & {
+  covered: boolean;
+  accent?: string;
+};
+
+const searchableStocks: StockSearchResult[] = [
+  ...researchCompanies.map((company) => ({
+    ticker: company.ticker,
+    name: company.name,
+    exchange: "NASDAQ" as const,
+    sector: company.thesis,
+    covered: true,
+    accent: company.accent,
+  })),
+  ...popularStocks.map((company) => ({ ...company, covered: false })),
+];
+
 function TickerSearch({
   query,
   onQueryChange,
@@ -39,16 +57,19 @@ function TickerSearch({
 }: {
   query: string;
   onQueryChange: (value: string) => void;
-  onSelect: (ticker: ResearchCompany["ticker"]) => void;
+  onSelect: (ticker: string, covered: boolean) => void;
 }) {
   const normalizedQuery = query.trim().toLowerCase();
   const matches = normalizedQuery
-    ? researchCompanies.filter(
+    ? searchableStocks.filter(
         (company) =>
-          company.ticker.toLowerCase().includes(normalizedQuery) ||
+          company.ticker.toLowerCase().startsWith(normalizedQuery) ||
           company.name.toLowerCase().includes(normalizedQuery)
-      )
+      ).slice(0, 6)
     : [];
+  const typedTicker = query.trim().toUpperCase();
+  const canLookupTypedTicker = /^[A-Z][A-Z0-9.-]{0,9}$/.test(typedTicker);
+  const hasExactTicker = matches.some((company) => company.ticker === typedTicker);
 
   return (
     <div
@@ -57,7 +78,10 @@ function TickerSearch({
         event.stopPropagation();
         if (event.key === "Enter" && matches[0]) {
           event.preventDefault();
-          onSelect(matches[0].ticker);
+          onSelect(matches[0].ticker, matches[0].covered);
+        } else if (event.key === "Enter" && canLookupTypedTicker) {
+          event.preventDefault();
+          onSelect(typedTicker, false);
         }
       }}
     >
@@ -82,27 +106,42 @@ function TickerSearch({
               <button
                 type="button"
                 key={company.ticker}
-                onClick={() => onSelect(company.ticker)}
+                onClick={() => onSelect(company.ticker, company.covered)}
                 className="flex w-full items-center justify-between rounded-lg border border-transparent px-3 py-2.5 text-left transition-colors hover:border-cyan-400/15 hover:bg-cyan-400/[0.06] focus-visible:border-cyan-400/30 focus-visible:outline-none"
                 role="option"
               >
                 <span className="flex items-center gap-3">
                   <i className="h-2 w-2 rounded-full" style={{ background: company.accent, boxShadow: `0 0 8px ${company.accent}80` }} />
-                  <span>
-                    <span className="block font-mono text-[10px] tracking-[0.12em] text-white">{company.ticker}</span>
-                    <span className="mt-0.5 block text-[11px] text-slate-500">{company.name}</span>
+                    <span>
+                      <span className="block font-mono text-[10px] tracking-[0.12em] text-white">{company.ticker}</span>
+                      <span className="mt-0.5 block text-[11px] text-slate-500">{company.name} · {company.exchange}</span>
+                    </span>
                   </span>
-                </span>
-                <span className="font-mono text-[9px] text-cyan-400">VIEW</span>
+                  <span className="font-mono text-[8px] uppercase tracking-[0.1em] text-cyan-400">{company.covered ? "FULL" : "QUOTE"}</span>
               </button>
             ))
-          ) : (
-            <p className="px-3 py-3 text-xs text-slate-500">No covered ticker found.</p>
+          ) : null}
+          {canLookupTypedTicker && !hasExactTicker && (
+            <button
+              type="button"
+              onClick={() => onSelect(typedTicker, false)}
+              className="flex w-full items-center justify-between rounded-lg border border-dashed border-cyan-400/15 px-3 py-2.5 text-left transition-colors hover:border-cyan-400/35 hover:bg-cyan-400/[0.06]"
+              role="option"
+            >
+              <span>
+                <span className="block font-mono text-[10px] tracking-[0.12em] text-white">{typedTicker}</span>
+                <span className="mt-0.5 block text-[11px] text-slate-500">Look up another market ticker</span>
+              </span>
+              <span className="font-mono text-[8px] uppercase tracking-[0.1em] text-cyan-400">LOOK UP</span>
+            </button>
+          )}
+          {matches.length === 0 && !canLookupTypedTicker && (
+            <p className="px-3 py-3 text-xs text-slate-500">Enter a valid ticker symbol.</p>
           )}
         </div>
       ) : (
         <p className="px-1 pt-2 font-mono text-[8px] uppercase tracking-[0.11em] text-slate-600">
-          Try SNDK, AMZN, NVDA or MU
+          Search 60+ popular stocks or enter another ticker
         </p>
       )}
     </div>
@@ -138,8 +177,11 @@ export default function Navbar() {
     }
   };
 
-  const handleTickerSelect = (ticker: ResearchCompany["ticker"]) => {
-    handleNavClick(`/intelligence?ticker=${encodeURIComponent(ticker)}#evidence`);
+  const handleTickerSelect = (ticker: string, covered: boolean) => {
+    const destination = covered
+      ? `/intelligence?ticker=${encodeURIComponent(ticker)}#evidence`
+      : `/stocks/${encodeURIComponent(ticker)}`;
+    handleNavClick(destination);
   };
 
   return (
