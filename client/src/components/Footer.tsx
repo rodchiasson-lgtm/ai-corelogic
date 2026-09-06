@@ -9,7 +9,7 @@ const footerLinks = {
   Services: [
     { label: "AI Discovery", href: "#services" },
     { label: "AI Implementation", href: "#services" },
-    { label: "AI Research", href: "#research" },
+    { label: "AI Research", href: "/intelligence" },
     { label: "AI Maturity", href: "#services" },
   ],
   Company: [
@@ -19,10 +19,10 @@ const footerLinks = {
     { label: "Careers", href: "#" },
   ],
   Resources: [
-    { label: "AI Insights Blog", href: "#research" },
+    { label: "Intelligence Desk", href: "/intelligence" },
+    { label: "AI Insights Blog", href: "/blog" },
     { label: "Maturity Assessment", href: "#contact" },
     { label: "AI Readiness Quiz", href: "#contact" },
-    { label: "Documentation", href: "#" },
   ],
 };
 
@@ -38,6 +38,10 @@ const WHATSAPP_MESSAGE = encodeURIComponent("Hi! I'm interested in learning more
 export default function Footer() {
   const handleNav = (href: string) => {
     if (href === "#") return;
+    if (href.startsWith("/")) {
+      window.location.href = href;
+      return;
+    }
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };

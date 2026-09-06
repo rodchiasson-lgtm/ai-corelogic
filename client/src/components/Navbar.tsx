@@ -12,7 +12,7 @@ const navLinks = [
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
-  { label: "Research", href: "#research" },
+  { label: "Intelligence", href: "/intelligence" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "#contact" },
 ];
@@ -31,7 +31,7 @@ export default function Navbar() {
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
     if (href.startsWith("/")) {
-      // External route
+      // Internal routed experience
       window.location.href = href;
     } else {
       // Anchor link
