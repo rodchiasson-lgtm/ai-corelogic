@@ -12,10 +12,13 @@ import {
   Clipboard,
   ExternalLink,
   FileCheck2,
+  Loader2,
   Menu,
   MessageCircle,
   Printer,
   Radar,
+  RefreshCw,
+  Search,
   ShieldCheck,
   Sparkles,
   X,
@@ -42,12 +45,20 @@ import {
   yahooFinanceSource,
   type ResearchCompany,
 } from "@/lib/intelligenceData";
+import {
+  fetchLiveStockQuote,
+  formatMarketPrice,
+  searchLiveStocks,
+  type LiveStockResult,
+} from "@/lib/marketData";
+import { popularStocks } from "@/lib/stockDirectory";
 
 const navigation = [
   { label: "Briefing", href: "#briefing", index: "01" },
   { label: "Evidence", href: "#evidence", index: "02" },
   { label: "Signals", href: "#signals", index: "03" },
-  { label: "Sources", href: "#sources", index: "04" },
+  { label: "Compare", href: "#comparison", index: "04" },
+  { label: "Sources", href: "#sources", index: "05" },
 ];
 
 const protocol = [
@@ -98,6 +109,35 @@ const chartColors: Record<ResearchCompany["ticker"], string> = {
   MU: "#aa7dff",
 };
 
+const comparisonColors = ["#f97360", "#4f8cff", "#00D4C8", "#aa7dff"];
+const comparisonStorageKey = "ai-corelogic-stock-comparison";
+const defaultComparisonStocks: LiveStockResult[] = researchCompanies.map((company) => ({
+  symbolKey: `NASDAQ:${company.ticker}`,
+  ticker: company.ticker,
+  name: company.name,
+  exchange: "NASDAQ",
+  price: company.price,
+  changePercent: company.dayMove,
+  currency: "USD",
+}));
+
+function loadSavedComparison() {
+  if (typeof window === "undefined") return defaultComparisonStocks;
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(comparisonStorageKey) || "null") as LiveStockResult[] | null;
+    if (
+      Array.isArray(saved) &&
+      saved.length === 4 &&
+      saved.every((stock) => stock && typeof stock.ticker === "string" && typeof stock.exchange === "string")
+    ) {
+      return saved;
+    }
+  } catch {
+    // Ignore malformed local state and restore the verified default basket.
+  }
+  return defaultComparisonStocks;
+}
+
 function IntelligenceMark({ compact = false }: { compact?: boolean }) {
   return (
     <span className="intelligence-mark" aria-hidden="true">
@@ -128,6 +168,141 @@ function SectionHeading({
       {description && (
         <p className="text-sm leading-7 text-slate-400 lg:text-right">{description}</p>
       )}
+    </div>
+  );
+}
+
+function StockSelectionPanel({
+  slot,
+  selectedKeys,
+  onSelect,
+  onClose,
+}: {
+  slot: number;
+  selectedKeys: string[];
+  onSelect: (stock: LiveStockResult) => void;
+  onClose: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<LiveStockResult[]>([]);
+  const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
+
+  useEffect(() => {
+    const normalized = query.trim();
+    if (!normalized) {
+      setResults([]);
+      setStatus("idle");
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setStatus("loading");
+      try {
+        const [matches, primaryMatches] = await Promise.all([
+          searchLiveStocks(normalized, controller.signal),
+          Promise.all(
+            popularStocks
+              .filter(
+                (stock) =>
+                  stock.ticker.toLowerCase().startsWith(normalized.toLowerCase()) ||
+                  stock.name.toLowerCase().includes(normalized.toLowerCase())
+              )
+              .slice(0, 4)
+              .map((stock) => fetchLiveStockQuote(stock.ticker, stock.exchange, controller.signal))
+          ),
+        ]);
+        const unique = new Map<string, LiveStockResult>();
+        primaryMatches
+          .filter((stock): stock is LiveStockResult => Boolean(stock))
+          .forEach((stock) => unique.set(stock.symbolKey, stock));
+        matches.forEach((stock) => {
+          if (!unique.has(stock.symbolKey)) unique.set(stock.symbolKey, stock);
+        });
+        setResults(
+          Array.from(unique.values())
+            .filter((stock) => !selectedKeys.includes(stock.symbolKey))
+            .slice(0, 8)
+        );
+        setStatus("ready");
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setResults([]);
+        setStatus("error");
+      }
+    }, 260);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, selectedKeys]);
+
+  return (
+    <div className="mb-8 border border-cyan-400/20 bg-[#050d18] p-4 sm:p-5 print:hidden">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="intelligence-kicker">Replace slot 0{slot + 1}</div>
+          <p className="mt-2 text-sm text-slate-400">Search a ticker or company across global exchanges.</p>
+        </div>
+        <button type="button" onClick={onClose} className="rounded-lg border border-white/10 p-2 text-slate-500 transition-colors hover:text-white" aria-label="Close stock selector">
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      <label className="relative mt-5 block">
+        {status === "loading" ? (
+          <Loader2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-cyan-400" />
+        ) : (
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+        )}
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Try AAPL, Microsoft, Toyota, Shell…"
+          autoFocus
+          autoComplete="off"
+          aria-label={`Search replacement stock for comparison slot ${slot + 1}`}
+          className="h-11 w-full rounded-lg border border-cyan-400/15 bg-[#030810] pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/45 focus:outline-none"
+        />
+      </label>
+
+      <div className="mt-3" aria-live="polite">
+        {status === "idle" && (
+          <p className="font-mono text-[8px] uppercase tracking-[0.12em] text-slate-600">Live global ticker directory</p>
+        )}
+        {status === "error" && (
+          <p className="text-xs text-rose-300">The live directory is temporarily unavailable. Try again shortly.</p>
+        )}
+        {status === "ready" && results.length === 0 && (
+          <p className="text-xs text-slate-500">No unselected stock matched that search.</p>
+        )}
+        {results.length > 0 && (
+          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4" role="listbox" aria-label="Replacement stock results">
+            {results.map((stock) => (
+              <button
+                type="button"
+                key={stock.symbolKey}
+                onClick={() => onSelect(stock)}
+                className="flex items-center justify-between gap-3 rounded-lg border border-cyan-400/10 bg-cyan-400/[0.025] p-3 text-left transition-colors hover:border-cyan-400/30 hover:bg-cyan-400/[0.06]"
+                role="option"
+              >
+                <span className="min-w-0">
+                  <span className="block font-mono text-[10px] tracking-[0.12em] text-white">{stock.ticker}</span>
+                  <span className="mt-1 block truncate text-[11px] text-slate-500">{stock.name} · {stock.exchange}</span>
+                </span>
+                <span className="shrink-0 text-right font-mono">
+                  <span className="block text-[9px] text-white">{stock.price !== null ? formatMarketPrice(stock.price, stock.currency) : "—"}</span>
+                  <span className={`mt-1 block text-[8px] ${stock.changePercent !== null && stock.changePercent >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                    {stock.changePercent !== null ? `${stock.changePercent >= 0 ? "+" : ""}${stock.changePercent.toFixed(2)}%` : "—"}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -229,6 +404,34 @@ export default function IntelligenceDesk() {
   });
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [comparisonStocks, setComparisonStocks] = useState<LiveStockResult[]>(loadSavedComparison);
+  const [editingSlot, setEditingSlot] = useState<number | null>(null);
+  const [comparisonRefreshing, setComparisonRefreshing] = useState(false);
+
+  useEffect(() => {
+    window.localStorage.setItem(comparisonStorageKey, JSON.stringify(comparisonStocks));
+  }, [comparisonStocks]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const refreshInitialQuotes = async () => {
+      const refreshed = await Promise.all(
+        comparisonStocks.map(async (stock) => {
+          try {
+            return (await fetchLiveStockQuote(stock.ticker, stock.exchange, controller.signal)) ?? stock;
+          } catch (error) {
+            if (error instanceof DOMException && error.name === "AbortError") return stock;
+            return stock;
+          }
+        })
+      );
+      if (!controller.signal.aborted) setComparisonStocks(refreshed);
+    };
+    void refreshInitialQuotes();
+    return () => controller.abort();
+    // The initial basket is refreshed once; later changes arrive with live data from the picker.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -265,6 +468,34 @@ export default function IntelligenceDesk() {
     growth: company.growth,
     fill: company.accent,
   }));
+
+  const replaceComparisonStock = (slot: number, stock: LiveStockResult) => {
+    setComparisonStocks((current) => current.map((item, index) => (index === slot ? stock : item)));
+    setEditingSlot(null);
+    toast.success(`${stock.ticker} added to comparison slot 0${slot + 1}`);
+  };
+
+  const refreshComparisonStocks = async () => {
+    setComparisonRefreshing(true);
+    const refreshed = await Promise.all(
+      comparisonStocks.map(async (stock) => {
+        try {
+          return (await fetchLiveStockQuote(stock.ticker, stock.exchange)) ?? stock;
+        } catch {
+          return stock;
+        }
+      })
+    );
+    setComparisonStocks(refreshed);
+    setComparisonRefreshing(false);
+    toast.success("Live comparison refreshed");
+  };
+
+  const resetComparisonStocks = () => {
+    setComparisonStocks(defaultComparisonStocks);
+    setEditingSlot(null);
+    toast.success("Default comparison restored");
+  };
 
   const copyBrief = async () => {
     try {
@@ -668,28 +899,67 @@ export default function IntelligenceDesk() {
           </div>
         </section>
 
-        <section className="border-y border-cyan-400/10 bg-[#07111f] py-20 lg:py-24">
+        <section id="comparison" className="scroll-mt-20 border-y border-cyan-400/10 bg-[#07111f] py-20 lg:py-24">
           <div className="container">
-            <SectionHeading eyebrow="Market snapshot" title="Dated, not live." description="USD regular-session close, 04 Sep 2026. Values are presented as a frozen research snapshot rather than a live market feed." />
+            <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="intelligence-kicker mb-3">Live comparison basket</div>
+                <h2 className="max-w-3xl text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl lg:text-5xl">Choose any four stocks.</h2>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">
+                  Replace any slot with a ticker from the global live directory. Your four selections are saved in this browser.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 print:hidden">
+                <button type="button" onClick={() => void refreshComparisonStocks()} disabled={comparisonRefreshing} className="intelligence-action">
+                  <RefreshCw className={`h-4 w-4 ${comparisonRefreshing ? "animate-spin" : ""}`} /> Refresh prices
+                </button>
+                <button type="button" onClick={resetComparisonStocks} className="intelligence-action">Restore defaults</button>
+              </div>
+            </div>
+
+            {editingSlot !== null && (
+              <StockSelectionPanel
+                key={editingSlot}
+                slot={editingSlot}
+                selectedKeys={comparisonStocks.filter((_, index) => index !== editingSlot).map((stock) => stock.symbolKey)}
+                onSelect={(stock) => replaceComparisonStock(editingSlot, stock)}
+                onClose={() => setEditingSlot(null)}
+              />
+            )}
+
             <div className="grid gap-px overflow-hidden rounded-xl border border-cyan-400/10 bg-cyan-400/10 md:grid-cols-2 xl:grid-cols-4">
-              {researchCompanies.map((company) => (
-                <article key={company.ticker} className="bg-[#07111f] p-6">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-[10px] tracking-[0.15em]" style={{ color: company.accent }}>{company.ticker}</span>
-                    <span className={`font-mono text-[10px] ${company.dayMove >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-                      {company.dayMove >= 0 ? "+" : ""}{company.dayMove}% 1D
-                    </span>
+              {comparisonStocks.map((stock, index) => (
+                <article key={`${index}-${stock.symbolKey}`} className="relative bg-[#07111f] p-6">
+                  <div className="absolute inset-x-0 top-0 h-px" style={{ background: comparisonColors[index] }} />
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <span className="font-mono text-[8px] uppercase tracking-[0.14em] text-slate-600">Slot 0{index + 1}</span>
+                      <p className="mt-2 font-mono text-[11px] tracking-[0.15em]" style={{ color: comparisonColors[index] }}>{stock.ticker}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setEditingSlot(index)}
+                      className="rounded border border-cyan-400/15 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.1em] text-cyan-400 transition-colors hover:border-cyan-400/40 hover:bg-cyan-400/[0.06] print:hidden"
+                      aria-label={`Change ${stock.ticker} in comparison slot ${index + 1}`}
+                    >
+                      Change
+                    </button>
                   </div>
-                  <p className="mt-5 text-3xl font-bold tracking-[-0.04em] text-white">
-                    ${company.price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  <h3 className="mt-5 truncate text-sm font-semibold text-slate-300" title={stock.name}>{stock.name}</h3>
+                  <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.11em] text-slate-600">{stock.exchange} · {stock.currency}</p>
+                  <p className="mt-6 text-3xl font-bold tracking-[-0.04em] text-white">
+                    {stock.price !== null ? formatMarketPrice(stock.price, stock.currency) : "—"}
                   </p>
-                  <p className="mt-3 font-mono text-[9px] text-slate-600">52W: {company.range}</p>
+                  <p className={`mt-3 flex items-center gap-2 font-mono text-[10px] ${stock.changePercent !== null && stock.changePercent >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                    {stock.changePercent !== null ? `${stock.changePercent >= 0 ? "+" : ""}${stock.changePercent.toFixed(2)}% 1D` : "Change unavailable"}
+                  </p>
                 </article>
               ))}
             </div>
-            <p className="mt-4 text-xs leading-5 text-slate-500">
-              1D change and 52-week ranges are attributed to the public <a href={yahooFinanceSource} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">Yahoo Finance</a> chart snapshot used by the source research desk.
-            </p>
+            <div className="mt-4 flex flex-col gap-2 text-xs leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+              <span>Live market snapshots may be delayed by the relevant exchange.</span>
+              <span className="font-mono text-[8px] uppercase tracking-[0.11em] text-cyan-400">Four slots · Global listings · Browser saved</span>
+            </div>
           </div>
         </section>
 
