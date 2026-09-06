@@ -1,9 +1,39 @@
 import os
 import json
+import re
 import sqlite3
 import requests
+from html.parser import HTMLParser
 from typing import Dict, Any, List, Optional
 from anthropic import Anthropic
+
+
+class _VisibleTextExtractor(HTMLParser):
+    """Extracts visible text from HTML, skipping script/style content."""
+
+    _SKIP_TAGS = {"script", "style", "noscript", "head"}
+
+    def __init__(self):
+        super().__init__()
+        self._skip_depth = 0
+        self.chunks: List[str] = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self._SKIP_TAGS:
+            self._skip_depth += 1
+
+    def handle_endtag(self, tag):
+        if tag in self._SKIP_TAGS and self._skip_depth > 0:
+            self._skip_depth -= 1
+
+    def handle_data(self, data):
+        if self._skip_depth == 0:
+            stripped = data.strip()
+            if stripped:
+                self.chunks.append(stripped)
+
+    def get_text(self) -> str:
+        return re.sub(r"\s+", " ", " ".join(self.chunks)).strip()
 
 
 class ResearchAgent:
@@ -42,6 +72,24 @@ class ResearchAgent:
                         }
                     },
                     "required": ["query"],
+                },
+            },
+            {
+                "name": "fetch_page",
+                "description": (
+                    "Fetch a web page by URL and return its visible text content. "
+                    "Use this to read a page in full when a search finding references a URL "
+                    "and more detail than the search snippet is needed."
+                ),
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "url": {
+                            "type": "string",
+                            "description": "The URL of the page to fetch, e.g. 'https://en.wikipedia.org/wiki/Renewable_energy'",
+                        }
+                    },
+                    "required": ["url"],
                 },
             },
             {
@@ -131,21 +179,59 @@ class ResearchAgent:
 
         findings: List[str] = []
 
+        def _add(text: str, url: Optional[str]):
+            if url:
+                findings.append(f"{text} (source: {url})")
+            else:
+                findings.append(text)
+
         if data.get("AbstractText"):
-            findings.append(data["AbstractText"])
+            _add(data["AbstractText"], data.get("AbstractURL"))
 
         for topic in data.get("RelatedTopics", []):
             if isinstance(topic, dict) and topic.get("Text"):
-                findings.append(topic["Text"])
+                _add(topic["Text"], topic.get("FirstURL"))
             elif isinstance(topic, dict) and topic.get("Topics"):
                 for sub_topic in topic["Topics"]:
                     if isinstance(sub_topic, dict) and sub_topic.get("Text"):
-                        findings.append(sub_topic["Text"])
+                        _add(sub_topic["Text"], sub_topic.get("FirstURL"))
 
         if not findings:
             return [f"No findings available for '{query}'."]
 
         return findings[:10]
+
+    def _tool_fetch_page(self, url: str) -> str:
+        """Fetch a page and return its cleaned visible text, truncated to a safe length."""
+        try:
+            response = requests.get(
+                url,
+                headers={"User-Agent": "Mozilla/5.0 (compatible; CoreLogicResearchAgent/1.0)"},
+                timeout=8,
+            )
+            response.raise_for_status()
+        except Exception as e:
+            return f"Error fetching '{url}': {str(e)}"
+
+        content_type = response.headers.get("Content-Type", "")
+        if "html" not in content_type:
+            return f"Cannot read '{url}': unsupported content type '{content_type}'."
+
+        extractor = _VisibleTextExtractor()
+        try:
+            extractor.feed(response.text)
+        except Exception as e:
+            return f"Error parsing '{url}': {str(e)}"
+
+        text = extractor.get_text()
+        if not text:
+            return f"No readable text content found at '{url}'."
+
+        max_chars = 4000
+        if len(text) > max_chars:
+            text = text[:max_chars] + "... [truncated]"
+
+        return text
 
     def _tool_summarize(self, findings: List[str]) -> List[str]:
         """Condense findings into a deduplicated, capped list of key points."""
@@ -162,12 +248,14 @@ class ResearchAgent:
     def _execute_tool(self, tool_name: str, tool_input: Dict[str, Any]) -> str:
         if tool_name == "search":
             result = self._tool_search(tool_input.get("query", ""))
+        elif tool_name == "fetch_page":
+            result = self._tool_fetch_page(tool_input.get("url", ""))
         elif tool_name == "summarize":
             result = self._tool_summarize(tool_input.get("findings", []))
         else:
             return f"Error: Unknown tool '{tool_name}'"
 
-        return json.dumps(result)
+        return result if isinstance(result, str) else json.dumps(result)
 
     # --- Main Agent Logic ---
 
@@ -181,8 +269,9 @@ class ResearchAgent:
 
         system_prompt = (
             f"You are {self.name}, a research assistant for AI-CoreLogic. "
-            "Use the search tool to gather information and the summarize tool to "
-            "condense findings, then provide a comprehensive summary of the topic."
+            "Use the search tool to gather information, fetch_page to read a promising "
+            "source in full when the search snippet isn't enough, and the summarize tool "
+            "to condense findings, then provide a comprehensive summary of the topic."
         )
 
         try:

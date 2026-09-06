@@ -10,6 +10,7 @@ This repository contains the AI-CoreLogic Python agent, an advanced AI assistant
   - `get_weather`: Fetches real-time weather data using the `wttr.in` API.
 - **Research Agent**: A second Claude-powered agent (`ResearchAgent`) that researches a topic across multiple tool-use turns.
   - `search`: Searches the web for a query using DuckDuckGo's keyless Instant Answer API.
+  - `fetch_page`: Fetches a URL surfaced by `search` and returns its cleaned visible text, for when a search snippet isn't enough detail.
   - `summarize`: Condenses a list of findings into a short list of key points.
 - **Persistent Memory**: Uses SQLite (`agent_memory.db` / `research_memory.db`) to store conversation history across sessions.
 - **FastAPI Web Interface**: Provides a REST API for easy integration with frontend applications (like React).
