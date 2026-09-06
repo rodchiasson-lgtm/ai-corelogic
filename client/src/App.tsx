@@ -24,7 +24,7 @@ function IntelligenceDeskRoute() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-[#050B18] flex items-center justify-center text-cyan-400 font-mono text-xs tracking-[0.18em]">
-          INITIALIZING INTELLIGENCE DESK
+          INITIALIZING FINANCIAL STOCK ANALYSIS
         </div>
       }
     >

@@ -5,21 +5,36 @@
  */
 
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, ChevronDown, FileSearch, Menu, X } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
-  { label: "Intelligence", href: "/intelligence" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "#contact" },
+];
+
+const financialAnalysisLinks = [
+  { label: "Research Desk", description: "Complete comparative briefing", href: "/intelligence", icon: BarChart3 },
+  { label: "Company Evidence", description: "Source-backed company files", href: "/intelligence#evidence", icon: FileSearch },
+  { label: "Market Signals", description: "Revenue, growth and price traces", href: "/intelligence#signals", icon: Activity },
+  { label: "Evidence Sources", description: "Primary releases and market data", href: "/intelligence#sources", icon: BookOpenCheck },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [financialOpen, setFinancialOpen] = useState(false);
   const { trackSchedulingClick } = useAnalytics();
 
   useEffect(() => {
@@ -30,6 +45,7 @@ export default function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
+    setFinancialOpen(false);
     if (href.startsWith("/")) {
       // Internal routed experience
       window.location.href = href;
@@ -68,8 +84,61 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-            {navLinks.map((link) => (
+          <div className="hidden lg:flex items-center gap-4 xl:gap-6">
+            {navLinks.slice(0, 3).map((link) => (
+              <button
+                key={link.href}
+                onClick={() => handleNavClick(link.href)}
+                className="text-slate-300 hover:text-cyan-400 transition-colors duration-200 text-sm font-medium tracking-wide"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                {link.label}
+              </button>
+            ))}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="group flex items-center gap-1.5 text-slate-300 hover:text-cyan-400 data-[state=open]:text-cyan-400 transition-colors duration-200 text-sm font-medium tracking-wide"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  Financial Stock Analysis
+                  <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="center"
+                sideOffset={14}
+                className="w-[320px] rounded-xl border-cyan-400/20 bg-[#07111f]/98 p-2 text-slate-100 shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl"
+              >
+                <DropdownMenuLabel className="px-3 py-3">
+                  <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-cyan-400">Financial Stock Analysis</span>
+                  <span className="mt-1 block text-xs font-normal leading-5 text-slate-500">Source-forward company research and comparative market signals.</span>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-cyan-400/10" />
+                {financialAnalysisLinks.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <DropdownMenuItem
+                      key={item.href}
+                      onSelect={() => handleNavClick(item.href)}
+                      className="group cursor-pointer gap-3 rounded-lg px-3 py-3 text-slate-300 focus:bg-cyan-400/[0.08] focus:text-white"
+                    >
+                      <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/15 bg-cyan-400/[0.05] text-cyan-400">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <span>
+                        <span className="block text-sm font-semibold">{item.label}</span>
+                        <span className="mt-0.5 block text-[11px] font-normal text-slate-500 group-focus:text-slate-400">{item.description}</span>
+                      </span>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {navLinks.slice(3).map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}
@@ -116,7 +185,52 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden nav-blur border-t border-cyan-400/10">
           <div className="container py-4 flex flex-col gap-1">
-            {navLinks.map((link) => (
+            {navLinks.slice(0, 3).map((link) => (
+              <button
+                key={link.href}
+                onClick={() => handleNavClick(link.href)}
+                className="text-left px-4 py-3 text-slate-300 hover:text-cyan-400 hover:bg-cyan-400/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                {link.label}
+              </button>
+            ))}
+
+            <div className="rounded-lg border border-cyan-400/10 bg-cyan-400/[0.025]">
+              <button
+                type="button"
+                onClick={() => setFinancialOpen((open) => !open)}
+                className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-medium text-slate-300 transition-colors hover:text-cyan-400"
+                style={{ fontFamily: "var(--font-body)" }}
+                aria-expanded={financialOpen}
+              >
+                Financial Stock Analysis
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${financialOpen ? "rotate-180" : ""}`} />
+              </button>
+              {financialOpen && (
+                <div className="border-t border-cyan-400/10 p-2">
+                  {financialAnalysisLinks.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        type="button"
+                        key={item.href}
+                        onClick={() => handleNavClick(item.href)}
+                        className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-slate-400 transition-colors hover:bg-cyan-400/[0.06] hover:text-white"
+                      >
+                        <Icon className="h-4 w-4 text-cyan-400" />
+                        <span>
+                          <span className="block text-sm font-medium">{item.label}</span>
+                          <span className="mt-0.5 block text-[11px] text-slate-600">{item.description}</span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {navLinks.slice(3).map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}

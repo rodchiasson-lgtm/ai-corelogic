@@ -149,7 +149,7 @@ export default function ResearchSection() {
           <div className="grid lg:grid-cols-[minmax(0,1.25fr)_minmax(340px,0.75fr)]">
             <div className="p-7 sm:p-9 lg:p-10">
               <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-cyan-400">
-                <Activity className="h-4 w-4" /> Intelligence Desk / Signal Ledger
+                <Activity className="h-4 w-4" /> Financial Stock Analysis / Signal Ledger
               </div>
               <h3 className="mt-5 max-w-2xl text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
                 Four earnings stories. <span className="gradient-text">One infrastructure cycle.</span>
@@ -159,7 +159,7 @@ export default function ResearchSection() {
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <Link href="/intelligence" className="btn-primary inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold">
-                  Open Intelligence Desk <ArrowUpRight className="h-4 w-4" />
+                  Open Stock Analysis <ArrowUpRight className="h-4 w-4" />
                 </Link>
                 <span className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.12em] text-slate-500">
                   <ShieldCheck className="h-4 w-4 text-cyan-400" /> Research only · no price targets

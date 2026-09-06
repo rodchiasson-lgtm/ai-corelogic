@@ -19,7 +19,7 @@ const footerLinks = {
     { label: "Careers", href: "#" },
   ],
   Resources: [
-    { label: "Intelligence Desk", href: "/intelligence" },
+    { label: "Financial Stock Analysis", href: "/intelligence" },
     { label: "AI Insights Blog", href: "/blog" },
     { label: "Maturity Assessment", href: "#contact" },
     { label: "AI Readiness Quiz", href: "#contact" },

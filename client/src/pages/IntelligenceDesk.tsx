@@ -151,7 +151,7 @@ function ResearchHeader() {
                 className="h-9 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80 lg:h-11"
               />
               <span className="hidden border-l border-cyan-400/20 pl-3 sm:block">
-                <span className="block font-mono text-[9px] tracking-[0.18em] text-slate-400">INTELLIGENCE DESK</span>
+                <span className="block font-mono text-[9px] tracking-[0.16em] text-slate-400">FINANCIAL STOCK ANALYSIS</span>
                 <span className="mt-1 flex items-center gap-1.5 font-mono text-[8px] tracking-[0.16em] text-cyan-400">
                   <i className="h-1 w-1 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(0,212,200,0.8)]" />
                   SOURCE-FORWARD
@@ -160,7 +160,7 @@ function ResearchHeader() {
             </Link>
           </div>
 
-          <nav className="hidden items-center gap-6 lg:flex" aria-label="Intelligence Desk sections">
+          <nav className="hidden items-center gap-6 lg:flex" aria-label="Financial Stock Analysis sections">
             {navigation.map((item) => (
               <a key={item.href} href={item.href} className="intelligence-nav-link">
                 <span>{item.index}</span> {item.label}
@@ -173,7 +173,7 @@ function ResearchHeader() {
               <ArrowLeft className="h-3.5 w-3.5" /> Main site
             </Link>
             <a
-              href="https://wa.me/17273189265?text=Hi%20Rodney%2C%20I%27d%20like%20to%20discuss%20the%20AI-Corelogic%20Intelligence%20Desk."
+              href="https://wa.me/17273189265?text=Hi%20Rodney%2C%20I%27d%20like%20to%20discuss%20AI-Corelogic%20Financial%20Stock%20Analysis."
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary rounded-lg px-4 py-2.5 text-xs"
@@ -186,7 +186,7 @@ function ResearchHeader() {
             type="button"
             onClick={() => setMobileOpen((open) => !open)}
             className="rounded-lg border border-cyan-400/20 p-2 text-slate-300 transition-colors hover:text-cyan-400 lg:hidden"
-            aria-label="Toggle Intelligence Desk navigation"
+            aria-label="Toggle Financial Stock Analysis navigation"
             aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -228,8 +228,15 @@ export default function IntelligenceDesk() {
 
   useEffect(() => {
     const previousTitle = document.title;
-    document.title = "Intelligence Desk | AI-Corelogic";
-    window.scrollTo({ top: 0, behavior: "instant" });
+    document.title = "Financial Stock Analysis | AI-Corelogic";
+    const hash = window.location.hash;
+    window.requestAnimationFrame(() => {
+      if (hash) {
+        document.querySelector(hash)?.scrollIntoView({ behavior: "auto" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+    });
     return () => {
       document.title = previousTitle;
     };
@@ -762,7 +769,7 @@ export default function IntelligenceDesk() {
           <div className="flex flex-wrap items-center gap-3 print:hidden">
             <Link href="/" className="intelligence-action"><ArrowLeft className="h-4 w-4" /> Main site</Link>
             <a
-              href="https://wa.me/17273189265?text=Hi%20Rodney%2C%20I%27d%20like%20to%20discuss%20the%20AI-Corelogic%20Intelligence%20Desk."
+              href="https://wa.me/17273189265?text=Hi%20Rodney%2C%20I%27d%20like%20to%20discuss%20AI-Corelogic%20Financial%20Stock%20Analysis."
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs"
