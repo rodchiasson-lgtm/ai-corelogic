@@ -5,10 +5,11 @@
  */
 
 import { useState, useEffect } from "react";
-import { Activity, BarChart3, BookOpenCheck, ChevronDown, FileSearch, Menu, Search, X } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, ChevronDown, FileSearch, Loader2, Menu, Search, X } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { researchCompanies } from "@/lib/intelligenceData";
-import { popularStocks, type StockDirectoryEntry } from "@/lib/stockDirectory";
+import { popularStocks } from "@/lib/stockDirectory";
+import { formatMarketPrice, searchLiveStocks, type LiveStockResult } from "@/lib/marketData";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,21 +34,40 @@ const financialAnalysisLinks = [
   { label: "Evidence Sources", description: "Primary releases and market data", href: "/intelligence#sources", icon: BookOpenCheck },
 ];
 
-type StockSearchResult = StockDirectoryEntry & {
+type StockSearchResult = {
+  symbolKey: string;
+  ticker: string;
+  name: string;
+  exchange: string;
   covered: boolean;
   accent?: string;
+  price: number | null;
+  changePercent: number | null;
+  currency: string;
 };
 
 const searchableStocks: StockSearchResult[] = [
   ...researchCompanies.map((company) => ({
+    symbolKey: `NASDAQ:${company.ticker}`,
     ticker: company.ticker,
     name: company.name,
     exchange: "NASDAQ" as const,
-    sector: company.thesis,
     covered: true,
     accent: company.accent,
+    price: null,
+    changePercent: null,
+    currency: "USD",
   })),
-  ...popularStocks.map((company) => ({ ...company, covered: false })),
+  ...popularStocks.map((company) => ({
+    symbolKey: `${company.exchange}:${company.ticker}`,
+    ticker: company.ticker,
+    name: company.name,
+    exchange: company.exchange,
+    covered: false,
+    price: null,
+    changePercent: null,
+    currency: "USD",
+  })),
 ];
 
 function TickerSearch({
@@ -57,18 +77,67 @@ function TickerSearch({
 }: {
   query: string;
   onQueryChange: (value: string) => void;
-  onSelect: (ticker: string, covered: boolean) => void;
+  onSelect: (ticker: string, covered: boolean, exchange?: string) => void;
 }) {
   const normalizedQuery = query.trim().toLowerCase();
-  const matches = normalizedQuery
+  const [liveMatches, setLiveMatches] = useState<LiveStockResult[]>([]);
+  const [searchStatus, setSearchStatus] = useState<"idle" | "loading" | "live" | "error">("idle");
+  const localMatches = normalizedQuery
     ? searchableStocks.filter(
         (company) =>
           company.ticker.toLowerCase().startsWith(normalizedQuery) ||
           company.name.toLowerCase().includes(normalizedQuery)
       ).slice(0, 6)
     : [];
+
+  useEffect(() => {
+    if (!normalizedQuery) {
+      setLiveMatches([]);
+      setSearchStatus("idle");
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setSearchStatus("loading");
+      try {
+        const results = await searchLiveStocks(query, controller.signal);
+        setLiveMatches(results);
+        setSearchStatus("live");
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setLiveMatches([]);
+        setSearchStatus("error");
+      }
+    }, 260);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [normalizedQuery, query]);
+
+  const liveResults: StockSearchResult[] = liveMatches.map((company) => {
+    const coveredCompany = company.exchange === "NASDAQ"
+      ? researchCompanies.find((item) => item.ticker === company.ticker)
+      : undefined;
+    return {
+      ...company,
+      covered: Boolean(coveredCompany),
+      accent: coveredCompany?.accent,
+    };
+  });
+  const combinedMatches = new Map<string, StockSearchResult>();
+  localMatches.forEach((company) => combinedMatches.set(company.symbolKey, company));
+  liveResults.forEach((company) => {
+    const existing = combinedMatches.get(company.symbolKey);
+    combinedMatches.set(company.symbolKey, existing ? { ...company, covered: existing.covered, accent: existing.accent } : company);
+  });
+  const matches = searchStatus === "live" && liveResults.length > 0
+    ? Array.from(combinedMatches.values()).slice(0, 8)
+    : localMatches;
   const typedTicker = query.trim().toUpperCase();
-  const canLookupTypedTicker = /^[A-Z][A-Z0-9.-]{0,9}$/.test(typedTicker);
+  const canLookupTypedTicker = /^[A-Z][A-Z0-9.-]{0,4}$/.test(typedTicker);
   const hasExactTicker = matches.some((company) => company.ticker === typedTicker);
 
   return (
@@ -78,7 +147,7 @@ function TickerSearch({
         event.stopPropagation();
         if (event.key === "Enter" && matches[0]) {
           event.preventDefault();
-          onSelect(matches[0].ticker, matches[0].covered);
+          onSelect(matches[0].ticker, matches[0].covered, matches[0].exchange);
         } else if (event.key === "Enter" && canLookupTypedTicker) {
           event.preventDefault();
           onSelect(typedTicker, false);
@@ -105,19 +174,30 @@ function TickerSearch({
             matches.map((company) => (
               <button
                 type="button"
-                key={company.ticker}
-                onClick={() => onSelect(company.ticker, company.covered)}
+                key={company.symbolKey}
+                onClick={() => onSelect(company.ticker, company.covered, company.exchange)}
                 className="flex w-full items-center justify-between rounded-lg border border-transparent px-3 py-2.5 text-left transition-colors hover:border-cyan-400/15 hover:bg-cyan-400/[0.06] focus-visible:border-cyan-400/30 focus-visible:outline-none"
                 role="option"
               >
                 <span className="flex items-center gap-3">
-                  <i className="h-2 w-2 rounded-full" style={{ background: company.accent, boxShadow: `0 0 8px ${company.accent}80` }} />
+                  <i className="h-2 w-2 rounded-full bg-cyan-400" style={company.accent ? { background: company.accent, boxShadow: `0 0 8px ${company.accent}80` } : undefined} />
                     <span>
                       <span className="block font-mono text-[10px] tracking-[0.12em] text-white">{company.ticker}</span>
                       <span className="mt-0.5 block text-[11px] text-slate-500">{company.name} · {company.exchange}</span>
                     </span>
                   </span>
-                  <span className="font-mono text-[8px] uppercase tracking-[0.1em] text-cyan-400">{company.covered ? "FULL" : "QUOTE"}</span>
+                  <span className="text-right font-mono">
+                    {company.price !== null ? (
+                      <>
+                        <span className="block text-[10px] text-white">{formatMarketPrice(company.price, company.currency)}</span>
+                        <span className={`mt-0.5 block text-[9px] ${company.changePercent !== null && company.changePercent >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                          {company.changePercent !== null ? `${company.changePercent >= 0 ? "+" : ""}${company.changePercent.toFixed(2)}%` : "—"}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-[8px] uppercase tracking-[0.1em] text-cyan-400">{company.covered ? "FULL" : "QUOTE"}</span>
+                    )}
+                  </span>
               </button>
             ))
           ) : null}
@@ -141,8 +221,19 @@ function TickerSearch({
         </div>
       ) : (
         <p className="px-1 pt-2 font-mono text-[8px] uppercase tracking-[0.11em] text-slate-600">
-          Search 60+ popular stocks or enter another ticker
+          Search stocks across global exchanges
         </p>
+      )}
+
+      {normalizedQuery && (
+        <div className="mt-2 flex items-center gap-2 px-1 font-mono text-[8px] uppercase tracking-[0.11em] text-slate-600" aria-live="polite">
+          {searchStatus === "loading" && <Loader2 className="h-3 w-3 animate-spin text-cyan-400" />}
+          <span>
+            {searchStatus === "loading" && "Searching global markets"}
+            {searchStatus === "live" && "Live global directory"}
+            {searchStatus === "error" && "Live feed unavailable · showing local directory"}
+          </span>
+        </div>
       )}
     </div>
   );
@@ -177,11 +268,8 @@ export default function Navbar() {
     }
   };
 
-  const handleTickerSelect = (ticker: string, covered: boolean) => {
-    const destination = covered
-      ? `/intelligence?ticker=${encodeURIComponent(ticker)}#evidence`
-      : `/stocks/${encodeURIComponent(ticker)}`;
-    handleNavClick(destination);
+  const handleTickerSelect = (ticker: string, _covered: boolean, exchange?: string) => {
+    handleNavClick(`/stocks/${encodeURIComponent(ticker)}${exchange ? `?exchange=${encodeURIComponent(exchange)}` : ""}`);
   };
 
   return (
@@ -236,7 +324,7 @@ export default function Navbar() {
               <DropdownMenuContent
                 align="center"
                 sideOffset={14}
-                className="w-[320px] rounded-xl border-cyan-400/20 bg-[#07111f]/98 p-2 text-slate-100 shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl"
+                className="max-h-[calc(100vh-6rem)] w-[320px] overflow-y-auto rounded-xl border-cyan-400/20 bg-[#07111f]/98 p-2 text-slate-100 shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl"
               >
                 <DropdownMenuLabel className="px-3 py-3">
                   <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-cyan-400">Financial Stock Analysis</span>

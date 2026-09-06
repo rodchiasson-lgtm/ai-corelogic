@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useRoute } from "wouter";
 import {
   ArrowLeft,
@@ -7,16 +7,28 @@ import {
   Building2,
   ExternalLink,
   FileText,
+  Loader2,
   MessageCircle,
+  RefreshCw,
   Search,
   ShieldCheck,
+  TrendingDown,
+  TrendingUp,
 } from "lucide-react";
 import { popularStocks } from "@/lib/stockDirectory";
 import { researchCompanies } from "@/lib/intelligenceData";
+import { fetchLiveStockQuote, formatMarketPrice, type LiveStockResult } from "@/lib/marketData";
 
 export default function StockLookup() {
   const [, params] = useRoute("/stocks/:ticker");
   const ticker = (params?.ticker || "").toUpperCase();
+  const requestedExchange = useMemo(
+    () => new URLSearchParams(window.location.search).get("exchange")?.toUpperCase() || null,
+    [ticker]
+  );
+  const [quote, setQuote] = useState<LiveStockResult | null>(null);
+  const [quoteStatus, setQuoteStatus] = useState<"loading" | "live" | "error">("loading");
+  const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
   const directoryEntry = useMemo(
     () => popularStocks.find((company) => company.ticker === ticker),
     [ticker]
@@ -25,16 +37,37 @@ export default function StockLookup() {
     () => researchCompanies.find((company) => company.ticker === ticker),
     [ticker]
   );
+  const preferredExchange = requestedExchange || directoryEntry?.exchange || (coveredCompany ? "NASDAQ" : null);
+
+  const loadQuote = useCallback(async (signal?: AbortSignal) => {
+    setQuoteStatus("loading");
+    try {
+      const result = await fetchLiveStockQuote(ticker, preferredExchange, signal);
+      if (!result) throw new Error("Ticker not found");
+      setQuote(result);
+      setUpdatedAt(new Date());
+      setQuoteStatus("live");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      setQuoteStatus("error");
+    }
+  }, [preferredExchange, ticker]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void loadQuote(controller.signal);
+    return () => controller.abort();
+  }, [loadQuote]);
 
   useEffect(() => {
     document.title = `${ticker || "Stock"} Lookup | AI-Corelogic`;
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [ticker]);
 
-  const displayName = directoryEntry?.name || coveredCompany?.name || ticker;
-  const exchange = directoryEntry?.exchange || "Market ticker";
+  const displayName = quote?.name || directoryEntry?.name || coveredCompany?.name || ticker;
+  const exchange = quote?.exchange || requestedExchange || directoryEntry?.exchange || "Market ticker";
   const sector = directoryEntry?.sector || coveredCompany?.thesis || "Public market security";
-  const yahooUrl = `https://finance.yahoo.com/quote/${encodeURIComponent(ticker)}`;
+  const marketUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(exchange)}-${encodeURIComponent(ticker)}/`;
   const secUrl = `https://www.sec.gov/edgar/search/#/q=${encodeURIComponent(ticker)}`;
   const analysisUrl = coveredCompany
     ? `/intelligence?ticker=${encodeURIComponent(ticker)}#evidence`
@@ -89,6 +122,60 @@ export default function StockLookup() {
                 </div>
               </div>
 
+              <div className="intelligence-panel mt-8 max-w-2xl p-5 sm:p-6" aria-live="polite">
+                {quoteStatus === "loading" && !quote ? (
+                  <div className="flex min-h-24 items-center gap-3 text-sm text-slate-400">
+                    <Loader2 className="h-5 w-5 animate-spin text-cyan-400" />
+                    Loading the latest market snapshot…
+                  </div>
+                ) : quoteStatus === "error" && !quote ? (
+                  <div className="flex min-h-24 flex-col justify-center gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-rose-400">Live feed unavailable</div>
+                      <p className="mt-2 text-sm text-slate-500">The ticker page remains available while the market provider reconnects.</p>
+                    </div>
+                    <button type="button" onClick={() => void loadQuote()} className="intelligence-action shrink-0">
+                      <RefreshCw className="h-4 w-4" /> Retry
+                    </button>
+                  </div>
+                ) : quote ? (
+                  <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)_auto] sm:items-end">
+                    <div>
+                      <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-slate-500">Live market price</div>
+                      <div className="mt-2 text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
+                        {quote.price !== null ? formatMarketPrice(quote.price, quote.currency) : "Unavailable"}
+                      </div>
+                      <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-slate-600">{quote.currency} · {quote.exchange}</div>
+                    </div>
+                    <div>
+                      <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-slate-500">Daily change</div>
+                      <div className={`mt-2 flex items-center gap-2 text-2xl font-bold ${quote.changePercent !== null && quote.changePercent >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                        {quote.changePercent !== null && quote.changePercent >= 0 ? <TrendingUp className="h-5 w-5" /> : <TrendingDown className="h-5 w-5" />}
+                        {quote.changePercent !== null ? `${quote.changePercent >= 0 ? "+" : ""}${quote.changePercent.toFixed(2)}%` : "—"}
+                      </div>
+                      <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-slate-600">Current session</div>
+                    </div>
+                    <div className="flex items-center gap-3 sm:flex-col sm:items-end">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-emerald-400">
+                        <i className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" /> Live
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => void loadQuote()}
+                        disabled={quoteStatus === "loading"}
+                        className="inline-flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-slate-500 transition-colors hover:text-cyan-400 disabled:opacity-50"
+                        aria-label="Refresh live stock price"
+                      >
+                        <RefreshCw className={`h-3 w-3 ${quoteStatus === "loading" ? "animate-spin" : ""}`} /> Refresh
+                      </button>
+                    </div>
+                    <div className="border-t border-cyan-400/10 pt-3 font-mono text-[8px] uppercase tracking-[0.1em] text-slate-600 sm:col-span-3">
+                      Updated {updatedAt?.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })} · Exchange data may be delayed
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
               <p className="mt-8 max-w-2xl text-base leading-8 text-slate-400">
                 {coveredCompany
                   ? "This company has a full source-forward evidence file in the AI-Corelogic research desk."
@@ -96,7 +183,7 @@ export default function StockLookup() {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href={yahooUrl} target="_blank" rel="noopener noreferrer" className="btn-primary inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm">
+                <a href={marketUrl} target="_blank" rel="noopener noreferrer" className="btn-primary inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm">
                   View current quote <ExternalLink className="h-4 w-4" />
                 </a>
                 {coveredCompany && (
@@ -117,7 +204,7 @@ export default function StockLookup() {
             </div>
 
             <div className="grid gap-5 md:grid-cols-3">
-              <a href={yahooUrl} target="_blank" rel="noopener noreferrer" className="intelligence-panel group p-6 transition-transform duration-200 hover:-translate-y-1">
+              <a href={marketUrl} target="_blank" rel="noopener noreferrer" className="intelligence-panel group p-6 transition-transform duration-200 hover:-translate-y-1">
                 <BarChart3 className="h-6 w-6 text-cyan-400" />
                 <h3 className="mt-5 text-lg font-bold text-white">Quote and chart</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-500">Review current pricing, recent performance, volume, and public market news.</p>
@@ -165,7 +252,7 @@ export default function StockLookup() {
       <footer className="border-t border-cyan-400/10 bg-[#030810] py-8">
         <div className="container flex flex-col gap-4 text-xs text-slate-600 sm:flex-row sm:items-center sm:justify-between">
           <span className="flex items-center gap-2"><Building2 className="h-4 w-4 text-cyan-400" /> AI-Corelogic Financial Stock Analysis</span>
-          <span>External quote data remains subject to the source provider’s timing and terms.</span>
+          <span>Live market data provided by TradingView; exchange delays and provider terms may apply.</span>
         </div>
       </footer>
     </div>
