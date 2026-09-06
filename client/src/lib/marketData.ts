@@ -1,5 +1,24 @@
 const TRADINGVIEW_SCANNER_URL = "https://scanner.tradingview.com/global/scan";
-const RESULT_COLUMNS = ["name", "description", "close", "change", "currency", "exchange"] as const;
+const RESULT_COLUMNS = [
+  "name",
+  "description",
+  "close",
+  "change",
+  "currency",
+  "exchange",
+  "market_cap_basic",
+  "price_earnings_ttm",
+  "earnings_per_share_diluted_ttm",
+  "dividends_yield_current",
+  "total_revenue",
+  "total_revenue_yoy_growth_ttm",
+  "RSI",
+  "MACD.macd",
+  "MACD.signal",
+  "SMA20",
+  "SMA50",
+  "Volatility.D",
+] as const;
 
 export type LiveStockResult = {
   symbolKey: string;
@@ -9,11 +28,25 @@ export type LiveStockResult = {
   price: number | null;
   changePercent: number | null;
   currency: string;
+  marketCap: number | null;
+  peRatio: number | null;
+  eps: number | null;
+  dividendYield: number | null;
+  revenue: number | null;
+  revenueGrowth: number | null;
+  rsi: number | null;
+  macd: number | null;
+  macdSignal: number | null;
+  sma20: number | null;
+  sma50: number | null;
+  dailyVolatility: number | null;
 };
+
+type ScannerValue = string | number | null;
 
 type ScannerRow = {
   s: string;
-  d: [string, string, number | null, number | null, string | null, string | null];
+  d: ScannerValue[];
 };
 
 type ScannerResponse = {
@@ -26,16 +59,59 @@ function cleanCompanyName(value: string) {
   return value.replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").trim();
 }
 
+function numberOrNull(value: ScannerValue) {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function textOrFallback(value: ScannerValue, fallback: string) {
+  return typeof value === "string" && value.trim() ? value : fallback;
+}
+
 function mapScannerRow(row: ScannerRow): LiveStockResult {
-  const [ticker, description, price, changePercent, currency, exchange] = row.d;
+  const [
+    tickerValue,
+    descriptionValue,
+    priceValue,
+    changeValue,
+    currencyValue,
+    exchangeValue,
+    marketCapValue,
+    peRatioValue,
+    epsValue,
+    dividendYieldValue,
+    revenueValue,
+    revenueGrowthValue,
+    rsiValue,
+    macdValue,
+    macdSignalValue,
+    sma20Value,
+    sma50Value,
+    volatilityValue,
+  ] = row.d;
+  const fallbackTicker = row.s.split(":").at(-1) || row.s;
+  const ticker = textOrFallback(tickerValue, fallbackTicker);
+  const exchange = textOrFallback(exchangeValue, row.s.split(":")[0] || "GLOBAL");
+
   return {
     symbolKey: row.s,
     ticker,
-    name: cleanCompanyName(description || ticker),
-    exchange: exchange || row.s.split(":")[0] || "GLOBAL",
-    price: typeof price === "number" ? price : null,
-    changePercent: typeof changePercent === "number" ? changePercent : null,
-    currency: currency || "USD",
+    name: cleanCompanyName(textOrFallback(descriptionValue, ticker)),
+    exchange,
+    price: numberOrNull(priceValue),
+    changePercent: numberOrNull(changeValue),
+    currency: textOrFallback(currencyValue, "USD"),
+    marketCap: numberOrNull(marketCapValue),
+    peRatio: numberOrNull(peRatioValue),
+    eps: numberOrNull(epsValue),
+    dividendYield: numberOrNull(dividendYieldValue),
+    revenue: numberOrNull(revenueValue),
+    revenueGrowth: numberOrNull(revenueGrowthValue),
+    rsi: numberOrNull(rsiValue),
+    macd: numberOrNull(macdValue),
+    macdSignal: numberOrNull(macdSignalValue),
+    sma20: numberOrNull(sma20Value),
+    sma50: numberOrNull(sma50Value),
+    dailyVolatility: numberOrNull(volatilityValue),
   };
 }
 
@@ -148,5 +224,18 @@ export function formatMarketPrice(price: number, currency: string) {
     }).format(price);
   } catch {
     return `${price.toLocaleString("en-US", { maximumFractionDigits: price < 1 ? 4 : 2 })} ${currency}`;
+  }
+}
+
+export function formatCompactMarketValue(value: number, currency: string) {
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency,
+      notation: "compact",
+      maximumFractionDigits: 2,
+    }).format(value);
+  } catch {
+    return `${value.toLocaleString("en-US", { notation: "compact", maximumFractionDigits: 2 })} ${currency}`;
   }
 }

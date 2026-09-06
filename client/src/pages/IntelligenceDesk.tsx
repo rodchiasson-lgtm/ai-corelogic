@@ -53,7 +53,20 @@ import {
   type LiveStockResult,
 } from "@/lib/marketData";
 import { popularStocks } from "@/lib/stockDirectory";
-import { authorizeStockSummaryAI, generateStockSummary, type StockSummaryResult } from "@/lib/stockSummary";
+import {
+  authorizeStockSummaryAI,
+  generateStockSummary,
+  stockSummaryStyles,
+  type StockSummaryResult,
+  type StockSummaryStyle,
+} from "@/lib/stockSummary";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const navigation = [
   { label: "Briefing", href: "#briefing", index: "01" },
@@ -113,6 +126,7 @@ const chartColors: Record<ResearchCompany["ticker"], string> = {
 
 const comparisonColors = ["#f97360", "#4f8cff", "#00D4C8", "#aa7dff"];
 const comparisonStorageKey = "ai-corelogic-stock-comparison";
+const summaryStyleStorageKey = "ai-corelogic-summary-style";
 const defaultComparisonStocks: LiveStockResult[] = researchCompanies.map((company) => ({
   symbolKey: `NASDAQ:${company.ticker}`,
   ticker: company.ticker,
@@ -121,6 +135,18 @@ const defaultComparisonStocks: LiveStockResult[] = researchCompanies.map((compan
   price: company.price,
   changePercent: company.dayMove,
   currency: "USD",
+  marketCap: null,
+  peRatio: null,
+  eps: null,
+  dividendYield: null,
+  revenue: null,
+  revenueGrowth: null,
+  rsi: null,
+  macd: null,
+  macdSignal: null,
+  sma20: null,
+  sma50: null,
+  dailyVolatility: null,
 }));
 
 function loadSavedComparison() {
@@ -138,6 +164,12 @@ function loadSavedComparison() {
     // Ignore malformed local state and restore the verified default basket.
   }
   return defaultComparisonStocks;
+}
+
+function loadSummaryStyle(): StockSummaryStyle {
+  if (typeof window === "undefined") return "technical";
+  const saved = window.localStorage.getItem(summaryStyleStorageKey);
+  return saved === "technical" || saved === "fundamental" || saved === "beginner" ? saved : "technical";
 }
 
 function IntelligenceMark({ compact = false }: { compact?: boolean }) {
@@ -412,6 +444,7 @@ export default function IntelligenceDesk() {
   const [stockSummary, setStockSummary] = useState<StockSummaryResult | null>(null);
   const [summaryLoading, setSummaryLoading] = useState(false);
   const [summaryCopied, setSummaryCopied] = useState(false);
+  const [summaryStyle, setSummaryStyle] = useState<StockSummaryStyle>(loadSummaryStyle);
 
   const comparisonSignature = comparisonStocks
     .map((stock) => `${stock.symbolKey}:${stock.price ?? "na"}:${stock.changePercent ?? "na"}`)
@@ -420,6 +453,12 @@ export default function IntelligenceDesk() {
   useEffect(() => {
     window.localStorage.setItem(comparisonStorageKey, JSON.stringify(comparisonStocks));
   }, [comparisonStocks]);
+
+  useEffect(() => {
+    window.localStorage.setItem(summaryStyleStorageKey, summaryStyle);
+    setStockSummary(null);
+    setSummaryCopied(false);
+  }, [summaryStyle]);
 
   useEffect(() => {
     setStockSummary(null);
@@ -521,10 +560,10 @@ export default function IntelligenceDesk() {
         })
       );
       setComparisonStocks(refreshed);
-      const result = await generateStockSummary(refreshed, aiAuthorized);
+      const result = await generateStockSummary(refreshed, summaryStyle, aiAuthorized);
       setStockSummary(result);
       if (result.mode === "ai") {
-        toast.success("AI comparison generated");
+        toast.success(`${stockSummaryStyles[summaryStyle].label} analysis generated`);
       } else {
         toast.info("AI provider unavailable — metrics brief generated instead");
       }
@@ -966,16 +1005,48 @@ export default function IntelligenceDesk() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 print:hidden">
-                <button
-                  type="button"
-                  onClick={() => void generateComparisonBrief()}
-                  disabled={summaryLoading}
-                  className="btn-primary inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs disabled:cursor-wait disabled:opacity-70"
-                  aria-describedby="ai-summary-disclosure"
-                >
-                  {summaryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <BrainCircuit className="h-4 w-4" />}
-                  {summaryLoading ? "Analyzing basket…" : "Generate AI brief"}
-                </button>
+                <div className="flex min-w-0 overflow-hidden rounded-lg border border-cyan-400/25 bg-[#050d18] shadow-[0_0_24px_rgba(0,212,200,0.05)]">
+                  <button
+                    type="button"
+                    onClick={() => void generateComparisonBrief()}
+                    disabled={summaryLoading}
+                    className="btn-primary inline-flex min-h-10 items-center gap-2 rounded-none border-0 px-4 py-2.5 text-xs disabled:cursor-wait disabled:opacity-70"
+                    aria-describedby="ai-summary-disclosure"
+                  >
+                    {summaryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <BrainCircuit className="h-4 w-4" />}
+                    {summaryLoading ? `Running ${stockSummaryStyles[summaryStyle].shortLabel.toLowerCase()}…` : "Generate AI brief"}
+                  </button>
+                  <Select
+                    value={summaryStyle}
+                    onValueChange={(value) => setSummaryStyle(value as StockSummaryStyle)}
+                    disabled={summaryLoading}
+                  >
+                    <SelectTrigger
+                      size="default"
+                      aria-label="Choose AI analysis style"
+                      className="h-10 min-w-[132px] rounded-none border-0 border-l border-cyan-950 bg-[#050d18] px-3 font-mono text-[9px] uppercase tracking-[0.08em] text-cyan-300 shadow-none focus-visible:border-cyan-400/40 focus-visible:ring-cyan-400/20 sm:min-w-[154px]"
+                    >
+                      <SelectValue>{stockSummaryStyles[summaryStyle].shortLabel}</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent
+                      align="end"
+                      className="w-[280px] border-cyan-400/20 bg-[#050d18] text-slate-200 shadow-[0_20px_55px_rgba(0,0,0,0.55)]"
+                    >
+                      {(Object.entries(stockSummaryStyles) as Array<[StockSummaryStyle, (typeof stockSummaryStyles)[StockSummaryStyle]]>).map(([value, option]) => (
+                        <SelectItem
+                          key={value}
+                          value={value}
+                          className="items-start rounded-md px-3 py-3 pr-8 focus:bg-cyan-400/[0.08] focus:text-white"
+                        >
+                          <span className="block">
+                            <span className="block text-xs font-semibold text-white">{option.label}</span>
+                            <span className="mt-1 block whitespace-normal text-[10px] leading-4 text-slate-500">{option.description}</span>
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <button type="button" onClick={() => void refreshComparisonStocks()} disabled={comparisonRefreshing || summaryLoading} className="intelligence-action">
                   <RefreshCw className={`h-4 w-4 ${comparisonRefreshing ? "animate-spin" : ""}`} /> Refresh prices
                 </button>
@@ -1033,13 +1104,18 @@ export default function IntelligenceDesk() {
                       Comparative intelligence
                     </div>
                     <h3 className="mt-3 text-2xl font-bold tracking-[-0.04em] text-white">
-                      {summaryLoading ? "Reading the live basket…" : "AI-Corelogic market brief"}
+                      {summaryLoading
+                        ? `Building the ${stockSummaryStyles[summaryStyle].label.toLowerCase()} view…`
+                        : `AI-Corelogic ${stockSummaryStyles[stockSummary?.style ?? summaryStyle].shortLabel.toLowerCase()} brief`}
                     </h3>
                   </div>
                   {stockSummary && (
                     <div className="flex items-center gap-2">
                       <span className={`rounded border px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.11em] ${stockSummary.mode === "ai" ? "border-cyan-400/20 bg-cyan-400/[0.06] text-cyan-400" : "border-amber-300/20 bg-amber-300/[0.06] text-amber-200"}`}>
                         {stockSummary.mode === "ai" ? "AI generated" : "Metrics fallback"}
+                      </span>
+                      <span className="rounded border border-white/10 bg-white/[0.025] px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.11em] text-slate-400">
+                        {stockSummaryStyles[stockSummary.style].shortLabel}
                       </span>
                       <button type="button" onClick={() => void copyStockSummary()} className="intelligence-action" aria-label="Copy comparative brief">
                         {summaryCopied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
@@ -1059,7 +1135,7 @@ export default function IntelligenceDesk() {
                   <div className="mt-6 max-w-4xl space-y-4 text-sm leading-7 text-slate-300">
                     {stockSummary.text.split(/\n\s*\n/).map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                     <p className="border-t border-cyan-400/10 pt-4 font-mono text-[8px] uppercase tracking-[0.1em] text-slate-600">
-                      Generated {new Date(stockSummary.generatedAt).toLocaleString()} · Current price and 1D change only
+                      Generated {new Date(stockSummary.generatedAt).toLocaleString()} · {stockSummaryStyles[stockSummary.style].metricLabel}
                     </p>
                   </div>
                 ) : null}
@@ -1067,7 +1143,7 @@ export default function IntelligenceDesk() {
             )}
 
             <div className="mt-4 flex flex-col gap-2 text-xs leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-              <span id="ai-summary-disclosure">Live market snapshots may be delayed. AI generation may request provider authorization and uses only the four displayed metrics.</span>
+              <span id="ai-summary-disclosure">Choose an analysis style before generating. Live market and company metrics may be delayed; AI uses only the selected basket data.</span>
               <span className="font-mono text-[8px] uppercase tracking-[0.11em] text-cyan-400">Four slots · Global listings · Browser saved</span>
             </div>
           </div>
