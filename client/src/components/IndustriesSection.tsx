@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ShoppingBag, HeartPulse, Truck, DollarSign, Building2, Factory, Utensils, GraduationCap, Beaker } from "lucide-react";
-import FinancialModelsCatalog from "./FinancialModelsCatalog";
+import FinancialServicesModelShowcase from "./FinancialServicesModelShowcase";
 
 const industries = [
   {
@@ -158,7 +158,7 @@ export default function IndustriesSection() {
             );
           })}
         </div>
-        <FinancialModelsCatalog />
+        <FinancialServicesModelShowcase />
       </div>
     </section>
   );

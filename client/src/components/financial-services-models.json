@@ -1,0 +1,41 @@
+[
+  {
+    "id": "ProsusAI/finbert",
+    "name": "FinBERT",
+    "publisher": "Prosus AI",
+    "category": "Financial sentiment",
+    "specialization": "Finance-specialized",
+    "description": "Classifies English financial text as positive, negative, or neutral.",
+    "application": "Explore tone analysis for financial communications and public reports, with human review.",
+    "limitation": "Sentiment is not a fraud score, credit decision, price forecast, or investment recommendation.",
+    "license": "Model weights: verify terms",
+    "licenseNote": "The Hugging Face card does not explicitly specify a weights license. The linked code repository is Apache-2.0; confirm the applicable model and data terms before deployment.",
+    "url": "https://huggingface.co/ProsusAI/finbert"
+  },
+  {
+    "id": "BAAI/bge-m3",
+    "name": "BGE-M3",
+    "publisher": "Beijing Academy of Artificial Intelligence",
+    "category": "Knowledge retrieval",
+    "specialization": "General-purpose · finance application",
+    "description": "Multilingual embedding model supporting dense, sparse, and multi-vector document retrieval.",
+    "application": "Explore semantic search across policies, product documentation, and financial reports as part of a retrieval-augmented workflow.",
+    "limitation": "Retrieves relevant text; it does not generate verified answers or determine regulatory compliance. Financial-domain performance needs evaluation.",
+    "license": "MIT",
+    "licenseNote": "Model-card license: MIT. Review the full license and the permissions of the documents you index.",
+    "url": "https://huggingface.co/BAAI/bge-m3"
+  },
+  {
+    "id": "ibm-granite/granite-docling-258M",
+    "name": "Granite Docling 258M",
+    "publisher": "IBM Research",
+    "category": "Document conversion",
+    "specialization": "General-purpose · finance application",
+    "description": "Compact document-conversion model that works with Docling to extract text, tables, and document structure.",
+    "application": "Explore converting statements and reports into structured content for downstream document workflows.",
+    "limitation": "Extraction can misread numbers or layouts. Reconcile figures against source documents; this is not an accounting or approval system.",
+    "license": "Apache-2.0",
+    "licenseNote": "Model-card license: Apache-2.0. Review the full license and evaluate your document-processing pipeline before deployment.",
+    "url": "https://huggingface.co/ibm-granite/granite-docling-258M"
+  }
+]

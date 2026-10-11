@@ -25,7 +25,7 @@ const navLinks = [
 ];
 
 const industryLinks = [
-  { label: "Financial Services", href: "#financial-services-models", icon: DollarSign, description: "Financial AI expertise and Hugging Face models" },
+  { label: "Financial Services", href: "#industry-financial-services", icon: DollarSign, description: "Financial AI expertise and Hugging Face models" },
   { label: "Healthcare", href: "#industry-healthcare", icon: HeartPulse, description: "Clinical workflows and patient insights" },
   { label: "Life Sciences", href: "#industry-life-sciences", icon: Beaker, description: "Drug discovery and clinical research" },
 ];
