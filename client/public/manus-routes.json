@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "title": "Home"
+    },
+    {
+      "path": "/blog",
+      "title": "Blog"
+    },
+    {
+      "path": "/blog/:slug",
+      "title": "Blog Article"
+    },
+    {
+      "path": "/category/:slug",
+      "title": "Category"
+    }
+  ]
+}
