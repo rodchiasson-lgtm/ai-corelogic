@@ -71,7 +71,7 @@ export default function IndustriesSection() {
   }, []);
 
   return (
-    <section className="py-20 relative overflow-hidden" style={{ background: "#050B18" }}>
+    <section id="industries" aria-labelledby="industries-heading" className="py-20 relative overflow-hidden scroll-mt-24" style={{ background: "#050B18" }}>
       {/* Subtle grid background */}
       <div
         className="absolute inset-0 opacity-3 pointer-events-none"
@@ -87,12 +87,15 @@ export default function IndustriesSection() {
         >
           <div className="mono-label mb-3">Industries We Serve</div>
           <h2
+            id="industries-heading"
             className="text-3xl lg:text-4xl font-bold text-white"
             style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}
           >
-            AI Solutions Across{" "}
-            <span className="gradient-text">Every Sector</span>
+            <span className="gradient-text">Industries</span>
           </h2>
+          <p className="mt-4 max-w-2xl text-base text-slate-400" style={{ fontFamily: "var(--font-body)" }}>
+            AI solutions tailored to your sector, from financial services and healthcare to life sciences.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -101,7 +104,8 @@ export default function IndustriesSection() {
             return (
               <div
                 key={industry.name}
-                className={`group p-4 rounded-xl cursor-default transition-all duration-700 ${
+                id={`industry-${industry.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                className={`group p-4 rounded-xl cursor-default scroll-mt-28 target:ring-1 target:ring-cyan-400/60 transition-all duration-700 ${
                   visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                 }`}
                 style={{
