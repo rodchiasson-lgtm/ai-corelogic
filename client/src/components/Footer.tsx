@@ -9,7 +9,7 @@ const footerLinks = {
   Services: [
     { label: "AI Discovery", href: "#services" },
     { label: "AI Implementation", href: "#services" },
-    { label: "AI Research", href: "/intelligence" },
+    { label: "AI Research", href: "#research" },
     { label: "AI Maturity", href: "#services" },
   ],
   Company: [
@@ -19,7 +19,6 @@ const footerLinks = {
     { label: "Careers", href: "#" },
   ],
   Resources: [
-    { label: "Financial Stock Analysis", href: "/intelligence" },
     { label: "AI Insights Blog", href: "/blog" },
     { label: "Maturity Assessment", href: "#contact" },
     { label: "AI Readiness Quiz", href: "#contact" },
