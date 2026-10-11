@@ -6,6 +6,7 @@
 
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import BrandVideoSection from "@/components/BrandVideoSection";
 import StatsSection from "@/components/StatsSection";
 import ServicesSection from "@/components/ServicesSection";
 import ProcessSection from "@/components/ProcessSection";
@@ -36,6 +37,7 @@ export default function Home() {
       <Navbar />
       <main className="hmi-flow">
         <HeroSection />
+        <BrandVideoSection />
         <StatsSection />
         <div className="hmi-stage hmi-stage--port" data-module="MISSION / 01"><ServicesSection /></div>
         <div className="hmi-stage hmi-stage--starboard" data-module="FLIGHTPLAN / 02"><ProcessSection /></div>

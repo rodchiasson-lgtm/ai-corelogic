@@ -1,0 +1,6 @@
+# Website integration outcomes
+
+- [x] Integrated the completed 30-second AI-CoreLogic video directly into the existing homepage code, immediately beneath the preserved hero. Added a responsive click-to-play player, poster, native controls, English captions, transcript, download fallback, and playback-error feedback. No autoplay with sound.
+- [x] Added a curated Hugging Face catalog with publisher model-card links to Financial Services: ProsusAI/finbert, yiyanghkust/finbert-tone, and TheFinAI/finma-7b-nlp. Verified purpose and access/licensing limitations on 11 October 2026. Desktop and mobile Financial Services navigation reach the catalog; the original sector card remains with a catalog link. No runnable inference or restored stock-analysis pages.
+- [x] TypeScript and production build passed. Six focused regression tests passed. All three media assets are bundled into the production output. Model links and licensing/access metadata were checked using publisher cards and Hugging Face model metadata.
+- [ ] Save the tested code and assets to the existing GitHub repository. Managed website attachment is temporarily unavailable; no Manus checkpoint or live publication is confirmed. Preserve the existing website and domain settings.

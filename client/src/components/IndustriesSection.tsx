@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ShoppingBag, HeartPulse, Truck, DollarSign, Building2, Factory, Utensils, GraduationCap, Beaker } from "lucide-react";
+import FinancialModelsCatalog from "./FinancialModelsCatalog";
 
 const industries = [
   {
@@ -145,10 +146,19 @@ export default function IndustriesSection() {
                 >
                   Read Article →
                 </a>
+                {industry.name === "Financial Services" && (
+                  <a
+                    href="#financial-services-models"
+                    className="mt-3 flex w-fit items-center gap-1 text-xs font-semibold text-cyan-400 transition-colors hover:text-cyan-300"
+                  >
+                    Explore Hugging Face models →
+                  </a>
+                )}
               </div>
             );
           })}
         </div>
+        <FinancialModelsCatalog />
       </div>
     </section>
   );
