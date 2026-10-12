@@ -13,7 +13,6 @@ import ProcessSection from "@/components/ProcessSection";
 import AboutSection from "@/components/AboutSection";
 import IndustriesSection from "@/components/IndustriesSection";
 import ResearchSection from "@/components/ResearchSection";
-import ResourcesSection from "@/components/ResourcesSection";
 
 import NewsletterSection from "@/components/NewsletterSection";
 import BlogSection from "@/components/BlogSection";
@@ -44,7 +43,6 @@ export default function Home() {
         <div className="hmi-stage hmi-stage--port" data-module="SYSTEM / 03"><AboutSection /></div>
         <div className="hmi-stage hmi-stage--starboard" data-module="SECTORS / 04"><IndustriesSection /></div>
         <div className="hmi-stage hmi-stage--port" data-module="RESEARCH / 05"><ResearchSection /></div>
-        <div className="hmi-stage hmi-stage--starboard" data-module="LIBRARY / 06"><ResourcesSection /></div>
         <div className="hmi-stage hmi-stage--port" data-module="SIGNAL / 07"><NewsletterSection /></div>
         <div className="hmi-stage hmi-stage--starboard" data-module="INTELLIGENCE / 08"><BlogSection /></div>
         <div className="hmi-stage hmi-stage--port" data-module="INDEX / 09"><CategoryGrid /></div>
