@@ -20,6 +20,7 @@ const navLinks = [
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
+  { label: "AI Strategy", href: "/category/ai-strategy" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "#contact" },
 ];

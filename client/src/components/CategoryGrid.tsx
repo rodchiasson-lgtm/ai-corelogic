@@ -10,7 +10,7 @@ import { ArrowRight } from "lucide-react";
 
 const categoryMetadata: Record<string, { description: string; icon: string; color: string }> = {
   "AI Strategy": {
-    description: "Develop AI strategies and maturity frameworks aligned with business goals",
+    description: "Explore 16 practical playbooks and 52 reference materials on AI architecture, agents, governance, costs, and adoption",
     icon: "🎯",
     color: "#2563EB",
   },
@@ -123,7 +123,7 @@ export default function CategoryGrid() {
                     {/* Article count & CTA */}
                     <div className="flex items-center justify-between pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
                       <span className="text-xs text-slate-500 font-semibold" style={{ fontFamily: "var(--font-body)" }}>
-                        {articleCount} {articleCount === 1 ? "article" : "articles"}
+                        {articleCount} {articleCount === 1 ? "article" : "articles"}{category === "AI Strategy" ? " + knowledge library" : ""}
                       </span>
                       <ArrowRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
                     </div>

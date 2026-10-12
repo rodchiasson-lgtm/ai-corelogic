@@ -20,6 +20,7 @@ const footerLinks = {
   ],
   Resources: [
     { label: "AI Insights Blog", href: "/blog" },
+    { label: "AI Strategy Library", href: "/category/ai-strategy" },
     { label: "Maturity Assessment", href: "#contact" },
     { label: "AI Readiness Quiz", href: "#contact" },
   ],

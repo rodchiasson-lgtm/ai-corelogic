@@ -50,12 +50,15 @@ describe("homepage video integration", () => {
     expect(selectBrandVideo(width, hints)).toBe(BRAND_VIDEO_ASSETS[expected]);
   });
 
-  it("ships all media, small posters, a lighter mobile file and valid captions", () => {
-    for (const asset of Object.values(BRAND_VIDEO_ASSETS)) {
+  it("hosts large videos externally while shipping small posters and valid captions", () => {
+    expect(BRAND_VIDEO_ASSETS.video).toMatch(/^https:\/\/files\.manuscdn\.com\/.+\.mp4$/);
+    expect(BRAND_VIDEO_ASSETS.mobileVideo).toMatch(/^https:\/\/files\.manuscdn\.com\/.+\.mp4$/);
+    expect(BRAND_VIDEO_ASSETS.mobileVideo).not.toBe(BRAND_VIDEO_ASSETS.video);
+    for (const asset of [BRAND_VIDEO_ASSETS.poster, BRAND_VIDEO_ASSETS.smallPoster, BRAND_VIDEO_ASSETS.mediumPoster, BRAND_VIDEO_ASSETS.captions]) {
       expect(existsSync(resolve(clientRoot, "public", asset.slice(1)))).toBe(true);
     }
-    expect(statSync(resolve(clientRoot, `public${BRAND_VIDEO_ASSETS.mobileVideo}`)).size)
-      .toBeLessThan(statSync(resolve(clientRoot, `public${BRAND_VIDEO_ASSETS.video}`)).size);
+    expect(existsSync(resolve(clientRoot, "public/media/ai-corelogic-brand-30s-v1.mp4"))).toBe(false);
+    expect(existsSync(resolve(clientRoot, "public/media/ai-corelogic-brand-30s-mobile-v2.mp4"))).toBe(false);
     expect(statSync(resolve(clientRoot, `public${BRAND_VIDEO_ASSETS.smallPoster}`)).size).toBeLessThan(25_000);
     expect(sourceFile(`public${BRAND_VIDEO_ASSETS.captions}`)).toMatch(/^WEBVTT\n/);
   });

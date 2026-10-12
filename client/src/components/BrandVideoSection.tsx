@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { ArrowRight, Captions, Film, Play } from "lucide-react";
 
 export const BRAND_VIDEO_ASSETS = {
-  video: "/media/ai-corelogic-brand-30s-v1.mp4",
-  mobileVideo: "/media/ai-corelogic-brand-30s-mobile-v2.mp4",
+  video: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/AlwrddDodnqFPndY.mp4",
+  mobileVideo: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/WnFKWGLIbZWAODvH.mp4",
   poster: "/media/ai-corelogic-brand-poster-v2-1280.webp",
   smallPoster: "/media/ai-corelogic-brand-poster-v2-640.webp",
   mediumPoster: "/media/ai-corelogic-brand-poster-v2-960.webp",
@@ -163,10 +163,12 @@ export default function BrandVideoSection() {
             </details>
             <a
               href={activeSource ?? BRAND_VIDEO_ASSETS.mobileVideo}
+              target="_blank"
+              rel="noopener noreferrer"
               download="AI-CoreLogic-30s.mp4"
               className="inline-flex min-h-11 w-fit items-center rounded py-3 text-slate-400 underline underline-offset-4 hover:text-cyan-300"
             >
-              Download video · {activeSource === BRAND_VIDEO_ASSETS.video ? "1.44" : "1.06"} MB
+              Open/download video · {activeSource === BRAND_VIDEO_ASSETS.video ? "1.44" : "1.06"} MB
             </a>
           </div>
         </div>

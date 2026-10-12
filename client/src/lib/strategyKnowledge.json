@@ -1,0 +1,835 @@
+{
+  "updated": "12 October 2026",
+  "playbooks": [
+    {
+      "id": "ai-language",
+      "title": "Speak the same AI language",
+      "theme": "Foundations",
+      "summary": "Separate AI, machine learning, generative models, retrieval, and agents before approving an initiative.",
+      "sources": [
+        "4773",
+        "4774",
+        "5221",
+        "5223",
+        "4863"
+      ],
+      "sections": [
+        {
+          "title": "A practical vocabulary",
+          "body": "Artificial intelligence is the broad field. Machine learning learns patterns from data; deep learning uses layered neural networks. Generative AI produces content. Large language models are one family of generative models, not the whole AI system. Multimodal models can work with more than one input or output modality."
+        },
+        {
+          "title": "Think, ground, act, coordinate",
+          "body": "An LLM generates or transforms content. Retrieval-augmented generation adds selected evidence to its context. An agent can choose tools and respond to observations. An agentic system coordinates decisions, state, workflows, and possibly multiple agents. These are complementary capabilities, not mandatory steps on a maturity ladder."
+        },
+        {
+          "title": "Translate architecture into business language",
+          "body": "The brain, memory, hands, wiring, and instruction metaphors in the references can help a board discussion, but they are only analogies. Distinguish training from live retrieval; distinguish instructions from enforceable security. Embeddings represent relationships numerically, and evaluations measure whether outputs are useful, relevant, safe, and reliable."
+        }
+      ],
+      "checklist": [
+        "Write a one-sentence business problem before naming a technology.",
+        "Label which component generates, retrieves, acts, and coordinates.",
+        "Specify what evidence is required and who owns the final decision.",
+        "Agree on task-success, risk, cost, and latency measures."
+      ],
+      "caution": "RAG does not guarantee truth, and a system prompt is not a substitute for access controls. The hierarchy graphics are learning aids, not a universal architecture."
+    },
+    {
+      "id": "enterprise-stack",
+      "title": "Design the complete enterprise AI stack",
+      "theme": "Architecture",
+      "summary": "Connect business journeys, data products, models, applications, and operations in one architecture.",
+      "sources": [
+        "4583",
+        "4584",
+        "4791",
+        "4792",
+        "4905",
+        "5226"
+      ],
+      "sections": [
+        {
+          "title": "Start with business and data",
+          "body": "Map the user journey, desired outcome, and the systems already supporting it. Internal and external sources feed ingestion and governed datasets, with ownership, lineage, quality checks, and permissions. AI should improve an existing workflow rather than become an isolated side channel."
+        },
+        {
+          "title": "Make the layers explicit",
+          "body": "A useful stack separates ingestion and document conversion; embeddings and indexes; retrieval and context assembly; model inference; application or agent orchestration; gateways and serving; and monitoring, evaluation, memory, and safeguards. Docling, document parsers, vector stores, frameworks, and model providers are examples of components, not requirements to adopt every layer."
+        },
+        {
+          "title": "Design the production path",
+          "body": "An API gateway authenticates and routes requests. Caches reuse eligible work. Queues move long tasks off the interactive path. Model serving and load balancing handle capacity. Logs, traces, metrics, alerts, and feedback support operations. Security, governance, and cost attribution run across these layers rather than being final add-ons."
+        }
+      ],
+      "checklist": [
+        "Draw a business-to-data-to-model-to-application map.",
+        "Identify authoritative sources, data owners, and access boundaries.",
+        "Define serving APIs, versions, and approval gates.",
+        "Plan failure handling, support ownership, and continuous evaluation."
+      ],
+      "caution": "The supplied tool maps are ecosystem snapshots. Capabilities, licenses, support, and availability must be checked before procurement; no vendor stack is endorsed here."
+    },
+    {
+      "id": "protocols-and-capabilities",
+      "title": "MCP, RAG, skills, and agent communication",
+      "theme": "Architecture",
+      "summary": "Choose the right mechanism for knowledge grounding, tool access, reusable procedures, and coordination.",
+      "sources": [
+        "4580",
+        "4585",
+        "4587",
+        "4852",
+        "4856",
+        "4857",
+        "5225",
+        "4593"
+      ],
+      "sections": [
+        {
+          "title": "Give each concept a distinct job",
+          "body": "RAG retrieves evidence. Model Context Protocol standardizes how an application connects to external capabilities through clients and servers. Skills package reusable instructions and supporting resources. Hooks execute logic at defined lifecycle points. Context is what the model sees now; state tracks the current task; memory can preserve selected information across interactions."
+        },
+        {
+          "title": "An agent is more than a model",
+          "body": "A practical agent harness manages instructions, context, tools, state, observations, stopping conditions, and output handling. The loop can plan, act, observe, review, and stop. Tool calls should have schemas, validation, permission checks, and controlled execution. Shell and file access need stronger isolation than read-only retrieval."
+        },
+        {
+          "title": "Coordinate only when needed",
+          "body": "Orchestration decides who does what and how outputs are combined. Subagents can isolate specialist work. Multi-agent systems may cooperate or hand off tasks. Agent-to-agent protocols such as A2A address communication between agents, while MCP addresses access to tools and resources. Memory, evals, sandboxing, and human approvals support reliability across the whole workflow."
+        }
+      ],
+      "checklist": [
+        "Choose retrieval, a tool integration, or a reusable procedure for each need.",
+        "Define each capability’s input, output, and permission scope.",
+        "Bound the loop by time, steps, tool calls, and spend.",
+        "Log decisions, observations, approvals, and final outcomes."
+      ],
+      "caution": "Protocol support does not establish trust or permission. RAG, MCP, skills, and multi-agent orchestration are not interchangeable products and do not all need to be present."
+    },
+    {
+      "id": "agent-patterns",
+      "title": "Select a bounded agent design pattern",
+      "theme": "Agents",
+      "summary": "Start simple, then add planning, reflection, verification, or delegation where the task justifies it.",
+      "sources": [
+        "4592",
+        "4772",
+        "4790",
+        "4853",
+        "4854"
+      ],
+      "sections": [
+        {
+          "title": "Five patterns worth distinguishing",
+          "body": "A single-shot design transforms an input once. An iterative ReAct-style loop chooses tools and uses observations to progress. A planner-executor separates task planning from execution. A reflexive pattern critiques and revises a draft. A verifier-gated pattern releases an output only when a separate validation gate passes."
+        },
+        {
+          "title": "Build the smallest useful agent",
+          "body": "Define the role, user, goal, and expected output. Choose a model using task evaluations. Give clear instructions and structured schemas. Add only necessary tools. Track task state; add persistent memory or retrieval only when required. Voice, vision, multi-agent teams, and a frontend are optional product choices, not prerequisites."
+        },
+        {
+          "title": "Engineer safe stopping and escalation",
+          "body": "Set retries, timeouts, maximum iterations, and tool budgets. Validate important outputs. Escalate when failures exceed a threshold, evidence is inadequate, or an action is high impact. Separate proposals from execution so people can review consequential changes. Monitor completion, failures, latency, cost, and safety after release."
+        }
+      ],
+      "checklist": [
+        "Prototype one agent with one well-scoped task.",
+        "Define structured output and acceptance tests.",
+        "Add an explicit stop, escalation, and rollback path.",
+        "Compare added complexity against measurable improvement."
+      ],
+      "caution": "Reflection can repeat an error rather than correct it. A second agent is not independent proof. Use objective checks and accountable human review for consequential decisions."
+    },
+    {
+      "id": "rag-patterns",
+      "title": "Choose a retrieval strategy that fits the question",
+      "theme": "Knowledge & RAG",
+      "summary": "Move from basic retrieval to reranking, hybrid search, graphs, multimodal evidence, or bounded agentic retrieval.",
+      "sources": [
+        "4721",
+        "4864",
+        "5224"
+      ],
+      "sections": [
+        {
+          "title": "Establish a trustworthy baseline",
+          "body": "Ingest permitted sources, preserve provenance, chunk appropriately, create embeddings, index content, retrieve relevant passages, and generate an answer with that evidence. A retrieve-and-rerank pattern adds a relevance-ranking step before generation. Test retrieval quality separately from answer quality."
+        },
+        {
+          "title": "Use advanced retrieval for a specific reason",
+          "body": "Lexical and vector retrieval can complement each other. Knowledge graphs can support relationship-oriented questions. Multimodal retrieval can handle images or other media with compatible models and indexes. The reference uses “hybrid” for a vector-plus-graph composition; other systems use that label for lexical-plus-vector search, so define the term in your design."
+        },
+        {
+          "title": "Explain agentic RAG in four stages",
+          "body": "Strategize by rewriting or decomposing the question. Select sources such as documents, structured systems, graphs, or approved web search. Compose the relevant evidence into context. Generate and check the response, repeating only when needed within a budget. A router or specialist retrieval agents can support complex questions, but add latency and operational risk."
+        }
+      ],
+      "checklist": [
+        "Create an evaluation set with answerable and unanswerable questions.",
+        "Preserve source IDs, permissions, and document freshness.",
+        "Measure retrieval relevance, citation support, and abstention.",
+        "Compare advanced patterns against the simple baseline."
+      ],
+      "caution": "Retrieved content may be stale, malicious, incomplete, or misinterpreted. Respect source permissions and treat retrieved instructions as untrusted content, not authorization."
+    },
+    {
+      "id": "vector-storage",
+      "title": "Evaluate search and vector-storage choices",
+      "theme": "Knowledge & RAG",
+      "summary": "Select storage by data access, filtering, retrieval quality, and operating constraints—not by a logo grid.",
+      "sources": [
+        "4594"
+      ],
+      "sections": [
+        {
+          "title": "Separate products from capabilities",
+          "body": "The reference includes managed search, database vector extensions, embedded stores, and similarity-search libraries. Azure AI Search, OpenSearch, Elasticsearch, MongoDB Atlas, PostgreSQL with pgvector, Redis, Qdrant, Weaviate, Milvus, Pinecone, Chroma, LanceDB, Vespa, Marqo, Vald, and FAISS represent different operating models."
+        },
+        {
+          "title": "Define the workload first",
+          "body": "Evaluate corpus size, update frequency, metadata filters, access controls, tenancy, hybrid retrieval, recall, latency, backup, availability, and residency. A familiar relational database may suit some workloads; an embedded store may suit a prototype; a managed service may reduce operating effort. Benchmark with your own documents and queries."
+        },
+        {
+          "title": "Keep retrieval portable",
+          "body": "Version embedding models and indexes. Plan re-indexing when embeddings or chunking change. Separate ingestion, retrieval interfaces, and evaluation datasets so a storage change does not require rewriting the whole application. Monitor retrieval regressions and total cost, including storage and operational work."
+        }
+      ],
+      "checklist": [
+        "Build a representative benchmark corpus.",
+        "Test filtered queries and permission enforcement.",
+        "Measure recall, latency, update behavior, and total cost.",
+        "Document migration, re-indexing, and disaster-recovery plans."
+      ],
+      "caution": "FAISS is a similarity-search library, not a managed database. No listed option is universally best, and the reference’s performance descriptions are not verified guarantees."
+    },
+    {
+      "id": "tool-selection",
+      "title": "Choose models, frameworks, and workflow tools",
+      "theme": "Tooling",
+      "summary": "Make task-specific choices across assistants, application frameworks, orchestration, and low-code automation.",
+      "sources": [
+        "4582",
+        "4665",
+        "4851",
+        "4862",
+        "5222"
+      ],
+      "sections": [
+        {
+          "title": "Model choice is a portfolio decision",
+          "body": "The references compare Claude, ChatGPT, Gemini, Grok, and Perplexity and list models from several providers. Treat those comparisons as ideas for an evaluation set, not a permanent ranking. Compare task quality, document handling, integration needs, data policy, availability, latency, and total cost. Your preferred assistant can be the starting point, not the only test."
+        },
+        {
+          "title": "Distinguish application composition from orchestration",
+          "body": "LangChain supplies application components and integrations. LangGraph supports explicit stateful control flow, branching, and persistence. LlamaIndex focuses on connecting applications to data and retrieval. They can work together, but do not have to. Other options in the references include Haystack, DSPy, PydanticAI, CrewAI, and Microsoft’s agent ecosystem."
+        },
+        {
+          "title": "Match the builder to the team",
+          "body": "n8n and Make support workflow automation; Flowise and Langflow offer visual building experiences. Coding assistants and app builders serve a different job from runtime orchestration. Evaluate integration depth, testing, governance, exportability, and support—not advertised toolkit counts. Prompt tooling, storage, observability, and evaluation are separate selection decisions."
+        }
+      ],
+      "checklist": [
+        "Create a weighted decision matrix for the actual task.",
+        "Test quality and failure modes with representative inputs.",
+        "Check licenses, contracts, data handling, and support.",
+        "Prefer the smallest maintainable stack that meets the requirements."
+      ],
+      "caution": "Model rankings, context windows, integration counts, and product names in screenshots may change. Listing a tool does not mean it is installed, connected, endorsed, or executable on this site."
+    },
+    {
+      "id": "claude-workspace",
+      "title": "Build reusable context and Claude work practices",
+      "theme": "Skills & Learning",
+      "summary": "Organize project knowledge, instructions, commands, skills, and specialist work without confusing configuration with capability.",
+      "sources": [
+        "4581",
+        "4586",
+        "4861"
+      ],
+      "sections": [
+        {
+          "title": "Structure the workspace",
+          "body": "The reference shows project instructions such as CLAUDE.md, local overrides, MCP configuration, settings, command files, skill folders with SKILL.md, and specialist agent definitions. Keep shared conventions separate from personal settings. Version stable team instructions; avoid storing secrets or sensitive personal preferences in shared files."
+        },
+        {
+          "title": "Grow from context to reusable workflows",
+          "body": "Start with clear response preferences and task context. Use a project per client, subject, or workstream. Curate reference files and remove stale information. Convert repeatable procedures into skills with defined inputs, checks, and outputs. Connect approved systems only when access is necessary; scheduling and autonomous work need explicit ownership and monitoring."
+        },
+        {
+          "title": "Treat plugin catalogs as templates",
+          "body": "The screenshot groups plugins by productivity, enterprise search, sales, marketing, support, operations, finance, legal, HR, design, research, engineering, data, and product. These are proposed work patterns, not staff replacements or enabled agents. Review each plugin’s provenance, permissions, instructions, connectors, and licensing before adoption."
+        }
+      ],
+      "checklist": [
+        "Create a concise shared project instruction file.",
+        "Keep secrets and personal overrides outside committed configuration.",
+        "Document each reusable workflow’s triggers and validation steps.",
+        "Review plugin and connector permissions before use."
+      ],
+      "caution": "Slash syntax, file layout, scheduling, plugin names, and catalog counts depend on product and version. The screenshot’s exact counts and installation text are not independently verified."
+    },
+    {
+      "id": "learning-repositories",
+      "title": "Learn by building small, tested systems",
+      "theme": "Skills & Learning",
+      "summary": "Use the repository and course references as a discovery map for practical learning—not as a verified directory of offers.",
+      "sources": [
+        "4591",
+        "4779",
+        "4859",
+        "4860"
+      ],
+      "sections": [
+        {
+          "title": "Choose a capability to practice",
+          "body": "The references point to browser automation, tool integrations, MCP servers, agent SDKs, memory, sandboxes, stateful workflows, validated outputs, and data retrieval. Repository names include Browser Use, Composio, MCP reference servers, OpenAI Agents SDK, Microsoft Agent Framework, Mem0, E2B, LangGraph, PydanticAI, and LlamaIndex."
+        },
+        {
+          "title": "Build a progressive learning path",
+          "body": "Begin with Python or the relevant application language, structured prompts and outputs, and a single model call. Add retrieval over a small permitted corpus, then one controlled tool, then state and tests. The learning references mention Microsoft beginner materials, Anthropic’s effective-agent guidance, Hugging Face courses, LLMs from scratch, and the OpenAI Cookbook."
+        },
+        {
+          "title": "Make experiments production-relevant",
+          "body": "Add authentication, validation, tracing, persistence, and evaluation to each project. The toolkit reference includes Temporal for durable workflows, PostgreSQL and Redis for state, Neo4j for graphs, FastAPI for interfaces, Playwright for browsers, OpenTelemetry and Langfuse for observability, and Pydantic for validation. Use examples to learn the job of each layer."
+        }
+      ],
+      "checklist": [
+        "Pick one small project with a measurable outcome.",
+        "Inspect repository maintenance, license, and security before running code.",
+        "Use synthetic or approved data in isolated experiments.",
+        "Keep a test set and record what failed, not just the demo."
+      ],
+      "caution": "Course availability, “free” claims, certificates, repository status, and accreditation in the source graphics are not verified. Do not run copied installation commands without inspection."
+    },
+    {
+      "id": "prompting-without-myths",
+      "title": "Replace “secret commands” with clear instructions",
+      "theme": "Foundations",
+      "summary": "Use intent, context, format, examples, and constraints rather than relying on magic slash phrases.",
+      "sources": [
+        "4595",
+        "4855"
+      ],
+      "sections": [
+        {
+          "title": "Useful intentions behind the shorthand",
+          "body": "The graphics suggest explaining, summarizing, simplifying, comparing, tabulating, planning, researching, rewriting, translating, coding, debugging, analyzing, and preparing interviews. These are useful task descriptions. State them in ordinary language with a concrete audience, purpose, and output shape."
+        },
+        {
+          "title": "Build a reliable prompt brief",
+          "body": "Specify the role, objective, source material, constraints, acceptance criteria, and requested format. Ask for a short explanation, assumptions, evidence, and uncertainty where relevant. For comparison, request criteria and a decision table. For critique, ask for weaknesses and counterarguments. For planning, ask for sequenced steps and validation gates."
+        },
+        {
+          "title": "Package repeatable prompts responsibly",
+          "body": "Reusable commands or skills can map a short label to a real instruction template in an application that supports them. A typed slash phrase alone is not proof of a product feature. Test the template on ordinary, edge-case, and adversarial inputs; version it with the workflow and review its outputs."
+        }
+      ],
+      "checklist": [
+        "Replace a vague request with a specific outcome and audience.",
+        "Provide relevant evidence and define what must not be invented.",
+        "Choose a format and measurable acceptance criteria.",
+        "Save only tested templates as reusable procedures."
+      ],
+      "caution": "Labels such as /godmode, /ghost, /ooda, or /devil in social graphics are not verified built-in commands and do not bypass security or model limitations."
+    },
+    {
+      "id": "governed-delivery",
+      "title": "Use a governed AI delivery decision framework",
+      "theme": "Governance & Delivery",
+      "summary": "Turn architecture decisions into explicit gates for data, actions, security, compliance, and operations.",
+      "sources": [
+        "4719",
+        "4720"
+      ],
+      "sections": [
+        {
+          "title": "Ask the architecture questions in order",
+          "body": "Identify the model and compute fit, enterprise-data requirements, deployment location, tool integrations, and whether a single agent is sufficient. Decide whether the system only advises or can act. Consider external exposure, sensitive data, regulated use, operational criticality, and continuous optimization."
+        },
+        {
+          "title": "Build safeguards into the delivery plan",
+          "body": "Screen and normalize inputs; control abusive requests. Assemble permitted knowledge and evaluate retrieval. Define output schemas and validation. Validate tool calls before execution and use least-privilege credentials. Apply approval workflows, audit logs, timeouts, rollback, and a stop mechanism for consequential actions."
+        },
+        {
+          "title": "Operate against measurable requirements",
+          "body": "Set task-success and groundedness thresholds, latency targets, error budgets, cost budgets, and support ownership. Test difficult and unanswerable cases. Monitor traces, user feedback, model behavior, dependency failures, and data freshness. Retrain, reconfigure, or change models only with regression testing and release review."
+        }
+      ],
+      "checklist": [
+        "Name a business owner, technical owner, and risk reviewer.",
+        "Classify data and define the permitted action boundary.",
+        "Document human approvals and incident/rollback procedures.",
+        "Agree on evidence-based acceptance and release gates."
+      ],
+      "caution": "More autonomy requires stronger controls, but no generic checklist establishes regulatory compliance. Requirements depend on jurisdiction, use case, data, and the organization’s policies."
+    },
+    {
+      "id": "compute-and-distributed-design",
+      "title": "Match compute and distributed design to the workload",
+      "theme": "Architecture",
+      "summary": "Use processor choices and a video-platform reference to reason about capacity, latency, and resilience.",
+      "sources": [
+        "4788",
+        "4722"
+      ],
+      "sections": [
+        {
+          "title": "Choose compute by workload",
+          "body": "CPUs handle general orchestration and preprocessing. GPUs excel at parallel computation. TPUs are specialized tensor accelerators. NPUs target efficient local inference. Inference-focused accelerators such as LPUs target serving workloads. DPUs offload network, storage, and infrastructure work. These labels describe roles, not universal purchase recommendations."
+        },
+        {
+          "title": "Assess the practical tradeoffs",
+          "body": "Compare model size, numerical precision, memory capacity and bandwidth, software support, latency, throughput, power, cost, residency, and operating skills. A CPU may be enough for some tasks; a large training workload may need accelerators. Benchmark the full pipeline rather than a chip’s advertised token rate."
+        },
+        {
+          "title": "Apply distributed-systems lessons",
+          "body": "The supplied YouTube-style architecture illustrates separate upload, encoding, storage, search, comments, history, notifications, caches, queues, replication, and sharding. Use it as a conceptual analogy: split long work into jobs, store large assets separately, decouple services, plan backpressure, and preserve recovery paths."
+        }
+      ],
+      "checklist": [
+        "Benchmark end-to-end throughput and latency with real task shapes.",
+        "Compare hosting and hardware total cost rather than list price.",
+        "Use queues and backpressure for long or bursty workloads.",
+        "Design retry safety, availability, and disaster recovery."
+      ],
+      "caution": "The video-platform graphic is an illustrative system-design reference, not a verified description of YouTube’s current internal architecture. Hardware performance depends on the whole stack."
+    },
+    {
+      "id": "inference-economics",
+      "title": "Control inference cost without sacrificing quality",
+      "theme": "Governance & Delivery",
+      "summary": "Manage model choice, context, caching, routing, and agent budgets using measured task outcomes.",
+      "sources": [
+        "4822",
+        "5229"
+      ],
+      "sections": [
+        {
+          "title": "Reduce unnecessary work first",
+          "body": "Use the smallest model that meets the quality threshold. Route tasks by complexity. Trim irrelevant context and summarize long conversations carefully. Limit output length. Prefer deterministic tools for deterministic work. Structured outputs can reduce parsing failures and retries, but are not automatically cheaper."
+        },
+        {
+          "title": "Cache and batch with boundaries",
+          "body": "Prompt-prefix caching, response caching, and semantic caching can reuse eligible work. Distinguish them in measurement and implementation. Respect user permissions, freshness, tenant separation, and sensitive data. Batch compatible jobs where provider support allows it. Asynchronous processing improves scheduling; streaming improves perceived responsiveness, not necessarily token cost."
+        },
+        {
+          "title": "Budget the whole agent workflow",
+          "body": "Set maximum iterations, tool calls, time, retries, and spend. Attribute usage by feature, team, or workflow. Include embeddings, retrieval, storage, infrastructure, and human review. Evaluate quantization, fine-tuning, or local/cloud routing only when quality, data policy, and operating requirements justify them."
+        }
+      ],
+      "checklist": [
+        "Establish cost per successfully completed task.",
+        "Log token usage, retries, tool calls, and latency.",
+        "Apply bounded routing, caching, and loop budgets.",
+        "Regression-test quality after every cost optimization."
+      ],
+      "caution": "No savings percentage is promised. Caching, batching, fine-tuning, quantization, and hybrid hosting have workload-specific tradeoffs and may introduce operational costs."
+    },
+    {
+      "id": "certification-due-diligence",
+      "title": "Plan skills development without certification hype",
+      "theme": "Skills & Learning",
+      "summary": "Choose learning goals and assess certification claims before paying for an exam or training package.",
+      "sources": [
+        "4789"
+      ],
+      "sections": [
+        {
+          "title": "Start from a capability gap",
+          "body": "Identify the job to be done: business strategy, cloud AI architecture, machine learning engineering, data governance, application delivery, or evaluation. Use a skills matrix and practical project evidence to decide what training would improve performance."
+        },
+        {
+          "title": "Verify the issuer and the offer",
+          "body": "The screenshot lists cloud, AI, and Claude-branded credentials with exam codes and prices. Treat those entries as unverified source claims. Check the official issuer, exact credential name, current exam availability, syllabus, prerequisites, assessment type, renewal policy, regional pricing, and employer recognition."
+        },
+        {
+          "title": "Measure learning rather than badges",
+          "body": "Pair learning with a supervised project, tests, architecture review, and a concise portfolio of results. Allocate time for retrieval, tools, safeguards, operations, and business-case work—not only model prompting. Reassess progress against the original role requirements."
+        }
+      ],
+      "checklist": [
+        "Define the target skills before selecting a course.",
+        "Confirm the offer with the official issuer.",
+        "Separate attendance certificates from assessed credentials.",
+        "Build and evaluate a practical project alongside study."
+      ],
+      "caution": "The listed Claude certificates, exam codes, prices, and “worth studying” ranking are not verified here and must not be treated as official or current offers."
+    },
+    {
+      "id": "leadership-and-adoption",
+      "title": "Design an operating model people can sustain",
+      "theme": "Leadership & Adoption",
+      "summary": "Support managers, create repeatable leadership habits, and protect the time needed for AI adoption.",
+      "sources": [
+        "4664",
+        "4858"
+      ],
+      "sections": [
+        {
+          "title": "Address the human operating constraints",
+          "body": "The management reference raises workload, responsibility without authority, emotional labor, unclear incentives, career risk, work-life boundaries, autonomy, and credible individual-contributor paths. Treat these as discussion prompts, not universal facts about a generation or a measured workforce trend."
+        },
+        {
+          "title": "Build small, repeatable leadership practices",
+          "body": "Use visible cues, protected thinking time, clear priorities, and simple routines. Pair a new habit with an existing action, make progress visible, and restart after a missed day. For AI adoption, this can mean a short review of exceptions, weekly evidence checks, and a recurring conversation about what should remain human-led."
+        },
+        {
+          "title": "Translate habits into adoption governance",
+          "body": "Clarify decision rights, escalation, training, and ownership. Give people time to test and review outputs. Reward verified outcomes rather than tool usage alone. Monitor support burden and unintended workload shifts, and provide feedback channels that change the workflow—not just collect comments."
+        }
+      ],
+      "checklist": [
+        "Interview users and managers about friction and workload.",
+        "Define roles and decision rights for human/AI collaboration.",
+        "Choose one small, observable adoption habit.",
+        "Review quality, wellbeing, workload, and business outcomes together."
+      ],
+      "caution": "The source’s generational statistics and universal management claims are not independently verified. Leadership habits are practical suggestions, not guaranteed performance interventions."
+    },
+    {
+      "id": "healthcare-system-context",
+      "title": "Use healthcare systems as a strategy case study",
+      "theme": "Industry Applications",
+      "summary": "Map hospital workflows and data boundaries before selecting a healthcare AI use case.",
+      "sources": [
+        "4716"
+      ],
+      "sections": [
+        {
+          "title": "Understand the hospital system landscape",
+          "body": "The reference groups electronic health records, clinical decision support, specialty and diagnostic systems, pharmacy, quality management, supply chain, population health, revenue cycle, analytics, and telehealth. Together they support patient journeys, clinical work, resource management, and financial operations."
+        },
+        {
+          "title": "Choose a workflow-level opportunity",
+          "body": "Potential areas for evaluation include administrative document processing, coding support, operational forecasting, knowledge search, quality reporting, and care-team coordination. Connect a proposed AI feature to the system of record, permitted data, accountable users, and a specific operational outcome."
+        },
+        {
+          "title": "Protect clinical judgment and sensitive information",
+          "body": "Use approved data access, provenance, validation, and human review. Separate operational support from clinical decision-making. Assess privacy, safety, bias, integration, and monitoring requirements before any real deployment. Do not infer clinical effectiveness from an architecture graphic."
+        }
+      ],
+      "checklist": [
+        "Map the patient or administrative journey and system owners.",
+        "Classify the use case as operational, assistive, or clinical.",
+        "Define data permissions and review responsibilities.",
+        "Validate against approved clinical or operational criteria."
+      ],
+      "caution": "This is an educational architecture case study, not medical advice or a deployed clinical tool. The source’s market-size and outcome claims are not verified here."
+    }
+  ],
+  "sources": [
+    {
+      "id": "4580",
+      "file": "IMG_4580.webp",
+      "title": "MCP vs RAG vs Skills",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/DWLGLAMontQXNquA.webp"
+    },
+    {
+      "id": "4581",
+      "file": "IMG_4581.webp",
+      "title": "Claude Code project structure",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/ezRFHfBghlbVIeNm.webp"
+    },
+    {
+      "id": "4582",
+      "file": "IMG_4582.webp",
+      "title": "An AI team of specialist tools",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/jtLFZZAZtUbZtyUS.webp"
+    },
+    {
+      "id": "4583",
+      "file": "IMG_4583.webp",
+      "title": "The full AI stack",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/rdlehyFghnJJbsbp.webp"
+    },
+    {
+      "id": "4584",
+      "file": "IMG_4584.webp",
+      "title": "A layered AI stack map",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/RMXpJKVRrXTCHIio.webp"
+    },
+    {
+      "id": "4585",
+      "file": "IMG_4585.webp",
+      "title": "Four building blocks of AI architecture",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/qPjipwjPrpxajZra.webp"
+    },
+    {
+      "id": "4586",
+      "file": "IMG_4586.webp",
+      "title": "Claude work practices and projects",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/vqijiQmZvLFEnVim.webp"
+    },
+    {
+      "id": "4587",
+      "file": "IMG_4587.webp",
+      "title": "Modern AI agent stack vocabulary",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/dsEcSRnfIshVUKpY.webp"
+    },
+    {
+      "id": "4591",
+      "file": "IMG_4591.webp",
+      "title": "Agent repositories and capability building",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/pwFPLXmrfbMbMxkY.webp"
+    },
+    {
+      "id": "4592",
+      "file": "IMG_4592.webp",
+      "title": "Five agent architecture patterns",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/vPtELtmqRLEHQmzk.webp"
+    },
+    {
+      "id": "4593",
+      "file": "IMG_4593.webp",
+      "title": "The agentic AI ecosystem",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/fxLLbGweflXFUFXv.webp"
+    },
+    {
+      "id": "4594",
+      "file": "IMG_4594.webp",
+      "title": "Vector database landscape",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/DhEwLcRjIoLXQBAa.webp"
+    },
+    {
+      "id": "4595",
+      "file": "IMG_4595.webp",
+      "title": "Prompt-intent shorthand and secret-code claims",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/eYtYpVKBOCWzeDQo.webp"
+    },
+    {
+      "id": "4664",
+      "file": "IMG_4664.webp",
+      "title": "Management workload and career tradeoffs",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/PkNJlOKfwNzBzzyP.webp"
+    },
+    {
+      "id": "4665",
+      "file": "IMG_4665.webp",
+      "title": "Assistant selection comparison",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/oyJxHQujcYaHjIVP.webp"
+    },
+    {
+      "id": "4716",
+      "file": "IMG_4716.webp",
+      "title": "Hospital information systems",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/zoeerOjgovDUEjvw.webp"
+    },
+    {
+      "id": "4719",
+      "file": "IMG_4719.webp",
+      "title": "Enterprise AI architecture decision tree",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/EicMzpoWBdvSOxnI.webp"
+    },
+    {
+      "id": "4720",
+      "file": "IMG_4720.webp",
+      "title": "LLM application delivery checklist",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/WdSBPswxRnwbDmBd.webp"
+    },
+    {
+      "id": "4721",
+      "file": "IMG_4721.webp",
+      "title": "RAG and agentic RAG comparison",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/AhGIgCfzBTPhWhCw.webp"
+    },
+    {
+      "id": "4722",
+      "file": "IMG_4722.webp",
+      "title": "Illustrative video-platform system design",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/IysMwnlLwtdUYseU.webp"
+    },
+    {
+      "id": "4772",
+      "file": "IMG_4772.webp",
+      "title": "Building agents from scratch",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/wsGzMlNYWRGhopJO.webp"
+    },
+    {
+      "id": "4773",
+      "file": "IMG_4773.webp",
+      "title": "AI terminology hierarchy",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/COiQhyLbAqfxlpnL.webp"
+    },
+    {
+      "id": "4774",
+      "file": "IMG_4774.webp",
+      "title": "AI terminology hierarchy — companion screenshot",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/cplSoJjPDISnhSnP.webp"
+    },
+    {
+      "id": "4779",
+      "file": "IMG_4779.webp",
+      "title": "Open-source learning repository ideas",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/ODpQhfPHgycWbJzt.webp"
+    },
+    {
+      "id": "4788",
+      "file": "IMG_4788.webp",
+      "title": "AI compute: CPU, GPU, TPU, NPU, LPU, DPU",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/oICubLwNDLwiQFUR.webp"
+    },
+    {
+      "id": "4789",
+      "file": "IMG_4789.webp",
+      "title": "Certification claims and listed exam prices",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/aqHGGkoozaxnhoNp.webp"
+    },
+    {
+      "id": "4790",
+      "file": "IMG_4790.webp",
+      "title": "Practical agent design foundations",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/pxEWZJRRprNBdwze.webp"
+    },
+    {
+      "id": "4791",
+      "file": "IMG_4791.webp",
+      "title": "AI engineer stack overview",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/WSKLPeKHwQgZLCOZ.webp"
+    },
+    {
+      "id": "4792",
+      "file": "IMG_4792.webp",
+      "title": "Business-to-data-to-model enterprise architecture",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/pYoMESJmZqFUTAhU.webp"
+    },
+    {
+      "id": "4822",
+      "file": "IMG_4822.webp",
+      "title": "Inference cost reduction techniques",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/xfvKjRcxrvNIurKs.webp"
+    },
+    {
+      "id": "4851",
+      "file": "IMG_4851.webp",
+      "title": "Agentic tool-selection ideas",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/SnzoYHCjzmieroLO.webp"
+    },
+    {
+      "id": "4852",
+      "file": "IMG_4852.webp",
+      "title": "Modern agent-system architecture",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/IGxtBJelFrXqsLrm.webp"
+    },
+    {
+      "id": "4853",
+      "file": "IMG_4853.webp",
+      "title": "A minimal agent-build roadmap",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/opMZWALJWbzOrCed.webp"
+    },
+    {
+      "id": "4854",
+      "file": "IMG_4854.webp",
+      "title": "Nine agent engineering concepts",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/bISMvkWZPbLoCcBt.webp"
+    },
+    {
+      "id": "4855",
+      "file": "IMG_4855.webp",
+      "title": "Hidden-command claims and prompt intentions",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/IltdAEcYequtADpO.webp"
+    },
+    {
+      "id": "4856",
+      "file": "IMG_4856.webp",
+      "title": "Five layers of an agent",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/cERpJSTWFVgfnrGx.webp"
+    },
+    {
+      "id": "4857",
+      "file": "IMG_4857.webp",
+      "title": "Core agentic AI concepts",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/CupjnLaetYHNEvdv.webp"
+    },
+    {
+      "id": "4858",
+      "file": "IMG_4858.webp",
+      "title": "Small leadership habits and adoption routines",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/RICWACDPrxoJwtGy.webp"
+    },
+    {
+      "id": "4859",
+      "file": "IMG_4859.webp",
+      "title": "Agent learning-course ideas",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/rLlIzKDLLFHaGAlm.webp"
+    },
+    {
+      "id": "4860",
+      "file": "IMG_4860.webp",
+      "title": "Agent toolkit and workflow use cases",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/qmdVeByJHqQieBtm.webp"
+    },
+    {
+      "id": "4861",
+      "file": "IMG_4861.webp",
+      "title": "Claude plugin and skills catalog screenshot",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/KMSnhigbcIrGtbND.webp"
+    },
+    {
+      "id": "4862",
+      "file": "IMG_4862.webp",
+      "title": "LangChain, LangGraph, and LlamaIndex",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/duLjMbFWPtbkXGTL.webp"
+    },
+    {
+      "id": "4863",
+      "file": "IMG_4863.webp",
+      "title": "AI architecture explained through analogies",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/EiDFLZutttFqnyij.webp"
+    },
+    {
+      "id": "4864",
+      "file": "IMG_4864.webp",
+      "title": "Explaining agentic RAG to the board",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/IFmeFLXXCHvPoUby.webp"
+    },
+    {
+      "id": "4905",
+      "file": "IMG_4905.webp",
+      "title": "GenAI system-design principles",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/tGaSaGvblGgSvBtm.webp"
+    },
+    {
+      "id": "5221",
+      "file": "IMG_5221.webp",
+      "title": "Ten AI terms for practitioners",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/PeXTrdCzwqxsNecp.webp"
+    },
+    {
+      "id": "5222",
+      "file": "IMG_5222.webp",
+      "title": "LLM tools and application layers",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/LAGjTzQsTQkaDFTS.webp"
+    },
+    {
+      "id": "5223",
+      "file": "IMG_5223.webp",
+      "title": "LLM, RAG, agents, and agentic systems",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/eWxqDomXpxHmSmqv.webp"
+    },
+    {
+      "id": "5224",
+      "file": "IMG_5224.webp",
+      "title": "Seven RAG design patterns",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/qaVNtdBVZLVDUwGm.webp"
+    },
+    {
+      "id": "5225",
+      "file": "IMG_5225.webp",
+      "title": "Agent harness, state, skills, and protocols",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/jQVzTpNCSdQlUoJV.webp"
+    },
+    {
+      "id": "5226",
+      "file": "IMG_5226.webp",
+      "title": "Models-to-operations engineering stack",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/bxSwrpFpzLEXschw.webp"
+    },
+    {
+      "id": "5229",
+      "file": "IMG_5229.webp",
+      "title": "LLM cost optimization patterns",
+      "url": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/JqMfhCDQfJFcfaaq.webp"
+    }
+  ]
+}
