@@ -47,7 +47,7 @@ export default function Navbar() {
   useEffect(() => {
     // Support bookmarked or shared links to the industry section and its cards.
     const hash = window.location.hash;
-    if (hash === "#industries" || hash === "#industry-financial-services" || industryLinks.some((link) => link.href === hash)) {
+    if (hash === "#industries" || hash === "#financial-services-models" || hash === "#industry-financial-services" || industryLinks.some((link) => link.href === hash)) {
       const frame = window.requestAnimationFrame(() => {
         document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "auto", block: "start" });
       });
