@@ -4,8 +4,9 @@ from pydantic import BaseModel
 import uvicorn
 import os
 
-# Import the Claude agent
+# Import the Claude agents
 from ai_agent_claude import ClaudeAIAgent
+from ai_agent_research import ResearchAgent
 
 app = FastAPI(
     title="AI-CoreLogic Claude Agent API",
@@ -22,8 +23,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the agent
+# Initialize the agents
 agent = ClaudeAIAgent(db_path="agent_memory.db")
+research_agent = ResearchAgent(db_path="research_memory.db")
 
 class ChatRequest(BaseModel):
     message: str
@@ -31,6 +33,14 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     response: str
+    session_id: str
+
+class ResearchRequest(BaseModel):
+    topic: str
+    session_id: str = "web_session"
+
+class ResearchResponse(BaseModel):
+    summary: str
     session_id: str
 
 @app.get("/")
@@ -73,6 +83,40 @@ async def get_history(session_id: str):
     """Get the conversation history for a specific session."""
     try:
         history = agent.get_history(session_id)
+        return {"session_id": session_id, "history": history}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving history: {str(e)}")
+
+@app.post("/api/research", response_model=ResearchResponse)
+async def research(request: ResearchRequest):
+    """Research a topic and get a comprehensive summary."""
+    if not request.topic.strip():
+        raise HTTPException(status_code=400, detail="Topic cannot be empty")
+
+    try:
+        summary = research_agent.research(request.topic, request.session_id)
+
+        return ResearchResponse(
+            summary=summary,
+            session_id=request.session_id
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Research agent error: {str(e)}")
+
+@app.delete("/api/research/{session_id}")
+async def clear_research_history(session_id: str):
+    """Clear the research history for a specific session."""
+    try:
+        research_agent.clear_history(session_id)
+        return {"status": "success", "message": f"Research history cleared for session {session_id}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error clearing history: {str(e)}")
+
+@app.get("/api/research/{session_id}/history")
+async def get_research_history(session_id: str):
+    """Get the research history for a specific session."""
+    try:
+        history = research_agent.get_history(session_id)
         return {"session_id": session_id, "history": history}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving history: {str(e)}")
