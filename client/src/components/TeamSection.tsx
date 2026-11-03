@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { Linkedin, Mail, Phone, MapPin, Youtube } from "lucide-react";
 
 export default function TeamSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -179,6 +179,22 @@ export default function TeamSection() {
                   >
                     <Linkedin className="w-4 h-4" />
                     <span className="text-sm font-medium">LinkedIn</span>
+                  </a>
+                  <a
+                    href="https://www.youtube.com/@rodchiasson"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Rodney Chiasson's YouTube channel (opens in a new tab)"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 hover:bg-opacity-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-400"
+                    style={{
+                      background: "rgba(0,212,200,0.1)",
+                      color: "#00D4C8",
+                      border: "1px solid rgba(0,212,200,0.2)",
+                      fontFamily: "var(--font-body)",
+                    }}
+                  >
+                    <Youtube className="w-4 h-4" aria-hidden="true" />
+                    <span className="text-sm font-medium">YouTube</span>
                   </a>
                 </div>
               </div>

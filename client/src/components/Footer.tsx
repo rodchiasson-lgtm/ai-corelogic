@@ -3,7 +3,7 @@
  * Theme: Deep Intelligence — dark footer with brand links and legal
  */
 
-import { Cpu, Linkedin, Twitter, Github, MessageCircle } from "lucide-react";
+import { Cpu, Linkedin, Twitter, Github, MessageCircle, Youtube } from "lucide-react";
 
 const footerLinks = {
   Services: [
@@ -75,21 +75,24 @@ export default function Footer() {
               <p><strong>Offices:</strong> London, UK & New York, USA</p>
             </div>
             {/* Social links */}
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {[
                 { icon: Linkedin, href: "https://www.linkedin.com/company/109932965/", label: "LinkedIn", color: "#0A66C2" },
                 { icon: MessageCircle, href: "https://t.me/Aicorelogic_bot", label: "Telegram", color: "#0088CC" },
                 { icon: null, href: `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`, label: "WhatsApp", color: "#25D366" },
                 { icon: Twitter, href: "#", label: "Twitter", color: undefined },
                 { icon: Github, href: "#", label: "GitHub", color: undefined },
+                { icon: Youtube, href: "https://www.youtube.com/@rodchiasson", label: "YouTube", color: "#00D4C8" },
               ].map(({ icon: Icon, href, label, color }) => (
                 <a
                   key={label}
                   href={href}
                   target={href !== "#" ? "_blank" : undefined}
                   rel={href !== "#" ? "noopener noreferrer" : undefined}
-                  aria-label={label}
-                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:border-cyan-400/40"
+                  aria-label={label === "YouTube" ? "Rodney Chiasson's YouTube channel (opens in a new tab)" : label}
+                  className={label === "YouTube"
+                    ? "h-9 px-3 gap-2 rounded-lg flex items-center justify-center transition-all duration-200 hover:border-cyan-400/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-400"
+                    : "w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:border-cyan-400/40"}
                   style={{
                     background: label === "Telegram" ? "rgba(0,136,204,0.12)" : label === "WhatsApp" ? "rgba(37,211,102,0.12)" : "rgba(255,255,255,0.04)",
                     border: label === "Telegram" ? "1px solid rgba(0,136,204,0.3)" : label === "WhatsApp" ? "1px solid rgba(37,211,102,0.3)" : "1px solid rgba(255,255,255,0.08)",
@@ -99,8 +102,9 @@ export default function Footer() {
                   {label === "WhatsApp" ? (
                     <WhatsAppIcon className="w-4 h-4" />
                   ) : Icon ? (
-                    <Icon className="w-4 h-4 text-slate-500 hover:text-cyan-400" />
+                    <Icon className={label === "YouTube" ? "w-4 h-4 text-cyan-400" : "w-4 h-4 text-slate-500 hover:text-cyan-400"} aria-hidden={label === "YouTube" ? true : undefined} />
                   ) : null}
+                  {label === "YouTube" && <span className="text-xs font-medium">YouTube</span>}
                 </a>
               ))}
             </div>
