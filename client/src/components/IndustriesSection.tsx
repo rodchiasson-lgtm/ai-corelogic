@@ -3,6 +3,7 @@
  * Theme: Deep Intelligence — horizontal scrolling industry tags + brief descriptions
  */
 
+import { sitePath } from "@/lib/sitePath";
 import { useEffect, useRef, useState } from "react";
 import { ShoppingBag, HeartPulse, Truck, DollarSign, Building2, Factory, Utensils, GraduationCap, Beaker } from "lucide-react";
 import FinancialServicesModelShowcase from "./FinancialServicesModelShowcase";
@@ -140,7 +141,7 @@ export default function IndustriesSection() {
                   {industry.desc}
                 </p>
                 <a
-                  href={`/blog/${industry.articleSlug}`}
+                  href={sitePath(`/blog/${industry.articleSlug}`)}
                   className="text-cyan-400 hover:text-cyan-300 text-xs font-semibold transition-colors inline-flex items-center gap-1"
                   style={{ textDecoration: "none", fontFamily: "var(--font-body)" }}
                 >

@@ -1,13 +1,14 @@
+import { sitePath } from "@/lib/sitePath";
 import { useRef, useState } from "react";
 import { ArrowRight, Captions, Film, Play } from "lucide-react";
 
 export const BRAND_VIDEO_ASSETS = {
   video: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/AlwrddDodnqFPndY.mp4",
   mobileVideo: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663498118390/WnFKWGLIbZWAODvH.mp4",
-  poster: "/media/ai-corelogic-brand-poster-v2-1280.webp",
-  smallPoster: "/media/ai-corelogic-brand-poster-v2-640.webp",
-  mediumPoster: "/media/ai-corelogic-brand-poster-v2-960.webp",
-  captions: "/media/ai-corelogic-brand-30s-v1.en.vtt",
+  poster: sitePath("/media/ai-corelogic-brand-poster-v2-1280.webp"),
+  smallPoster: sitePath("/media/ai-corelogic-brand-poster-v2-640.webp"),
+  mediumPoster: sitePath("/media/ai-corelogic-brand-poster-v2-960.webp"),
+  captions: sitePath("/media/ai-corelogic-brand-30s-v1.en.vtt"),
 } as const;
 
 export const BRAND_VIDEO_TRANSCRIPT =

@@ -4,8 +4,9 @@
  * Behavior: Transparent on top, blurred on scroll
  */
 
+import { sitePath, isHomePath } from "@/lib/sitePath";
 import { useState, useEffect } from "react";
-import { Beaker, ChevronDown, DollarSign, HeartPulse, Menu, X } from "lucide-react";
+import { Beaker, ChevronDown, DollarSign, HeartPulse, Menu, UserRound, X } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import {
   DropdownMenu,
@@ -24,6 +25,9 @@ const navLinks = [
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "#contact" },
 ];
+
+/** Founder profile: every section of Rodney Chiasson's portfolio, hosted on this site. */
+export const FOUNDER_PROFILE_HREF = sitePath("/profile");
 
 const industryLinks = [
   { label: "Financial Services", href: "#industry-financial-services", icon: DollarSign, description: "Financial AI expertise and Hugging Face models" },
@@ -48,7 +52,9 @@ export default function Navbar() {
   useEffect(() => {
     // Support bookmarked or shared links to the industry section and its cards.
     const hash = window.location.hash;
-    if (hash === "#industries" || hash === "#financial-services-models" || hash === "#industry-financial-services" || industryLinks.some((link) => link.href === hash)) {
+    // Industry bookmarks, plus any section link arriving from another page (e.g. /#services from the founder profile).
+    const isIndustryBookmark = hash === "#industries" || hash === "#financial-services-models" || hash === "#industry-financial-services" || industryLinks.some((link) => link.href === hash);
+    if (isHomePath() && (isIndustryBookmark || hash.length > 1)) {
       const frame = window.requestAnimationFrame(() => {
         document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "auto", block: "start" });
       });
@@ -61,9 +67,14 @@ export default function Navbar() {
     setIndustriesOpen(false);
     setDesktopIndustriesOpen(false);
     if (href.startsWith("/")) {
-      window.location.href = href;
+      window.location.href = sitePath(href);
     } else {
       const el = document.getElementById(href.slice(1));
+      if (!el) {
+        // Section links point at the home page when used from another page (e.g. the founder profile).
+        window.location.href = sitePath(`/${href}`);
+        return;
+      }
       if (el) {
         window.history.replaceState(null, "", href);
         window.requestAnimationFrame(() => {
@@ -94,9 +105,16 @@ export default function Navbar() {
       <div className="container">
         <div className="nav-command-bar flex items-center justify-between h-16 lg:h-20">
           <a
-            href="#"
+            href={sitePath("/")}
             className="flex items-center gap-3 group"
-            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            onClick={(e) => {
+              e.preventDefault();
+              if (!isHomePath()) {
+                window.location.href = sitePath("/");
+                return;
+              }
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
           >
             <img
               src="https://d2xsxph8kpxj0f.cloudfront.net/310519663498118390/juLcehvUK8ZLccnz5JYQE8/logo_8ad417ef.png"
@@ -155,6 +173,15 @@ export default function Navbar() {
 
           <div className="hidden lg:flex items-center gap-3">
             <a
+              href={FOUNDER_PROFILE_HREF}
+              className="founder-profile-link inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-400/[0.06] px-3.5 py-2 text-xs font-semibold text-cyan-300 transition-colors duration-200 hover:border-cyan-300 hover:bg-cyan-400/[0.12] hover:text-white"
+              style={{ fontFamily: "var(--font-body)" }}
+              aria-label="Founder profile: Rodney Chiasson"
+            >
+              <UserRound className="h-3.5 w-3.5" aria-hidden="true" />
+              Founder Profile
+            </a>
+            <a
               href="https://calendar.google.com/calendar/u/0?cid=rodchiasson@ai-corelogic.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -169,6 +196,15 @@ export default function Navbar() {
             </button>
           </div>
 
+          <a
+            href={FOUNDER_PROFILE_HREF}
+            className="founder-profile-link lg:hidden ml-auto mr-1 inline-flex items-center gap-1.5 rounded-full border border-cyan-400/40 bg-cyan-400/[0.06] px-3 py-2 text-[11px] font-semibold text-cyan-300"
+            style={{ fontFamily: "var(--font-body)" }}
+            aria-label="Founder profile: Rodney Chiasson"
+          >
+            <UserRound className="h-3.5 w-3.5" aria-hidden="true" />
+            Founder
+          </a>
           <button
             className="lg:hidden p-2 text-slate-300 hover:text-cyan-400 transition-colors"
             onClick={() => { setMobileOpen(!mobileOpen); setIndustriesOpen(false); }}
@@ -184,6 +220,14 @@ export default function Navbar() {
       {mobileOpen && (
         <div id="mobile-navigation" className="lg:hidden nav-blur border-t border-cyan-400/10 max-h-[calc(100dvh-4rem)] overflow-y-auto">
           <div className="container py-4 flex flex-col gap-1">
+            <a
+              href={FOUNDER_PROFILE_HREF}
+              className="flex items-center gap-2 px-4 py-3 text-cyan-300 hover:text-white hover:bg-cyan-400/5 rounded-lg transition-all duration-200 text-sm font-semibold"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              <UserRound className="h-4 w-4" aria-hidden="true" />
+              Founder Profile — Rodney Chiasson
+            </a>
             {renderNavLinks(navLinks.slice(0, 3), true)}
             <div className="rounded-lg border border-cyan-400/10 bg-cyan-400/[0.025]">
               <button

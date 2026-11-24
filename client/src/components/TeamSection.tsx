@@ -3,6 +3,7 @@
  * Theme: Deep Intelligence — professional team showcase with expertise highlights
  */
 
+import { sitePath } from "@/lib/sitePath";
 import { useEffect, useRef, useState } from "react";
 import { Linkedin, Mail, Phone, MapPin, Youtube } from "lucide-react";
 
@@ -151,6 +152,18 @@ export default function TeamSection() {
 
                 {/* Contact Links */}
                 <div className="flex flex-wrap gap-4 pt-6 border-t border-slate-700">
+                  <a
+                    href={sitePath("/profile")}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 font-semibold"
+                    style={{
+                      background: "#00D4C8",
+                      color: "#050B18",
+                      border: "1px solid #00D4C8",
+                      fontFamily: "var(--font-body)",
+                    }}
+                  >
+                    <span className="text-sm">View full founder profile →</span>
+                  </a>
 
                   <a
                     href="tel:+1-727-318-9265"
