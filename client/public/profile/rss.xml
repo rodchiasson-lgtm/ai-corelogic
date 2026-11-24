@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rodney Chiasson — Articles</title>
+    <link>https://rodneyai-hrrqprhm.manus.space/feed.html</link>
+    <description>Original articles on enterprise AI, cloud architecture, and governance by Rodney Chiasson.</description>
+    <language>en-us</language>
+    <atom:link href="https://rodneyai-hrrqprhm.manus.space/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 21 Nov 2026 13:29:00 +0000</lastBuildDate>
+    <generator>RodneyAI Portfolio</generator>
+    <item>
+      <title>Designing agents for the realities of enterprise work</title>
+      <link>https://rodneyai-hrrqprhm.manus.space/articles/enterprise-agents.html</link>
+      <description>A practical lens on bounded permissions, human review, traceability, and evaluation as foundations for dependable agentic workflows.</description>
+      <pubDate>Sat, 21 Nov 2026 13:00:00 +0000</pubDate>
+      <author>rodchiasson@gmail.com (Rodney Chiasson)</author>
+      <guid isPermaLink="false">rodneyai-article-enterprise-agents</guid>
+    </item>
+    <item>
+      <title>From prototype to production: make the operating model part of the design</title>
+      <link>https://rodneyai-hrrqprhm.manus.space/articles/operating-model.html</link>
+      <description>Production readiness is not a final checklist. Ownership, monitoring, escalation, and change control should shape the system from its first architecture decisions.</description>
+      <pubDate>Sat, 21 Nov 2026 13:01:00 +0000</pubDate>
+      <author>rodchiasson@gmail.com (Rodney Chiasson)</author>
+      <guid isPermaLink="false">rodneyai-article-operating-model</guid>
+    </item>
+  </channel>
+</rss>

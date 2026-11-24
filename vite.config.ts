@@ -153,6 +153,8 @@ function vitePluginManusDebugCollector(): Plugin {
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
 
 export default defineConfig({
+  // "/" for a domain root (Manus); set VITE_BASE=/ai-corelogic/ for GitHub Pages.
+  base: process.env.VITE_BASE || "/",
   plugins,
   resolve: {
     alias: {

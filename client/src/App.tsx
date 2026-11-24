@@ -6,8 +6,9 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Router as WouterRouter, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { BASE_PATH } from "./lib/sitePath";
 
 import WhatsAppWidget from "./components/WhatsAppWidget";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -15,6 +16,7 @@ import Home from "./pages/Home";
 import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import CategoryLanding from "./pages/CategoryLanding";
+import Profile from "./pages/Profile";
 
 function Router() {
   return (
@@ -23,6 +25,7 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/category/:slug" component={CategoryLanding} />
+      <Route path="/profile" component={Profile} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -44,7 +47,9 @@ function App() {
               },
             }}
           />
-          <Router />
+          <WouterRouter base={BASE_PATH}>
+            <Router />
+          </WouterRouter>
       <WhatsAppWidget />
         </TooltipProvider>
       </ThemeProvider>

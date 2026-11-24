@@ -1,4 +1,5 @@
 /* AI-CoreLogic category pages — existing articles plus the AI Strategy knowledge library. */
+import { sitePath } from "@/lib/sitePath";
 import { useRoute, Link } from "wouter";
 import { getArticlesByCategory, categories } from "@/lib/blogData";
 import { ArrowLeft, ArrowRight, BookOpen, Calendar, Clock } from "lucide-react";
@@ -43,7 +44,7 @@ export default function CategoryLanding() {
       <header className="border-b border-cyan-400/15 bg-[#07111f]">
         <div className="container flex min-h-20 flex-wrap items-center justify-between gap-3 py-4">
           <Link href="/" className="text-xl font-extrabold tracking-tight text-white" style={{ fontFamily: "var(--font-display)" }}>AI-<span className="gradient-text">CoreLogic</span></Link>
-          <nav aria-label="Category navigation" className="flex flex-wrap items-center gap-4 text-xs sm:gap-6"><Link href="/" className="text-slate-400 hover:text-cyan-300">Home</Link><Link href="/blog" className="text-slate-400 hover:text-cyan-300">Blog</Link><a href="/#industries" className="text-slate-400 hover:text-cyan-300">Industries</a><a href="/#contact" className="rounded-lg border border-cyan-400/25 px-3 py-2 text-cyan-300 hover:bg-cyan-400/5">Discuss your strategy</a></nav>
+          <nav aria-label="Category navigation" className="flex flex-wrap items-center gap-4 text-xs sm:gap-6"><Link href="/" className="text-slate-400 hover:text-cyan-300">Home</Link><Link href="/blog" className="text-slate-400 hover:text-cyan-300">Blog</Link><a href={sitePath("/#industries")} className="text-slate-400 hover:text-cyan-300">Industries</a><a href={sitePath("/#contact")} className="rounded-lg border border-cyan-400/25 px-3 py-2 text-cyan-300 hover:bg-cyan-400/5">Discuss your strategy</a></nav>
         </div>
       </header>
       <main>
@@ -81,7 +82,7 @@ export default function CategoryLanding() {
         <section className="border-t border-slate-800 py-12">
           <div className="container"><h2 className="mb-6 text-xl font-semibold text-white">Explore Other Topics</h2><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{categories.filter((item) => item !== "All" && item !== category).map((item) => <Link key={item} href={`/category/${item.toLowerCase().replace(/\s+/g, "-")}`} className="rounded-xl border border-slate-700 bg-[#0D1B2E]/50 p-5 hover:border-cyan-400/30"><h3 className="mb-2 text-sm font-semibold text-white">{item}</h3><p className="text-xs text-slate-500">{getArticlesByCategory(item).length} articles</p></Link>)}</div></div>
         </section>
-        <section className="container py-12"><div className="rounded-xl border border-cyan-400/20 bg-gradient-to-r from-cyan-400/5 to-blue-500/5 p-6 sm:p-8"><h2 className="text-xl font-semibold text-white">Turn knowledge into an operating plan.</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">Discuss your organization’s priorities, architecture choices, and adoption roadmap with AI-CoreLogic—or follow our research for further practical guidance.</p><div className="mt-5 flex flex-wrap gap-3"><a href="/#contact" className="rounded-lg border border-cyan-400/30 px-5 py-3 text-sm font-semibold text-cyan-300 hover:bg-cyan-400/5">Request a strategy briefing</a><a href="/#newsletter" className="rounded-lg border border-slate-700 px-5 py-3 text-sm text-slate-300 hover:text-white">Subscribe to insights</a></div></div></section>
+        <section className="container py-12"><div className="rounded-xl border border-cyan-400/20 bg-gradient-to-r from-cyan-400/5 to-blue-500/5 p-6 sm:p-8"><h2 className="text-xl font-semibold text-white">Turn knowledge into an operating plan.</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">Discuss your organization’s priorities, architecture choices, and adoption roadmap with AI-CoreLogic—or follow our research for further practical guidance.</p><div className="mt-5 flex flex-wrap gap-3"><a href={sitePath("/#contact")} className="rounded-lg border border-cyan-400/30 px-5 py-3 text-sm font-semibold text-cyan-300 hover:bg-cyan-400/5">Request a strategy briefing</a><a href={sitePath("/#newsletter")} className="rounded-lg border border-slate-700 px-5 py-3 text-sm text-slate-300 hover:text-white">Subscribe to insights</a></div></div></section>
       </main>
       <footer className="border-t border-slate-800 py-6"><div className="container flex flex-wrap justify-between gap-3 text-xs text-slate-500"><span>© {new Date().getFullYear()} AI-CoreLogic</span><Link href="/" className="text-cyan-400 hover:text-cyan-300">Return to homepage</Link></div></footer>
     </div>
