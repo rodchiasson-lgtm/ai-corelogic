@@ -11,8 +11,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 
 import WhatsAppWidget from "./components/WhatsAppWidget";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import Blog from "./pages/Blog";
+import Home from "@/pages/Home";
+import Blueprint from "@/pages/Blueprint";
+import Blog from "@/pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import CategoryLanding from "./pages/CategoryLanding";
 
@@ -20,6 +21,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/blueprint" component={Blueprint} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/category/:slug" component={CategoryLanding} />

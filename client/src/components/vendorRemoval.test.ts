@@ -40,14 +40,17 @@ describe("vendor removal", () => {
     expect(matches).toEqual([]);
   });
 
-  it("removes ResourcesSection while retaining the Home page sections", () => {
+  it("keeps the homepage focused while retaining detailed sections on the AI Blueprint page", () => {
     const home = readSource(resolve(srcDirectory, "pages/Home.tsx"));
+    const blueprint = readSource(resolve(srcDirectory, "pages/Blueprint.tsx"));
 
     expect(home).not.toContain("ResourcesSection");
     expect(findFiles(srcDirectory, (path) => basename(path) === "ResourcesSection.tsx")).toEqual([]);
-    expect(home).toContain("<IndustriesSection />");
-    expect(home).toContain("<BrandVideoSection />");
-    expect(home).toContain("<ResearchSection />");
+    expect(home).not.toContain("<IndustriesSection />");
+    expect(blueprint).toContain("<IndustriesSection />");
+    expect(blueprint).toContain("<BrandVideoSection />");
+    expect(blueprint).toContain("<ResearchSection />");
+    expect(readSource(resolve(srcDirectory, "App.tsx"))).toContain('path="/blueprint"');
   });
 
   it("links IndustriesSection to the financial services model showcase", () => {
@@ -93,13 +96,12 @@ describe("vendor removal", () => {
     }
   });
 
-  it("retains financial services navigation and its bookmark link", () => {
+  it("retains the Industries route and financial-services bookmark link", () => {
     const navbar = readSource(resolve(componentsDirectory, "Navbar.tsx"));
 
-    expect(navbar).toContain("Financial Services");
-    expect(navbar).toContain("Healthcare");
-    expect(navbar).toContain("Life Sciences");
-    expect(navbar).toContain("#financial-services-models");
+    expect(navbar).toContain('label: "Industries", href: "/blueprint#industries"');
+    expect(readSource(resolve(componentsDirectory, "Footer.tsx"))).toContain("/blueprint#industry-financial-services");
+    expect(readSource(resolve(componentsDirectory, "IndustriesSection.tsx"))).toContain('href="#financial-services-models"');
   });
 
   it("does not retain the removed application routes", () => {

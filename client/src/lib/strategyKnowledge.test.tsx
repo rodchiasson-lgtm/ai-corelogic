@@ -53,13 +53,13 @@ describe("AI Strategy knowledge library", () => {
     expect(markup.match(/id="strategy-[a-z][^"]*"/g)?.length).toBeGreaterThanOrEqual(16);
     expect(markup).toContain("Source references");
   });
-  it("keeps the Industries dropdown, research, showcase, and video; stock routes remain retired", () => {
+  it("keeps strategy and industry routes while organizing research, showcase, and video on the Blueprint page", () => {
     const navbar = read("components/Navbar.tsx");
-    for (const industry of ["Financial Services", "Healthcare", "Life Sciences"]) expect(navbar).toContain(industry);
     expect(navbar).toContain('/category/ai-strategy');
-    const home = read("pages/Home.tsx");
-    expect(home).toContain("<ResearchSection />");
-    expect(home).toContain("<BrandVideoSection />");
+    expect(navbar).toContain('label: "Industries", href: "/blueprint#industries"');
+    const blueprint = read("pages/Blueprint.tsx");
+    expect(blueprint).toContain("<ResearchSection />");
+    expect(blueprint).toContain("<BrandVideoSection />");
     expect(read("components/IndustriesSection.tsx")).toContain("<FinancialServicesModelShowcase />");
     const app = read("App.tsx");
     expect(app).not.toContain("/intelligence");

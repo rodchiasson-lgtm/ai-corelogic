@@ -7,22 +7,22 @@ import { Cpu, Linkedin, Twitter, Github, MessageCircle, Youtube } from "lucide-r
 
 const footerLinks = {
   Services: [
-    { label: "AI Discovery", href: "#services" },
-    { label: "AI Implementation", href: "#services" },
-    { label: "AI Research", href: "#research" },
-    { label: "AI Maturity", href: "#services" },
+    { label: "Capabilities", href: "/blueprint#capabilities" },
+    { label: "How We Work", href: "/blueprint#process" },
+    { label: "Industry Applications", href: "/blueprint#industries" },
+    { label: "AI Research", href: "/blueprint#research" },
   ],
   Company: [
-    { label: "About Us", href: "#about" },
-    { label: "Our Process", href: "#process" },
-    { label: "Case Studies", href: "#" },
-    { label: "Careers", href: "#" },
+    { label: "About AI-CoreLogic", href: "/#about" },
+    { label: "AI Blueprint", href: "/blueprint" },
+    { label: "Insights Blog", href: "/blog" },
+    { label: "Contact", href: "/#contact" },
   ],
   Resources: [
     { label: "AI Insights Blog", href: "/blog" },
     { label: "AI Strategy Library", href: "/category/ai-strategy" },
-    { label: "Maturity Assessment", href: "#contact" },
-    { label: "AI Readiness Quiz", href: "#contact" },
+    { label: "Financial Services Models", href: "/blueprint#industry-financial-services" },
+    { label: "Start an Assessment", href: "/#contact" },
   ],
 };
 

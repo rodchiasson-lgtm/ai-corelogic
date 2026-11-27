@@ -141,11 +141,10 @@ export default function HeroSection() {
 
           {/* Main headline */}
           <h1
-            className={`transition-all duration-700 delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+            className={`text-[clamp(2rem,9vw,2.7rem)] md:text-[clamp(2.75rem,4.4vw,4.5rem)] transition-all duration-700 delay-100 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 800,
-              fontSize: "clamp(2.5rem, 6vw, 5rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.02em",
               color: "#F8FAFC",
@@ -173,11 +172,11 @@ export default function HeroSection() {
               onClick={() => { const el = document.querySelector("#contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
               className="btn-primary flex items-center gap-2 px-7 py-3.5 rounded-lg text-base font-semibold"
             >
-              Request an AI Readiness Briefing
+              Request an AI Briefing
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
-              onClick={() => { const el = document.querySelector("#services"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
+              onClick={() => { window.location.assign("/blueprint#capabilities"); }}
               className="btn-outline-glow flex items-center gap-2 px-7 py-3.5 rounded-lg text-base"
             >
               Review Capabilities

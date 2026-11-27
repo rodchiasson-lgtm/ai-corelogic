@@ -63,10 +63,15 @@ describe("homepage video integration", () => {
     expect(sourceFile(`public${BRAND_VIDEO_ASSETS.captions}`)).toMatch(/^WEBVTT\n/);
   });
 
-  it("keeps the video directly after the hero and preserves all other sections", () => {
+  it("moves the video and detailed exploration sections to the dedicated Blueprint page", () => {
     const home = sourceFile("src/pages/Home.tsx");
-    expect(home).toMatch(/<HeroSection\s*\/>\s*<BrandVideoSection\s*\/>/);
-    expect(home).toContain("<IndustriesSection />");
+    const blueprint = sourceFile("src/pages/Blueprint.tsx");
+    expect(home).not.toContain("<BrandVideoSection />");
+    expect(home).not.toContain("<IndustriesSection />");
+    expect(blueprint).toContain("<BrandVideoSection />");
+    for (const section of ["ServicesSection", "ProcessSection", "IndustriesSection", "ResearchSection"]) {
+      expect(blueprint).toContain(`<${section} />`);
+    }
   });
 });
 
@@ -86,8 +91,9 @@ describe("supplied Financial Services showcase", () => {
     expect(markup).toContain("No customer");
   });
 
-  it("preserves the Financial Services menu anchor and links its card to the showcase", () => {
-    expect(sourceFile("src/components/Navbar.tsx")).toContain('label: "Financial Services", href: "#industry-financial-services"');
+  it("routes to industries on the Blueprint page and keeps the financial-services bookmark", () => {
+    expect(sourceFile("src/components/Navbar.tsx")).toContain('label: "Industries", href: "/blueprint#industries"');
+    expect(sourceFile("src/components/Footer.tsx")).toContain('/blueprint#industry-financial-services');
     const industries = sourceFile("src/components/IndustriesSection.tsx");
     expect(industries).toContain('href="#financial-services-models"');
     expect(industries).toContain("<FinancialServicesModelShowcase />");
