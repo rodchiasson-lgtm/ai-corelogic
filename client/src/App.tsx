@@ -16,7 +16,6 @@ import Blueprint from "@/pages/Blueprint";
 import Blog from "@/pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import CategoryLanding from "./pages/CategoryLanding";
-import Training from "./pages/Training";
 
 function Router() {
   return (
@@ -26,7 +25,6 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/category/:slug" component={CategoryLanding} />
-      <Route path="/training" component={Training} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
