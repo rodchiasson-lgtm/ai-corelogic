@@ -3,8 +3,9 @@
  */
 
 import { useEffect, useState } from "react";
-import { ChevronDown, FileText, Menu, X } from "lucide-react";
+import { BookOpen, ChevronDown, FileText, Menu, X } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { trainingCourses } from "@/lib/trainingCourses";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,15 +21,6 @@ const navLinks = [
   { label: "AI Strategy", href: "/category/ai-strategy" },
   { label: "Insights", href: "/blog" },
   { label: "Contact", href: "/#contact" },
-];
-
-const trainingCourses = [
-  {
-    title: "Agentic Training & Inference Platform",
-    subtitle: "Step-by-Step Architecture · DOCX · 14 pages",
-    href: "/manus-storage/AgenticTrainingandInferencePlatformStep-by-StepArchitecture_10625846.docx",
-    downloadName: "AgenticTrainingandInferencePlatformStep-by-StepArchitecture.docx",
-  },
 ];
 
 export default function Navbar() {
@@ -108,9 +100,16 @@ export default function Navbar() {
           <span className="mt-1 block text-xs font-normal leading-5 text-slate-500">Technical guides and training materials</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-cyan-400/10" />
+        <DropdownMenuItem asChild className="cursor-pointer rounded-lg p-0 text-cyan-200 focus:bg-cyan-400/[0.08] focus:text-white">
+          <a href="/training" className="flex w-full items-center gap-3 px-3 py-3 text-sm font-medium">
+            <BookOpen className="h-4 w-4 text-cyan-300" aria-hidden="true" />
+            <span>Course overview &amp; prerequisites</span>
+          </a>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-cyan-400/10" />
         {trainingCourses.map((course, index) => (
           <DropdownMenuItem key={course.href} asChild className="cursor-pointer rounded-lg p-0 text-slate-200 focus:bg-cyan-400/[0.08] focus:text-white">
-            <a href={course.href} download={course.downloadName} className="flex w-full items-start gap-3 px-3 py-3.5">
+            <a href={course.href} className="flex w-full items-start gap-3 px-3 py-3.5">
               <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-cyan-400/15 bg-cyan-400/[0.05] text-cyan-300">
                 <FileText className="h-4 w-4" aria-hidden="true" />
               </span>
@@ -192,11 +191,18 @@ export default function Navbar() {
               </button>
               {trainingOpen && (
                 <div id="mobile-training-courses" className="border-t border-cyan-400/10 p-2">
+                  <a
+                    href="/training"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-cyan-200 transition-colors hover:bg-cyan-400/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300"
+                  >
+                    <BookOpen className="h-4 w-4 text-cyan-300" aria-hidden="true" />
+                    Course overview &amp; prerequisites
+                  </a>
                   {trainingCourses.map((course, index) => (
                     <a
                       key={course.href}
                       href={course.href}
-                      download={course.downloadName}
                       onClick={() => setMobileOpen(false)}
                       className="flex items-start gap-3 rounded-lg px-3 py-3 text-slate-200 transition-colors hover:bg-cyan-400/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300"
                     >
